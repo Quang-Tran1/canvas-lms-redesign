@@ -1,0 +1,370 @@
+/* Global SDSU Navigation Bar */
+.ic-app-header {
+    height: auto;
+    margin: 15vh 0px 15vh 8px;
+    padding: 16px 4px;
+    border-radius: 45px;
+}
+
+.ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+}
+
+.ic-app-header__logomark-container {
+    background-color: transparent;
+}
+
+.ic-app-header__logomark {
+    height: 68px !important;
+}
+
+
+
+/* Course Navigation Bar */
+.ic-sticky-frame {
+    padding-top: 225px !important;
+}
+
+#section-tabs {
+    background-color: #231f20;
+    border-radius: 16px;
+    padding: 8px;
+}
+
+.section {
+    margin-bottom: 4px;
+}
+
+.section > a {
+    color: white !important;
+    border-radius: 8px !important;
+}
+
+.section > a:hover {
+    background-color: #ffffff14;
+    text-decoration: none !important;
+}
+
+.section > a.active {
+    border-left: 6px ridge #c83640;
+    background-color: #c8364030;
+}
+
+
+
+/* Dashboard Screen */
+.ic-Dashboard-header__layout {
+    background-color: transparent;
+    border: none;
+}
+
+.ic-Dashboard-header {
+    position: static;
+}
+
+.css-1lq5l3q-view-heading { /* Dashboard word */
+    color:white;
+    text-shadow: 2px 2px 4px #15345e;
+    font-size: 48px;
+    font-family: "Baskerville";
+
+}
+
+.ic-DashboardCard {
+    border-radius: 16px;
+}
+
+.ic-DashboardCard__header_hero {
+    border: 12px solid rgba(0, 0, 0, .1);
+    border-radius: 16px 16px 0px 0px;
+}
+
+.ic-DashboardCard__header-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+
+
+/* Modules, Assignments, Quizzes, Grades */
+.ig-header {
+    border: 1px solid #b9bbbc !important;
+    border-radius: 16px 16px 16px 16px;
+}
+
+[class="ig-list items context_module_items "]:has(*),
+.assignment-list, #assignment-quizzes, .ic-Table, .ic-item-row { /* Modules, Assignment, Quizzes, Grades, Announcement cards*/
+    background-color: #fffffff0; /* #fffc */  /* white */
+    border: 1px solid #b9bbbc; /* #b9bbbc */
+    border-radius: 16px;
+    margin-top: 8px;
+    padding-right: 36px; /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+}
+
+.ig-row  {
+    background-color: transparent !important; /* white */
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 12px !important;
+}
+
+.context_module_item.context_module_item_hover,
+.context_module_item.context_module_item_hover,
+.context_module_item:hover {
+    background-color: transparent;
+}
+
+.header-bar, .item-group-container {
+    background-color: transparent;
+    padding-bottom: 0px;
+}
+
+.ic-Layout-contentMain, .css-69szee-view--block { /* Main content, announcement UI, discussion UI */
+    min-width: 55vw;
+    width: fit-content;
+    max-width: 70vw;
+    margin: 10vh 0 2vh 1.5vw;
+    padding: 36px !important;
+    height: auto;
+    border: 1px solid #e1e3e6; /* #e1e3e6 */
+    background-color: #ffffff6e;    /* #fffc */
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+}
+
+.ic-Layout-contentMain:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #assignments-2-student-header) { /*Specific for Home, Text, Grade pages */
+    background-color: #fffffff0; /* #fffffff0 */
+}
+
+
+.css-1j6kuei-view, .css-1srbu6u-view > div { /* Discussion instructions, Announcement message, post/threads/replies, Pagination button  */
+    background-color: #fffffff0; /* #fffc */ /* white */
+    border: 1px solid #b9bbbc;
+    border-radius: 16px;
+    margin-top: 16px;
+    padding-top: 12px;
+}
+
+.css-tab7xj-view > div > div { /* submission/text box preview for #assignments-2-student-header*/
+    border: none !important;
+    /*box-shadow: 1px 1px 6px #9c9c9c;*/
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.css-k8wj4l-view { /* Discussion Top Toolbar*/
+    background-color: transparent;
+}
+
+.css-1c66oc-drawerLayout__content { /* Discussion scrollbar */
+    scrollbar-width: none;
+}
+
+
+.discussion-pagination-section {
+    padding: 0px !important;
+    width: fit-content;
+    margin: auto;
+}
+
+.mce-content-body { /*Text box*/
+    background-image: none;
+    box-shadow: none;
+}
+
+
+
+/* Submission Page */
+.ic-Layout-contentMain:has(.submission_details) {
+    width: 65vw;
+    /*height: 88vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;*/
+}
+
+.ic-Layout-contentMain:has(.submission_description/*, .quiz-header*/) { /* discussion post, quiz */
+
+    background-color: #fffffff0;
+    border: 1px solid #b9bbbc;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: fit-content;
+}
+
+.ic-Layout-contentMain:has(#submission_preview.paper, #submission_preview.plain_text) { /*textbox, paper*/
+
+    background-color: transparent;
+    backdrop-filter: none;
+    border: none;
+    max-width: fit-content;
+    margin: 0;
+    padding-top: 0 !important;
+}
+
+
+body.no-headers { /* Submission box */
+    background-image: none;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    scrollbar-width: none;
+}
+
+
+.submission-details-comments > div { /* wrapper box for comments */
+    background-color: transparent !important;
+}
+
+.submission-details-comments .comments {
+    background-color: #fffffff0;
+    border: 1px solid #b9bbbc;
+    border-radius: 16px;
+    padding-top: 12px;
+}
+
+
+.submission-details-container {
+    border: none;
+}
+
+
+
+
+
+/* Right Side Content: Quiz score, Todo, Submission */
+#right-side-wrapper:has(#tfc-wall-rose, table, ul, button) {
+    height: fit-content;
+    margin-top: 10vh;
+    margin-right: 1vw;
+    margin-left: 1vw;
+    border: 1px solid #e1e3e6;
+    background-color: #fffc; /* #ffc */
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+}
+
+/*#right-side-wrapper:has(#sidebar_content > *) {
+    display: none;  hmmm 
+}*/
+
+.recent_feedback_icon {
+    background-color: white;
+    padding: 8px;
+    margin-top: 4px;
+    border-radius: 8px;
+    border: 2px solid #e8eaec;
+    box-shadow: 2px 2px 4px #00000052;
+     
+}
+
+.right-side-list  li:last-child  .recent_feedback_icon {
+    border: 2px solid #e8eaec !important;
+    box-shadow: 2px 2px 4px #00000052 !important;
+}
+
+.ic-app-main-content { /* Flex main and right side */
+    width: fit-content;
+}
+
+[class="sc-dmlrTW jIDpCu"] { /* Todo extension cards */
+    background-color: white;
+}
+
+
+
+/* Due dates, Points chips */
+.ig-details__item {
+    background-color: transparent; /* #ebebeb */
+    font-weight: bold;
+    border: 1px solid #b9bbbc;
+    border-radius: 12px;
+    margin-left: 4px;
+    margin-top: 2px;
+    padding: 0px 6px;
+}
+
+.ig-details__item::after {
+    display: none;
+}
+
+[class="requirement-description ig-details__item"] {
+    display: none;
+}
+
+[class="estimated_duration_display ig-details__item"] {
+    display: none;
+}
+
+
+
+
+/* Button Styling */
+.css-1ta5ds2-baseButton__content, .btn, .Button, .ui-button {
+    border-radius: 24px;
+    background-color: white;
+    color: black;
+    padding: 0px 12px;
+}
+
+.btn, .Button, .ui-button {
+    padding: 8px 12px;
+}
+
+.css-usxqn-view--inlineBlock-baseButton:hover > [class$="-baseButton__content"], .btn:hover, .Button:hover, .ui-button:hover {
+    color: black;
+    background-color: #f0f7fe;
+}
+
+.btn-primary, .Button--primary, .btn-primary:hover, .Button--primary:hover  {
+    color: white;
+    background-color: #c83640;
+    border-radius: 8px;
+}
+
+.ic-DashboardCard__header-button, .ic-DashboardCard__header-button:hover {
+    background-color: transparent;
+}
+
+.css-1jpjaee-textInput__facade { /* Search, Selection box */
+    border-radius: 12px;
+}
+
+
+
+/* Wallpaper */
+body {
+    background-color: #fff;
+    background-image: url("https://cdnb.artstation.com/p/assets/images/images/049/176/805/large/killian-prevost-crique-v2.jpg?1651854727");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 100% 70%;
+    background-attachment: fixed;
+    box-shadow: 0px 0px 24px #000 inset;
+    
+}
+
+
+
+/* Misc */
+.ic-app-nav-toggle-and-crumbs {
+    display: none;
+}
+
+/*
+#module_sequence_footer {
+    position: static;
+}
+*/
+
+.module-sequence-footer .module-sequence-footer-content, #assignments-student-footer {
+    height: fit-content;
+    background-color: transparent !important;
+    border: none;
+    justify-content: flex-end;
+}
+
+#footer {
+    display: none;
+}

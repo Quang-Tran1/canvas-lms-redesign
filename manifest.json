@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Canvas LMS Redesign",
+  "version": "1.0",
+  "description": "Custom visual redesign for Canvas LMS.",
+  "content_scripts": [
+    {
+      "matches":[
+        "*://*.instructure.com/*"
+      ],
+      "js": ["inject.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources":[
+    {
+      "resources": ["styles.css"],
+      "matches":["*://*.instructure.com/*"]
+    }
+  ]
+}
