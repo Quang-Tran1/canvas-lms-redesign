@@ -1,33 +1,58 @@
 /* Global SDSU Navigation Bar */
-.ic-app-header {
-    height: auto;
-    margin: 15vh 0px 15vh 8px;
-    padding: 16px 4px;
-    border-radius: 45px;
+body.primary-nav-expanded .ic-app-header { /*just expanded*/
+    width: 96px;
+    padding: 24px 4px;
+}
+
+.ic-app-header { /* all including mini*/
+    height: 82vh;
+    margin: 9vh 0px 0vh 12px;
+    padding: 36px 4px;
+    border-radius: 48px;
+    border: 1px solid #6f6f6f; /* #e1e3e6 */
+    background-color: #000000bf;    /* #fffc */
+    backdrop-filter: blur(6px);
+    scrollbar-width: none;
+    overscroll-behavior: none;
 }
 
 .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
     border-radius: 100%;
     aspect-ratio: 1/1;
+    border: 1px solid #b33d3e; /* #e1e3e6 */
+    background-color: #ae152030;    /* #fffc */
+}
+
+.menu-item__text {
+    color: white !important; /* White instead of blue*/
 }
 
 .ic-app-header__logomark-container {
     background-color: transparent;
 }
 
-.ic-app-header__logomark {
+body.primary-nav-expanded .ic-app-header__logomark {
     height: 68px !important;
+}
+
+.ic-app-header__logomark {
+    height: 24px !important;
 }
 
 
 
 /* Course Navigation Bar */
-.ic-sticky-frame {
-    padding-top: 225px !important;
+#sticky-container {
+    padding-top: 24vh;
+    padding-left: 0;
+    padding-bottom: 0;
+    transform: translateX(32px);
 }
 
 #section-tabs {
-    background-color: #231f20;
+    border: 1px solid #6f6f6f; /* #e1e3e6 */
+    background-color: #000000bf;
+    backdrop-filter: blur(6px);
     border-radius: 16px;
     padding: 8px;
 }
@@ -47,9 +72,36 @@
 }
 
 .section > a.active {
-    border-left: 6px ridge #c83640;
-    background-color: #c8364030;
+    border-left: 6px ridge #b33d3e;
+    background-color: #ae152030;
 }
+
+
+
+/* Navigation Container */
+.css-1gto5tw-tray {
+    height: 82vh !important;
+    margin-top: 9vh;
+    margin-left: 12px;
+    padding-top: 12px;
+    padding-left: 12px;
+    background-color: #ffffffd1; /* #fffc */  /* white */
+    border: 1px solid #b9bbbc; /* #b9bbbc */
+    backdrop-filter: blur(6px);
+    border-radius: 48px;
+    scrollbar-width: none;
+    overscroll-behavior: none;
+}
+
+.css-1gto5tw-tray .css-peiex8-view--inlineBlock-baseButton {
+    margin-top: 20px !important;
+    margin-right: 20px !important;
+    border-radius: 14px;
+}
+
+/*.tray-with-space-for-global-nav {
+    margin-left: 0 !important;
+}*/
 
 
 
@@ -87,7 +139,6 @@
 
 
 
-
 /* Modules, Assignments, Quizzes, Grades */
 .ig-header {
     border: 1px solid #b9bbbc !important;
@@ -121,25 +172,67 @@
     padding-bottom: 0px;
 }
 
-.ic-Layout-contentMain, .css-69szee-view--block { /* Main content, announcement UI, discussion UI */
-    min-width: 55vw;
-    width: fit-content;
-    max-width: 70vw;
-    margin: 10vh 0 2vh 1.5vw;
-    padding: 36px !important;
+.ic-Layout-contentMain, .css-69szee-view--block { /* Main content, Dashboard | announcement UI, discussion UI */
+    width: 56vw;
     height: auto;
+    padding: 36px !important;
+    margin: 10vh 0 2vh 2.5vw;
     border: 1px solid #e1e3e6; /* #e1e3e6 */
     background-color: #ffffff6e;    /* #fffc */
     backdrop-filter: blur(6px);
     border-radius: 24px;
 }
 
-.ic-Layout-contentMain:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #assignments-2-student-header) { /*Specific for Home, Text, Grade pages */
+.css-69szee-view--block { /* announcement/discussion wider UI */
+    width: 70vw;
+}
+
+#content:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #assignments-2-student-header) { /*Specific for Home, Text, Grade, Quiz pages */
     background-color: #fffffff0; /* #fffffff0 */
 }
 
+.css-k1zfx8-view--flex-flex { /* Inbox UI */
+    width: auto;
+    height: 96vh !important;
+    padding: 16px;
+    margin: 2vh 2vw 2vh 2vw;   
+    border: 1px solid #e1e3e6; /* #e1e3e6 */
+    background-color: #ffffff6e;    /* #fffc */
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+}
 
-.css-1j6kuei-view, .css-1srbu6u-view > div { /* Discussion instructions, Announcement message, post/threads/replies, Pagination button  */
+.css-8iuz5w-view--inlineBlock { /* Inbox Toolbar */
+    background-color: transparent;
+    border: none;
+}
+
+.css-1fmutmb-view { /* Inbox Conversation List  */
+    border: none;
+    border-radius: 24px;
+    margin-right: 16px;
+    height: auto;
+    background-color:#fffc;
+    scrollbar-width: none;
+}
+
+.css-hzvops-view { /* Inbox Individual Conversations */
+    border: none;
+}
+
+.css-107y6ep-view-flexItem { /* Inbox Message */
+    border-radius: 24px;
+    background-color:#fffffff0;
+    padding: 16px;
+}
+
+.ic-app-main-content:has(#inbox-conversation-holder) {
+    width: 100%;
+}
+
+
+
+.css-1j6kuei-view, .css-1srbu6u-view > div { /* Discussion instructions, Announcement message, post/threads/replies, Pagination button */
     background-color: #fffffff0; /* #fffc */ /* white */
     border: 1px solid #b9bbbc;
     border-radius: 16px;
@@ -147,14 +240,14 @@
     padding-top: 12px;
 }
 
-.css-tab7xj-view > div > div { /* submission/text box preview for #assignments-2-student-header*/
+.css-tab7xj-view > div > div { /* submission/text box preview for #assignments-2-student-header */
     border: none !important;
     /*box-shadow: 1px 1px 6px #9c9c9c;*/
     border-radius: 16px;
     padding: 16px;
 }
 
-.css-k8wj4l-view { /* Discussion Top Toolbar*/
+.css-k8wj4l-view { /* Discussion Top Toolbar */
     background-color: transparent;
 }
 
@@ -240,7 +333,7 @@ body.no-headers { /* Submission box */
     margin-right: 1vw;
     margin-left: 1vw;
     border: 1px solid #e1e3e6;
-    background-color: #fffc; /* #ffc */
+    background-color: #fffc; /* #fffc */
     backdrop-filter: blur(6px);
     border-radius: 24px;
 }
@@ -264,12 +357,17 @@ body.no-headers { /* Submission box */
     box-shadow: 2px 2px 4px #00000052 !important;
 }
 
-.ic-app-main-content { /* Flex main and right side */
+.ic-app-main-content { /* Right side stick to main content or pinned to right, also #notrightside */
     width: fit-content;
 }
 
 [class="sc-dmlrTW jIDpCu"] { /* Todo extension cards */
     background-color: white;
+}
+
+[class="App !tw-font-primary"] { /* Canvas Analytics grade UI */
+    background-color: transparent !important;
+
 }
 
 
@@ -342,9 +440,13 @@ body {
     background-position: 100% 70%;
     background-attachment: fixed;
     box-shadow: 0px 0px 24px #000 inset;
-    
 }
 
+/*body:has(#authorization_redirect_form) {
+    background-color: #fff;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSedYNQ9UDSTUXZdXifaZVY8uVwt5GxFX2QrgDBnbmOFA&s=10") !important;
+    opacity: 0.3 !important;
+}*/
 
 
 /* Misc */
