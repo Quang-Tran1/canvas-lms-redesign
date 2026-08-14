@@ -1,99 +1,224 @@
+:root {
+    color-scheme: light;
+    /* LIGHT Mode */
+    /* BG colors */
+    --main-content-bg: #fffffff0;
+    --side-content-bg: #fffc;
+    --transparent-glass-bg: #ffffff6e;
+    --nav-bg: #ffffff6e;
+
+    /* Borders */
+    --main-border: #b9bbbc;
+    --transparent-glass-border: #e1e3e6;
+    --nav-border: #dfdfdf;
+
+    /* Accent */
+    --accent: var(--ic-brand-primary) /*#3797a8*/  /*#b33d3e*/;
+    --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent); ;
+
+    --text-color: black;
+    --ic-brand-font-color-dark: var(--text-color);
+    --ic-link-color: #0000FF;
+
+    /* Misc */
+    --shadow: #00000052;
+    --ic-brand-global-nav-menu-item__text-color: var(--text-color) !important;
+    --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
+    --ic-brand-global-nav-ic-icon-svg-fill: var(--text-color) !important;
+    --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
+    --ic-brand-font-color-dark-lightened-15: #323232;
+    --lti-icon-color-filter: brightness(0) !important;
+    --school-logo-display: block;
+
+    --glass-backdrop-filter: blur(6px) saturate(120%);
+    --glass-inset-shadow: 0px 0px 24px var(--side-content-bg) inset;
+}   
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    /* DARK Mode */
+    /* BG colors */
+    --main-content-bg: #303033e0;
+    --side-content-bg: #0000003b;
+    --transparent-glass-bg: #0000003b;
+    --nav-bg: #00000069;
+
+    /* Borders */
+    --main-border: #444444;
+    --transparent-glass-border: #1e1e1e;
+    --nav-border: #414141;
+
+    /* Accent */
+    --accent: var(--ic-brand-primary) /*#b33d3e*/;
+    --accent-fill: #ae152030;
+
+    --text-color: white;
+    --ic-brand-font-color-dark: var(--text-color);
+    --ic-link-color: #6CB4EE;
+
+    /* Misc */
+    --shadow: #00000052;
+    --ic-brand-global-nav-menu-item__text-color: var(--text-color) !important;
+    --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
+    --ic-brand-global-nav-ic-icon-svg-fill: var(--text-color) !important;
+    --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
+    --ic-brand-font-color-dark-lightened-15: #eaeaea;
+    --lti-icon-color-filter: brightness(1) !important;
+    --school-logo-display: block;
+
+    --glass-backdrop-filter: blur(6px) saturate(120%);
+    --glass-inset-shadow: 0px 0px 12px #ffffff60 inset;
+}
+
+.lti_tool_icon_large {
+    filter: var(--lti-icon-color-filter);
+}
+
+.css-qbccd8-view-link:-webkit-any(a), .css-qbccd8-view-link:-webkit-any(button) {
+    color: var(--ic-link-color);
+}
+
+/* App Structure*/
+html body:not(.no-headers):not(.content-only):not(.hide-global-nav).primary-nav-expanded .ic-Layout-wrapper {
+    /* aka #wrapper */
+    margin-left: 112px;
+    margin-right: 16px;
+    max-width: none;
+}
+
+html body.course-menu-expanded:not(.ic-no-flex-layout):not(.embedded):not(.is-inside-submission-frame):not(.content-only) .ic-Layout-columns {
+    /*aka #main when theres course nav bar*/
+    margin-left: calc(192px + 8px);
+    /*8 px margin-left for course nav bar from the global nav bar*/
+}
+
+html #not_right_side {
+    /*is right side*/
+    margin-left: 16px;
+    /*16px margin-left for main content from course/global nav bar*/
+}
+
+html #not_right_side:has(#grades_summary) {
+    width: fit-content;
+    /*solve canvas bug where grades table overflows*/
+}
+
+
 /* Global SDSU Navigation Bar */
-body.primary-nav-expanded .ic-app-header { /*just expanded*/
+html body.primary-nav-expanded .ic-app-header {
+    /*just expanded*/
     width: 96px;
     padding: 24px 4px;
 }
 
-.ic-app-header { /* all including mini*/
-    height: 82vh;
-    margin: 9vh 0px 0vh 12px;
+html .ic-app-header {
+    /* all including mini*/
+    height: fit-content;
+    max-height: 82vh;
+    margin-left: 16px;
     padding: 36px 4px;
     border-radius: 48px;
-    border: 1px solid #6f6f6f; /* #e1e3e6 */
-    background-color: #000000bf;    /* #fffc */
-    backdrop-filter: blur(6px);
+    border: 1px solid var(--nav-border);
+    background-color: var(--nav-bg);
+    backdrop-filter: var(--glass-backdrop-filter);
+    box-shadow: var(--glass-inset-shadow);
     scrollbar-width: none;
     overscroll-behavior: none;
+    top: 50%;
+    /*vertically centered*/
+    transform: translateY(-50%);
+    anchor-name: --global-nav-bar;
 }
 
-.ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
+html .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
     border-radius: 100%;
     aspect-ratio: 1/1;
-    border: 1px solid #b33d3e; /* #e1e3e6 */
-    background-color: #ae152030;    /* #fffc */
+    background-color: var(--accent-fill);
+    /*box-shadow: 0px 0px 8px #fff inset;*/
+    padding-top: 12px;
 }
 
-.menu-item__text {
-    color: white !important; /* White instead of blue*/
+html .menu-item a,
+html .ic-app-header__menu-list-item a {
+    transition: transform 200ms ease;
 }
 
-.ic-app-header__logomark-container {
+html .menu-item a:hover,
+html .ic-app-header__menu-list-item a:hover {
+    transform: scale(1.2);
     background-color: transparent;
 }
 
-body.primary-nav-expanded .ic-app-header__logomark {
+html .ic-app-header__logomark-container {
+    display: var(--school-logo-display);
+    background-color: transparent;
     height: 68px !important;
-}
-
-.ic-app-header__logomark {
-    height: 24px !important;
 }
 
 
 
 /* Course Navigation Bar */
-#sticky-container {
-    padding-top: 24vh;
-    padding-left: 0;
-    padding-bottom: 0;
-    transform: translateX(32px);
+html #sticky-container {
+    padding: 0;
+    top: 50%;
+    /*vertically centered*/
+    transform: translateY(-50%);
 }
 
-#section-tabs {
-    border: 1px solid #6f6f6f; /* #e1e3e6 */
-    background-color: #000000bf;
-    backdrop-filter: blur(6px);
-    border-radius: 16px;
-    padding: 8px;
+html #section-tabs {
+    border: 1px solid var(--nav-border);
+    background-color: var(--nav-bg);
+    backdrop-filter: var(--glass-backdrop-filter);
+    box-shadow: var(--glass-inset-shadow);
+    border-radius: 30.5px;
+    padding: 8px 8px 4px 8px;
+    /*4px margin bottom*/ 
 }
 
-.section {
+html .section > a {
+    color: var(--ic-brand-global-nav-menu-item__text-color) !important;
+    border-radius: 22.5px !important;
+    transition: transform 180ms cubic-bezier(.22, .61, .36, 1);
     margin-bottom: 4px;
 }
 
-.section > a {
-    color: white !important;
-    border-radius: 8px !important;
-}
-
-.section > a:hover {
+html .section > a:hover {
     background-color: #ffffff14;
     text-decoration: none !important;
+    transform: translateX(6px);
 }
 
-.section > a.active {
-    border-left: 6px ridge #b33d3e;
-    background-color: #ae152030;
+html .section > a.active {
+    border: none;
+    padding: 12px 16px !important;
+    color: var(--accent) !important;
+    background-color: var(--accent-fill);
+    /*box-shadow: 0px 0px 8px #fff inset;*/
 }
 
 
 
 /* Navigation Container */
-.css-1gto5tw-tray {
-    height: 82vh !important;
-    margin-top: 9vh;
-    margin-left: 12px;
+html .css-1gto5tw-tray {
+    margin-left: 16px;
     padding-top: 12px;
     padding-left: 12px;
-    background-color: #ffffffd1; /* #fffc */  /* white */
-    border: 1px solid #b9bbbc; /* #b9bbbc */
-    backdrop-filter: blur(6px);
+    background-color: var(--side-content-bg);
+    /* white */
+    border: 1px solid var(--main-border);
+    backdrop-filter: var(--glass-backdrop-filter);
     border-radius: 48px;
     scrollbar-width: none;
     overscroll-behavior: none;
+
+    /* Match the header's top and bottom boundaries */
+    top: anchor(--global-nav-bar top);
+    bottom: anchor(--global-nav-bar bottom);
+    height: auto;
+    /* Let the anchors decide the height */
 }
 
-.css-1gto5tw-tray .css-peiex8-view--inlineBlock-baseButton {
+html .css-1gto5tw-tray .css-peiex8-view--inlineBlock-baseButton {
     margin-top: 20px !important;
     margin-right: 20px !important;
     border-radius: 14px;
@@ -102,37 +227,41 @@ body.primary-nav-expanded .ic-app-header__logomark {
 /*.tray-with-space-for-global-nav {
     margin-left: 0 !important;
 }*/
-
-
-
 /* Dashboard Screen */
-.ic-Dashboard-header__layout {
+html .ic-Dashboard-header__layout {
     background-color: transparent;
     border: none;
 }
 
-.ic-Dashboard-header {
+html .ic-Dashboard-header {
     position: static;
 }
 
-.css-1lq5l3q-view-heading { /* Dashboard word */
-    color:white;
+html .css-1lq5l3q-view-heading {
+    /* Dashboard word */
+    color: white;
     text-shadow: 2px 2px 4px #15345e;
     font-size: 48px;
     font-family: "Baskerville";
-
 }
 
-.ic-DashboardCard {
+html .ic-DashboardCard {
     border-radius: 16px;
+    transition: transform 200ms ease-in-out,
+                box-shadow 200ms ease-in-out;
 }
 
-.ic-DashboardCard__header_hero {
+html .ic-DashboardCard:hover {
+    transform: scale(1.05);
+    /*pop out animation*/
+}
+
+html .ic-DashboardCard__header_hero {
     border: 12px solid rgba(0, 0, 0, .1);
     border-radius: 16px 16px 0px 0px;
 }
 
-.ic-DashboardCard__header-title {
+html .ic-DashboardCard__header-title {
     font-size: 18px;
     font-weight: bold;
 }
@@ -140,129 +269,169 @@ body.primary-nav-expanded .ic-app-header__logomark {
 
 
 /* Modules, Assignments, Quizzes, Grades */
-.ig-header {
-    border: 1px solid #b9bbbc !important;
+html .ig-header {
+    background-color: var(--main-content-bg) !important;
+    border: 1px solid var(--main-border) !important;
     border-radius: 16px 16px 16px 16px;
 }
 
-[class="ig-list items context_module_items "]:has(*),
-.assignment-list, #assignment-quizzes, .ic-Table, .ic-item-row { /* Modules, Assignment, Quizzes, Grades, Announcement cards*/
-    background-color: #fffffff0; /* #fffc */  /* white */
-    border: 1px solid #b9bbbc; /* #b9bbbc */
-    border-radius: 16px;
-    margin-top: 8px;
-    padding-right: 36px; /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+html .ig-header .name {
+    color: var(--text-color);
+    text-shadow: none;
 }
 
-.ig-row  {
-    background-color: transparent !important; /* white */
+html [class="ig-list items context_module_items "]:has(*),
+html .assignment-list,
+html #assignment-quizzes,
+html .ic-Table,
+html .ic-item-row {
+    /* Modules, Assignment, Quizzes, Grades, Announcement cards*/
+    background-color: var(--main-content-bg);
+    /* white */
+    border: 1px solid var(--main-border);
+    border-radius: 16px;
+    margin-top: 8px;
+    padding-right: 24px;
+    /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+}
+
+html .ig-row {
+    background-color: transparent !important;
+    /* white */
     border: none !important;
     border-radius: 16px !important;
     padding: 12px !important;
+    /*transition: transform 240ms ease;*/
 }
 
-.context_module_item.context_module_item_hover,
-.context_module_item.context_module_item_hover,
-.context_module_item:hover {
+
+html .ig-row:hover {
+    /*transform: translateX(24px);*/
+    background: transparent !important;
+}
+
+
+html .context_module_item.context_module_item_hover,
+html .context_module_item.context_module_item_hover,
+html .context_module_item:hover {
     background-color: transparent;
 }
 
-.header-bar, .item-group-container {
+html .header-bar,
+html .item-group-container {
     background-color: transparent;
     padding-bottom: 0px;
 }
 
-.ic-Layout-contentMain, .css-69szee-view--block { /* Main content, Dashboard | announcement UI, discussion UI */
-    width: 56vw;
+html .ic-Layout-contentMain,
+html .css-69szee-view--block {
+    /* Main content, Dashboard | announcement UI, discussion UI */
     height: auto;
     padding: 36px !important;
-    margin: 10vh 0 2vh 2.5vw;
-    border: 1px solid #e1e3e6; /* #e1e3e6 */
-    background-color: #ffffff6e;    /* #fffc */
-    backdrop-filter: blur(6px);
+    margin: 10vh 0 2vh 0;
+    border: 1px solid var(--transparent-glass-border);
+    background-color: var(--transparent-glass-bg);
+    backdrop-filter: var(--glass-backdrop-filter);
     border-radius: 24px;
+    box-shadow: var(--glass-inset-shadow);
 }
 
-.css-69szee-view--block { /* announcement/discussion wider UI */
+html .css-69szee-view--block {
+    /* announcement/discussion UI reduce width */
     width: 70vw;
 }
 
-#content:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #assignments-2-student-header) { /*Specific for Home, Text, Grade, Quiz pages */
-    background-color: #fffffff0; /* #fffffff0 */
+html #content:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #submit_quiz_form, #assignments-2-student-header) {
+    /*Specific for Home, Text, Grade, Quiz pages */
+    background-color: var(--main-content-bg);
 }
 
-.css-k1zfx8-view--flex-flex { /* Inbox UI */
+html .css-k1zfx8-view--flex-flex {
+    /* Inbox UI */
     width: auto;
     height: 96vh !important;
     padding: 16px;
-    margin: 2vh 2vw 2vh 2vw;   
-    border: 1px solid #e1e3e6; /* #e1e3e6 */
-    background-color: #ffffff6e;    /* #fffc */
-    backdrop-filter: blur(6px);
-    border-radius: 24px;
+    margin: 2vh 2vw;
+    border: 1px solid var(--transparent-glass-border);
+    background-color: var(--transparent-glass-bg);
+    box-shadow: var(--glass-inset-shadow);
+    backdrop-filter: var(--glass-backdrop-filter);
+    border-radius: 40px;
 }
 
-.css-8iuz5w-view--inlineBlock { /* Inbox Toolbar */
+html .css-8iuz5w-view--inlineBlock {
+    /* Inbox Toolbar */
     background-color: transparent;
     border: none;
 }
 
-.css-1fmutmb-view { /* Inbox Conversation List  */
+html .css-1fmutmb-view {
+    /* Inbox Conversation List  */
     border: none;
     border-radius: 24px;
     margin-right: 16px;
     height: auto;
-    background-color:#fffc;
+    background-color: var(--side-content-bg);
     scrollbar-width: none;
 }
 
-.css-hzvops-view { /* Inbox Individual Conversations */
+html .css-hzvops-view {
+    /* Inbox Individual Conversations */
     border: none;
 }
 
-.css-107y6ep-view-flexItem { /* Inbox Message */
+html .css-107y6ep-view-flexItem {
+    /* Inbox Message */
     border-radius: 24px;
-    background-color:#fffffff0;
+    background-color: var(--main-content-bg);
     padding: 16px;
 }
 
-.ic-app-main-content:has(#inbox-conversation-holder) {
-    width: 100%;
-}
 
 
-
-.css-1j6kuei-view, .css-1srbu6u-view > div { /* Discussion instructions, Announcement message, post/threads/replies, Pagination button */
-    background-color: #fffffff0; /* #fffc */ /* white */
-    border: 1px solid #b9bbbc;
+html .css-1j6kuei-view,
+html .css-1srbu6u-view > div {
+    /* Discussion instructions, Announcement message, post/threads/replies, Pagination button */
+    background-color: var(--main-content-bg);
+    /* white */
+    border: 1px solid var(--main-border);
     border-radius: 16px;
     margin-top: 16px;
     padding-top: 12px;
 }
 
-.css-tab7xj-view > div > div { /* submission/text box preview for #assignments-2-student-header */
+html .css-1hsfnch-view-flexItem hr {
+    /*removing the line in discussion posts*/
+    /*display: none !important;*/
+}
+
+html .css-tab7xj-view > div > div {
+    /* submission/text box preview for #assignments-2-student-header */
     border: none !important;
     /*box-shadow: 1px 1px 6px #9c9c9c;*/
     border-radius: 16px;
     padding: 16px;
 }
 
-.css-k8wj4l-view { /* Discussion Top Toolbar */
+html .css-k8wj4l-view {
+    /* Discussion Top Toolbar */
     background-color: transparent;
 }
 
-.css-1c66oc-drawerLayout__content { /* Discussion scrollbar */
+html .css-1c66oc-drawerLayout__content {
+    /* Discussion scrollbar */
     scrollbar-width: none;
 }
 
 
-.discussion-pagination-section {
+html .discussion-pagination-section {
     padding: 0px !important;
     width: fit-content;
     margin: auto;
 }
 
-.mce-content-body { /*Text box*/
+html .mce-content-body {
+    /*Text box*/
     background-image: none;
     box-shadow: none;
 }
@@ -270,24 +439,25 @@ body.primary-nav-expanded .ic-app-header__logomark {
 
 
 /* Submission Page */
-.ic-Layout-contentMain:has(.submission_details) {
+html .ic-Layout-contentMain:has(.submission_details) {
     width: 65vw;
     /*height: 88vh;
     margin-top: 2vh;
     margin-bottom: 2vh;*/
 }
 
-.ic-Layout-contentMain:has(.submission_description/*, .quiz-header*/) { /* discussion post, quiz */
-
-    background-color: #fffffff0;
-    border: 1px solid #b9bbbc;
+html .ic-Layout-contentMain:has(.submission_description/*, .quiz-header*/
+) {
+    /* discussion post, quiz */
+    background-color: var(--main-content-bg);
+    border: 1px solid var(--main-border);
     margin-top: 0;
     margin-bottom: 0;
     max-width: fit-content;
 }
 
-.ic-Layout-contentMain:has(#submission_preview.paper, #submission_preview.plain_text) { /*textbox, paper*/
-
+html .ic-Layout-contentMain:has(#submission_preview.paper, #submission_preview.plain_text) {
+    /*textbox, paper*/
     background-color: transparent;
     backdrop-filter: none;
     border: none;
@@ -297,7 +467,8 @@ body.primary-nav-expanded .ic-app-header__logomark {
 }
 
 
-body.no-headers { /* Submission box */
+html body.no-headers {
+    /* Submission box */
     background-image: none;
     background-color: transparent;
     border: none;
@@ -306,19 +477,20 @@ body.no-headers { /* Submission box */
 }
 
 
-.submission-details-comments > div { /* wrapper box for comments */
+html .submission-details-comments > div {
+    /* wrapper box for comments */
     background-color: transparent !important;
 }
 
-.submission-details-comments .comments {
-    background-color: #fffffff0;
-    border: 1px solid #b9bbbc;
+html .submission-details-comments .comments {
+    background-color: var(--main-content-bg);
+    border: 1px solid var(--main-border);
     border-radius: 16px;
     padding-top: 12px;
 }
 
 
-.submission-details-container {
+html .submission-details-container {
     border: none;
 }
 
@@ -327,71 +499,66 @@ body.no-headers { /* Submission box */
 
 
 /* Right Side Content: Quiz score, Todo, Submission */
-#right-side-wrapper:has(#tfc-wall-rose, table, ul, button) {
+html #right-side-wrapper:has(#tfc-wall-rose, table, ul, button) {
     height: fit-content;
     margin-top: 10vh;
-    margin-right: 1vw;
-    margin-left: 1vw;
-    border: 1px solid #e1e3e6;
-    background-color: #fffc; /* #fffc */
-    backdrop-filter: blur(6px);
+    margin-left: 16px;
+    border: 1px solid var(--transparent-glass-border);
+    background-color: var(--side-content-bg);
+    backdrop-filter: var(--glass-backdrop-filter);
+    box-shadow: var(--glass-inset-shadow);
     border-radius: 24px;
 }
 
 /*#right-side-wrapper:has(#sidebar_content > *) {
     display: none;  hmmm 
 }*/
-
-.recent_feedback_icon {
+html .recent_feedback_icon {
     background-color: white;
     padding: 8px;
     margin-top: 4px;
     border-radius: 8px;
-    border: 2px solid #e8eaec;
-    box-shadow: 2px 2px 4px #00000052;
-     
+    border: 2px solid var(--transparent-glass-border);
+    box-shadow: 2px 2px 4px var(--shadow);
 }
 
-.right-side-list  li:last-child  .recent_feedback_icon {
-    border: 2px solid #e8eaec !important;
-    box-shadow: 2px 2px 4px #00000052 !important;
+html .right-side-list li:last-child .recent_feedback_icon {
+    border: 2px solid var(--transparent-glass-border) !important;
+    box-shadow: 2px 2px 4px var(--shadow) !important;
 }
 
-.ic-app-main-content { /* Right side stick to main content or pinned to right, also #notrightside */
-    width: fit-content;
-}
-
-[class="sc-dmlrTW jIDpCu"] { /* Todo extension cards */
+html [class="sc-dmlrTW jIDpCu"] {
+    /* Todo extension cards */
     background-color: white;
 }
 
-[class="App !tw-font-primary"] { /* Canvas Analytics grade UI */
+html [class="App !tw-font-primary"] {
+    /* Canvas Analytics grade UI */
     background-color: transparent !important;
-
 }
 
 
 
 /* Due dates, Points chips */
-.ig-details__item {
-    background-color: transparent; /* #ebebeb */
+html .ig-details__item {
+    background-color: transparent;
     font-weight: bold;
-    border: 1px solid #b9bbbc;
+    border: 1px solid var(--main-border);
     border-radius: 12px;
     margin-left: 4px;
     margin-top: 2px;
     padding: 0px 6px;
 }
 
-.ig-details__item::after {
+html .ig-details__item::after {
     display: none;
 }
 
-[class="requirement-description ig-details__item"] {
+html [class="requirement-description ig-details__item"] {
     display: none;
 }
 
-[class="estimated_duration_display ig-details__item"] {
+html [class="estimated_duration_display ig-details__item"] {
     display: none;
 }
 
@@ -399,47 +566,71 @@ body.no-headers { /* Submission box */
 
 
 /* Button Styling */
-.css-1ta5ds2-baseButton__content, .btn, .Button, .ui-button {
+html .css-1ta5ds2-baseButton__content,
+html .btn,
+html .Button,
+html .ui-button {
     border-radius: 24px;
-    background-color: white;
-    color: black;
+    background-color: var(--main-content-bg);
+    color: var(--text-color);
     padding: 0px 12px;
 }
 
-.btn, .Button, .ui-button {
+html .btn,
+html .Button,
+html .ui-button {
     padding: 8px 12px;
 }
 
-.css-usxqn-view--inlineBlock-baseButton:hover > [class$="-baseButton__content"], .btn:hover, .Button:hover, .ui-button:hover {
-    color: black;
-    background-color: #f0f7fe;
+html .css-usxqn-view--inlineBlock-baseButton:hover > [class$="-baseButton__content"],
+html .btn:hover,
+html .Button:hover,
+html .ui-button:hover {
+    color: var(--text-color);
+    background-color: var(--main-content-bg);
 }
 
-.btn-primary, .Button--primary, .btn-primary:hover, .Button--primary:hover  {
+html .btn-primary,
+html .Button--primary,
+html .btn-primary:hover,
+html .Button--primary:hover {
     color: white;
     background-color: #c83640;
     border-radius: 8px;
 }
 
-.ic-DashboardCard__header-button, .ic-DashboardCard__header-button:hover {
+html .ic-DashboardCard__header-button,
+html .ic-DashboardCard__header-button:hover {
     background-color: transparent;
 }
 
-.css-1jpjaee-textInput__facade { /* Search, Selection box */
+html .css-1jpjaee-textInput__facade {
+    /* Search, Selection box */
     border-radius: 12px;
+}
+
+html #courseMenuToggle {
+    /* Course Nav Bar Toggle*/
+    padding: 0 0 2px 0;
+    width: 41px;
+    height: 41px;
 }
 
 
 
 /* Wallpaper */
-body {
+/* The default wallpaper. When the user picks their own image, popup.js injects a
+   <style id="canvas-redesign-bg"> rule that overrides this with !important --
+   it can't come through --canvas-bg-image, because Chrome drops custom property
+   values over 2 MiB and a base64 image is routinely bigger than that. */
+html body {
     background-color: #fff;
-    background-image: url("https://cdnb.artstation.com/p/assets/images/images/049/176/805/large/killian-prevost-crique-v2.jpg?1651854727");
+    background-image: var(--canvas-bg-image, url("https://images.unsplash.com/photo-1508108712903-49b7ef9b1df8?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 100% 70%;
     background-attachment: fixed;
-    box-shadow: 0px 0px 24px #000 inset;
+    /*box-shadow: 0px 0px 24px #000 inset;*/
 }
 
 /*body:has(#authorization_redirect_form) {
@@ -447,26 +638,77 @@ body {
     background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSedYNQ9UDSTUXZdXifaZVY8uVwt5GxFX2QrgDBnbmOFA&s=10") !important;
     opacity: 0.3 !important;
 }*/
-
-
 /* Misc */
-.ic-app-nav-toggle-and-crumbs {
-    display: none;
+html .Grouping-styles__items {
+    background-color: var(--main-content-bg);
 }
+
+html .ic-app-crumbs {
+    flex: none;
+}
+
+html .ic-app-nav-toggle-and-crumbs {
+    border: none;
+}
+
+html #breadcrumbs {
+    background-color: var(--main-content-bg);
+    border: 1px solid var(--main-border);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+
+/* ---- Course content entrance animation ---- */
+@keyframes ccFadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate(0, 200px) scale(0.99) rotateX(-60deg) rotateZ(-2deg);
+    }
+    70% {
+        transform: translate(0, -8px) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+html #content.ic-Layout-contentMain, html .css-k1zfx8-view--flex-flex {
+    animation: ccFadeInUp 550ms ease-in-out;
+}
+
+/* sidebar follows slightly behind for a subtle stagger */
+html #right-side-wrapper {
+    animation: ccFadeInUp 550ms ease-in-out 200ms;
+}
+
+/* ---- Accessibility ---- */
+@media (prefers-reduced-motion: reduce) {
+    html #content.ic-Layout-contentMain,
+    html #right-side-wrapper,
+    html #section-tabs li.section a,
+    html #section-tabs li.section a::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+
 
 /*
 #module_sequence_footer {
     position: static;
 }
 */
-
-.module-sequence-footer .module-sequence-footer-content, #assignments-student-footer {
+html .module-sequence-footer .module-sequence-footer-content,
+html #assignments-student-footer {
     height: fit-content;
     background-color: transparent !important;
     border: none;
     justify-content: flex-end;
 }
 
-#footer {
+html #footer {
     display: none;
 }
