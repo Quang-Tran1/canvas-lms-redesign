@@ -1,227 +1,329 @@
-:root {
-    color-scheme: light;
-    /* LIGHT Mode */
-    /* BG colors */
-    --main-content-bg: #fffffff0;
-    --side-content-bg: #fffc;
-    --transparent-glass-bg: #ffffff6e;
-    --nav-bg: #ffffff6e;
+:root[data-theme="light"] {
+  color-scheme: light;
+  /* LIGHT Mode */
+  /* BG colors */
+  --main-content-bg: #fffffff0;
+  --secondary-content-bg: #efefef;
+  --sidebar-content-bg: #fffc;
+  --transparent-glass-bg: #ffffff6e;
+  --nav-bg: #ffffff6e;
 
-    /* Borders */
-    --main-border: #b9bbbc;
-    --transparent-glass-border: #e1e3e6;
-    --nav-border: #dfdfdf;
+  /* Borders */
+  --main-border: #b9bbbc;
+  --transparent-glass-border: #e1e3e6;
+  --nav-border: #dfdfdf;
 
-    /* Accent */
-    --accent: var(--ic-brand-primary) /*#3797a8*/  /*#b33d3e*/;
-    --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent); ;
+  /* Accent */
+  --accent: var(--ic-brand-primary)
+    /*#3797a8*/
+    /*#b33d3e*/
+  ;
+  --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent);
 
-    --text-color: black;
-    --ic-brand-font-color-dark: var(--text-color);
-    --ic-link-color: #0000FF;
+  --primary-text-color: #000000;
+  --secondary-text-color: #393939;
+  --tertiary-text-color: #565656;
+  --text-on-glass-color: #000000;
 
-    /* Misc */
-    --shadow: #00000052;
-    --ic-brand-global-nav-menu-item__text-color: var(--text-color) !important;
-    --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
-    --ic-brand-global-nav-ic-icon-svg-fill: var(--text-color) !important;
-    --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
-    --ic-brand-font-color-dark-lightened-15: #323232;
-    --lti-icon-color-filter: brightness(0) !important;
-    --school-logo-display: block;
+  --ic-brand-font-color-dark: var(--primary-text-color);
+  --ic-link-color: #0000ff;
+  --ic-link-color-darkened-10: var(--ic-link-color);
+  --ic-link-color-lightened-10: #var(--ic-link-color);
 
-    --glass-backdrop-filter: blur(6px) saturate(120%);
-    --glass-inset-shadow: 0px 0px 24px var(--side-content-bg) inset;
-}   
+  /* Misc */
+  --shadow: #00000052;
+  --ic-brand-global-nav-menu-item__text-color: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
+  --ic-brand-font-color-dark-lightened-15: var(--secondary-text-color);
+  --ic-brand-font-color-dark-lightened-28: var(--tertiary-text-color);
+  --lti-icon-color-filter: brightness(0) !important;
+  --school-logo-display: none;
+
+  --glass-backdrop-filter: blur(6px) saturate(120%);
+  --glass-inset-shadow: 0px 0px 24px var(--sidebar-content-bg) inset;
+}
+
+:root[data-theme="hybrid"] {
+  color-scheme: light;
+  /* DARK Mode */
+  /* BG colors */
+  --main-content-bg: #fffffff0;
+  --secondary-content-bg: #efefef;
+  --sidebar-content-bg: #fffc;
+  --transparent-glass-bg: #0000003b;
+  --nav-bg: #00000069;
+
+  /* Borders */
+  --main-border: #b9bbbc;
+  --transparent-glass-border: #1e1e1e;
+  --nav-border: #414141;
+
+  /* Accent */
+  --accent: var(--ic-brand-primary)
+    /*#3797a8*/
+    /*#b33d3e*/
+  ;
+  --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent);
+
+  --primary-text-color: #000000;
+  --secondary-text-color: #393939;
+  --tertiary-text-color: #565656;
+  --text-on-glass-color: #fff;
+
+  --ic-brand-font-color-dark: var(--primary-text-color);
+  --ic-link-color: #0000ff;
+  --ic-link-color-darkened-10: var(--ic-link-color);
+  --ic-link-color-lightened-10: #var(--ic-link-color);
+
+  /* Misc */
+  --shadow: #00000052;
+  --ic-brand-global-nav-menu-item__text-color: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
+  --ic-brand-font-color-dark-lightened-15: var(--secondary-text-color);
+  --ic-brand-font-color-dark-lightened-28: var(--tertiary-text-color);
+  --lti-icon-color-filter: brightness(1) !important;
+  --school-logo-display: none;
+
+  --glass-backdrop-filter: blur(6px) saturate(120%);
+  --glass-inset-shadow: 0px 0px 12px #ffffff60 inset;
+}
 
 :root[data-theme="dark"] {
-    color-scheme: dark;
-    /* DARK Mode */
-    /* BG colors */
-    --main-content-bg: #303033e0;
-    --side-content-bg: #0000003b;
-    --transparent-glass-bg: #0000003b;
-    --nav-bg: #00000069;
+  color-scheme: dark;
+  /* DARK Mode */
+  /* BG colors */
+  --main-content-bg: #2c2c2ceb
+    /* #363636c8 */
+    /* #2c2c2c */
+  ;
+  --secondary-content-bg: #252525
+    /* #2d2d2d */
+    /* #252525 */
+  ;
+  --sidebar-content-bg: #363636c8;
+  --transparent-glass-bg: #0000003b;
+  --nav-bg: #00000069;
 
-    /* Borders */
-    --main-border: #444444;
-    --transparent-glass-border: #1e1e1e;
-    --nav-border: #414141;
+  /* Borders */
+  --main-border: #5b5b5b;
+  --transparent-glass-border: #1e1e1e;
+  --nav-border: #414141;
 
-    /* Accent */
-    --accent: var(--ic-brand-primary) /*#b33d3e*/;
-    --accent-fill: #ae152030;
+  /* Accent */
+  --accent: var(--ic-brand-primary)
+    /*#3797a8*/
+    /*#b33d3e*/
+  ;
+  --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent);
 
-    --text-color: white;
-    --ic-brand-font-color-dark: var(--text-color);
-    --ic-link-color: #6CB4EE;
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #d5d5d5;
+  --tertiary-text-color: #a2a2a2;
+  --text-on-glass-color: #fff;
 
-    /* Misc */
-    --shadow: #00000052;
-    --ic-brand-global-nav-menu-item__text-color: var(--text-color) !important;
-    --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
-    --ic-brand-global-nav-ic-icon-svg-fill: var(--text-color) !important;
-    --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
-    --ic-brand-font-color-dark-lightened-15: #eaeaea;
-    --lti-icon-color-filter: brightness(1) !important;
-    --school-logo-display: block;
+  --ic-brand-font-color-dark: var(--primary-text-color);
+  --ic-link-color: #6cb4ee;
+  --ic-link-color-darkened-10: var(--ic-link-color);
+  --ic-link-color-lightened-10: #var(--ic-link-color);
 
-    --glass-backdrop-filter: blur(6px) saturate(120%);
-    --glass-inset-shadow: 0px 0px 12px #ffffff60 inset;
+  /* Misc */
+  --shadow: #00000052;
+  --ic-brand-global-nav-menu-item__text-color: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-menu-item__text-color--active: var(--accent) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill: var(--text-on-glass-color) !important;
+  --ic-brand-global-nav-ic-icon-svg-fill--active: var(--accent) !important;
+  --ic-brand-font-color-dark-lightened-15: var(--secondary-text-color);
+  --ic-brand-font-color-dark-lightened-28: var(--tertiary-text-color);
+  --lti-icon-color-filter: brightness(1) !important;
+  --school-logo-display: none;
+
+  --glass-backdrop-filter: blur(6px) saturate(120%);
+  --glass-inset-shadow: 0px 0px 12px #ffffff60 inset;
 }
 
 .lti_tool_icon_large {
-    filter: var(--lti-icon-color-filter);
+  filter: var(--lti-icon-color-filter);
 }
 
-.css-qbccd8-view-link:-webkit-any(a), .css-qbccd8-view-link:-webkit-any(button) {
-    color: var(--ic-link-color);
+a[class*="-link"],
+button[class*="-link"] {
+  color: var(--ic-link-color) !important;
+}
+
+html .flash-message-container {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html [class*="-text"][color="primary"] {
+  color: var(--primary-text-color);
+}
+
+html [class*="-text"][color="secondary"] {
+  color: var(--secondary-text-color);
 }
 
 /* App Structure*/
 html body:not(.no-headers):not(.content-only):not(.hide-global-nav).primary-nav-expanded .ic-Layout-wrapper {
-    /* aka #wrapper */
-    margin-left: 112px;
-    margin-right: 16px;
-    max-width: none;
+  /* aka #wrapper */
+  margin-left: 112px;
+  margin-right: 16px;
+  max-width: none;
 }
 
 html body.course-menu-expanded:not(.ic-no-flex-layout):not(.embedded):not(.is-inside-submission-frame):not(.content-only) .ic-Layout-columns {
-    /*aka #main when theres course nav bar*/
-    margin-left: calc(192px + 8px);
-    /*8 px margin-left for course nav bar from the global nav bar*/
+  /*aka #main when theres course nav bar*/
+  margin-left: calc(192px + 8px);
+  /*8 px margin-left for course nav bar from the global nav bar*/
 }
 
 html #not_right_side {
-    /*is right side*/
-    margin-left: 16px;
-    /*16px margin-left for main content from course/global nav bar*/
+  /*is right side*/
+  margin-left: 16px;
+  /*16px margin-left for main content from course/global nav bar*/
 }
 
 html #not_right_side:has(#grades_summary) {
-    width: fit-content;
-    /*solve canvas bug where grades table overflows*/
+  width: fit-content;
+  /*solve canvas bug where grades table overflows*/
 }
-
 
 /* Global SDSU Navigation Bar */
 html body.primary-nav-expanded .ic-app-header {
-    /*just expanded*/
-    width: 96px;
-    padding: 24px 4px;
+  /*just expanded*/
+  width: 96px;
+  padding: 24px 4px;
 }
 
 html .ic-app-header {
-    /* all including mini*/
-    height: fit-content;
-    max-height: 82vh;
-    margin-left: 16px;
-    padding: 36px 4px;
-    border-radius: 48px;
-    border: 1px solid var(--nav-border);
-    background-color: var(--nav-bg);
-    backdrop-filter: var(--glass-backdrop-filter);
-    box-shadow: var(--glass-inset-shadow);
-    scrollbar-width: none;
-    overscroll-behavior: none;
-    top: 50%;
-    /*vertically centered*/
-    transform: translateY(-50%);
-    anchor-name: --global-nav-bar;
+  /* all including mini*/
+  height: fit-content;
+  max-height: 82vh;
+  margin-left: 16px;
+  padding: 36px 4px;
+  border-radius: 48px;
+  border: 1px solid var(--nav-border);
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  box-shadow: var(--glass-inset-shadow);
+  scrollbar-width: none;
+  overscroll-behavior: none;
+  top: 50%;
+  /*vertically centered*/
+  transform: translateY(-50%);
+  anchor-name: --global-nav-bar;
 }
 
 html .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
-    border-radius: 100%;
-    aspect-ratio: 1/1;
-    background-color: var(--accent-fill);
-    /*box-shadow: 0px 0px 8px #fff inset;*/
-    padding-top: 12px;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  background-color: var(--accent-fill);
+  /*box-shadow: 0px 0px 8px #fff inset;*/
+  padding-top: 12px;
 }
 
 html .menu-item a,
 html .ic-app-header__menu-list-item a {
-    transition: transform 200ms ease;
+  transition: transform 200ms ease;
 }
 
 html .menu-item a:hover,
 html .ic-app-header__menu-list-item a:hover {
-    transform: scale(1.2);
-    background-color: transparent;
+  transform: scale(1.2);
+  background-color: transparent;
 }
 
 html .ic-app-header__logomark-container {
-    display: var(--school-logo-display);
-    background-color: transparent;
-    height: 68px !important;
+  display: var(--school-logo-display);
+  background-color: transparent;
+  height: 68px !important;
 }
 
-
+html .ic-Layout-watermark {
+  display: var(--school-logo-display);
+}
 
 /* Course Navigation Bar */
 html #sticky-container {
-    padding: 0;
-    top: 50%;
-    /*vertically centered*/
-    transform: translateY(-50%);
+  padding: 0;
+  top: 50%;
+  /*vertically centered*/
+  transform: translateY(-50%);
 }
 
 html #section-tabs {
-    border: 1px solid var(--nav-border);
-    background-color: var(--nav-bg);
-    backdrop-filter: var(--glass-backdrop-filter);
-    box-shadow: var(--glass-inset-shadow);
-    border-radius: 30.5px;
-    padding: 8px 8px 4px 8px;
-    /*4px margin bottom*/ 
+  border: 1px solid var(--nav-border);
+  background-color: var(--nav-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  box-shadow: var(--glass-inset-shadow);
+  border-radius: 30.5px;
+  padding: 8px 8px 4px 8px;
+  /*4px margin bottom*/
 }
 
-html .section > a {
-    color: var(--ic-brand-global-nav-menu-item__text-color) !important;
-    border-radius: 22.5px !important;
-    transition: transform 180ms cubic-bezier(.22, .61, .36, 1);
-    margin-bottom: 4px;
+html .section>a {
+  color: var(--text-on-glass-color) !important;
+  border-radius: 22.5px !important;
+  transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  padding: 8px 0 8px 10px !important;
+  margin-bottom: 4px;
 }
 
-html .section > a:hover {
-    background-color: #ffffff14;
-    text-decoration: none !important;
-    transform: translateX(6px);
+html .section>a:hover {
+  background-color: #ffffff14;
+  text-decoration: none !important;
+  transform: translateX(6px);
 }
 
-html .section > a.active {
-    border: none;
-    padding: 12px 16px !important;
-    color: var(--accent) !important;
-    background-color: var(--accent-fill);
-    /*box-shadow: 0px 0px 8px #fff inset;*/
+html .section>a.active {
+  border: none;
+  padding: 12px 16px !important;
+  color: var(--accent) !important;
+  background-color: var(--accent-fill);
+  /*box-shadow: 0px 0px 8px #fff inset;*/
 }
 
-
+/* Profile Pages */
+html #content .ic-Profile-layout {
+  color: var(--text-on-glass-color);
+}
 
 /* Navigation Container */
-html .css-1gto5tw-tray {
-    margin-left: 16px;
-    padding-top: 12px;
-    padding-left: 12px;
-    background-color: var(--side-content-bg);
-    /* white */
-    border: 1px solid var(--main-border);
-    backdrop-filter: var(--glass-backdrop-filter);
-    border-radius: 48px;
-    scrollbar-width: none;
-    overscroll-behavior: none;
+html #nav-tray-portal>span>span {
+  margin-left: 16px;
+  padding-top: 12px;
+  padding-left: 12px;
+  background-color: var(--sidebar-content-bg);
+  /* white */
+  border: 1px solid var(--main-border);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border-radius: 48px;
+  scrollbar-width: none;
+  overscroll-behavior: none;
 
-    /* Match the header's top and bottom boundaries */
-    top: anchor(--global-nav-bar top);
-    bottom: anchor(--global-nav-bar bottom);
-    height: auto;
-    /* Let the anchors decide the height */
+  /* Match the header's top and bottom boundaries */
+  top: anchor(--global-nav-bar top);
+  bottom: anchor(--global-nav-bar bottom);
+  height: auto;
+  /* Let the anchors decide the height */
 }
 
-html .css-1gto5tw-tray .css-peiex8-view--inlineBlock-baseButton {
-    margin-top: 20px !important;
-    margin-right: 20px !important;
-    border-radius: 14px;
+html #nav-tray-portal>span>span button[data-cid~="CloseButton"] {
+  margin-top: 20px !important;
+  margin-right: 20px !important;
+  border-radius: 14px;
+}
+
+html #nav-tray-portal li[data-cid="ListItem"] {
+  color: var(--secondary-text-color);
+}
+
+html [class*="-toggleFacade__label"] {
+  color: var(--secondary-text-color);
 }
 
 /*.tray-with-space-for-global-nav {
@@ -229,394 +331,805 @@ html .css-1gto5tw-tray .css-peiex8-view--inlineBlock-baseButton {
 }*/
 /* Dashboard Screen */
 html .ic-Dashboard-header__layout {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
 }
 
 html .ic-Dashboard-header {
-    position: static;
+  position: static;
 }
 
-html .css-1lq5l3q-view-heading {
-    /* Dashboard word */
-    color: white;
-    text-shadow: 2px 2px 4px #15345e;
-    font-size: 48px;
-    font-family: "Baskerville";
+html .ic-Dashboard-header span[class*="view-heading"] {
+  /* Dashboard word */
+  color: white;
+  text-shadow: 2px 2px 4px #15345e;
+  font-size: 48px;
+  font-family: "Baskerville";
 }
 
 html .ic-DashboardCard {
-    border-radius: 16px;
-    transition: transform 200ms ease-in-out,
-                box-shadow 200ms ease-in-out;
+  background-color: var(--main-content-bg);
+  border-radius: 16px;
+  transition:
+    transform 200ms ease-in-out,
+    box-shadow 200ms ease-in-out;
 }
 
 html .ic-DashboardCard:hover {
-    transform: scale(1.05);
-    /*pop out animation*/
+  transform: scale(1.05);
+  /*pop out animation*/
 }
 
 html .ic-DashboardCard__header_hero {
-    border: 12px solid rgba(0, 0, 0, .1);
-    border-radius: 16px 16px 0px 0px;
+  border: 12px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px 16px 0px 0px;
 }
 
 html .ic-DashboardCard__header-title {
-    font-size: 18px;
-    font-weight: bold;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-
+html .ic-DashboardCard__header_content {
+  background-color: transparent;
+}
 
 /* Modules, Assignments, Quizzes, Grades */
 html .ig-header {
-    background-color: var(--main-content-bg) !important;
-    border: 1px solid var(--main-border) !important;
-    border-radius: 16px 16px 16px 16px;
+  background-color: var(--secondary-content-bg) !important;
+  border: 1px solid var(--main-border) !important;
+  border-radius: 16px 16px 16px 16px;
 }
 
 html .ig-header .name {
-    color: var(--text-color);
-    text-shadow: none;
+  color: var(--primary-text-color);
+  text-shadow: none;
+}
+
+html .element_toggler,
+html .accessible-toggler {
+  color: var(--primary-text-color);
+}
+
+html .ig-header .pill {
+  border-color: var(--main-border);
+  padding: 4px;
+  box-shadow: none;
 }
 
 html [class="ig-list items context_module_items "]:has(*),
 html .assignment-list,
 html #assignment-quizzes,
-html .ic-Table,
-html .ic-item-row {
-    /* Modules, Assignment, Quizzes, Grades, Announcement cards*/
-    background-color: var(--main-content-bg);
-    /* white */
-    border: 1px solid var(--main-border);
-    border-radius: 16px;
-    margin-top: 8px;
-    padding-right: 24px;
-    /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+html .ic-item-row,
+html #calendar-list-holder {
+  /* Modules, Assignment, Quizzes, Grades, Announcement cards*/
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  margin-top: 8px;
+  padding-right: 24px;
+  box-shadow: none;
+  /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+}
+
+html .pages.show,
+html .course-title {
+  color: var(--primary-text-color) !important;
+}
+
+html .ui-widget-header {
+  background-color: var(--secondary-content-bg) !important;
+  color: var(--primary-text-color) !important;
+}
+
+html .ui-tabs .ui-tabs-nav li.ui-tabs-active,
+html .ui-tabs .ui-tabs-nav li.ui-tabs-active.ui-state-hover,
+html .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
+  background-color: var(--main-content-bg) !important;
+}
+
+html .ui-widget-content {
+  background-color: var(--main-content-bg) !important;
+  color: var(--primary-text-color) !important;
+}
+
+html [class*="-formFieldLayout__label"] {
+  color: var(--secondary-text-color);
+}
+
+
+
+html #calendar-app .fc-widget-header {
+  border: none;
+  color: var(--text-on-glass-color);
+}
+
+html #calendar-app .fc-body {
+  background-color: var(--main-content-bg) !important;
+  display: block;
+  border-radius: 16px;
+  border: 1px solid var(--main-border);
+}
+
+html #calendar-app .fc-month-view>table {
+  border-collapse: separate;
+  gap: 2px;
+}
+
+html #calendar-app .fc-widget-content {
+  border: none;
+}
+
+html #calendar-app .fc-day-top {
+  background-color: transparent !important;
+  padding-top: 8px;
+  padding-right: 16px;
+  border: none;
+}
+
+html #calendar-app .fc-bg .fc-today {
+  background: var(--secondary-content-bg) !important;
+}
+
+html #calendar-app .fc-day {
+  /* background-color: var(--main-content-bg); */
+  border: 1px solid var(--main-border);
+  /* border-radius: 16px; */
+}
+
+html #minical,
+html .mini_month {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  padding: 4px;
+}
+
+html #minical .fc-icon {
+  color: var(--secondary-text-color);
+}
+
+html #minical .fc-toolbar h2 {
+  color: var(--secondary-text-color);
+}
+
+html #minical .fc-day-number {
+  text-align: center !important;
+  border: none !important;
+  aspect-ratio: 1/1;
+}
+
+html #minical .fc-widget-content {
+  color: var(--secondary-text-color);
+  border: none;
+}
+
+html #minical .fc-day-grid-container {
+  height: fit-content !important;
+  overflow: auto !important;
+  scrollbar-width: none;
+}
+
+html #minical .fc-week {
+  height: auto !important;
+}
+
+html #minical .fc-day-top:hover {
+  background-color: var(--secondary-content-bg) !important;
+}
+
+html #minical .fc-today {
+  background-color: #ff3a3c !important;
+  color: white !important;
+}
+
+html #calendar-list-holder {
+  padding: 8px;
+  scrollbar-width: none;
+}
+
+html .ic-Table {
+  color: var(--primary-text-color);
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  padding: 0 16px;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+html .ic-Table tbody tr th,
+html .ic-Table tbody tr td {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--main-border) !important;
+}
+
+html .ic-Table tbody tr:last-child th,
+html .ic-Table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+html .ic-Table tbody tr {
+  background-color: transparent !important;
+}
+
+
+html .ic-Table tbody tr:hover {
+  background-color: var(--secondary-content-bg) !important;
+}
+
+html .ic-Table.ic-Table--striped tbody tr:nth-child(odd) {
+  background-color: var(--secondary-content-bg);
+}
+
+html table.summary {
+  /* Grading weights table */
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  padding: 0 8px;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+html table.summary td,
+html table.summary tbody th {
+  /* Grading weights table */
+  background-color: transparent;
+  border: none;
 }
 
 html .ig-row {
-    background-color: transparent !important;
-    /* white */
-    border: none !important;
-    border-radius: 16px !important;
-    padding: 12px !important;
-    /*transition: transform 240ms ease;*/
+  background-color: transparent !important;
+  /* white */
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  /*transition: transform 240ms ease;*/
 }
-
 
 html .ig-row:hover {
-    /*transform: translateX(24px);*/
-    background: transparent !important;
+  /*transform: translateX(24px);*/
+  background: transparent !important;
 }
-
 
 html .context_module_item.context_module_item_hover,
 html .context_module_item.context_module_item_hover,
 html .context_module_item:hover {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 html .header-bar,
 html .item-group-container {
+  background-color: transparent;
+  padding-bottom: 0px;
+}
+
+html #content.ic-Layout-contentMain,
+html #discussion-drawer-layout>#module_sequence_footer_container {
+  /* Main content, Dashboard | announcement UI, discussion UI */
+  height: auto;
+  padding: 36px !important;
+  margin: 10vh 0 2vh 0;
+  border: 1px solid var(--transparent-glass-border);
+  background-color: var(--transparent-glass-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border-radius: 24px;
+  box-shadow: var(--glass-inset-shadow);
+}
+
+html #content:has(#wiki_page_show,
+  #course_syllabus,
+  #grade-summary-content,
+  #assignment_show,
+  #quiz_show,
+  #submit_quiz_form,
+  #assignments-2-student-header) {
+  /*Specific for Home, Text, Grade, Quiz pages */
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border: var(--main-border);
+}
+
+html #grade-summary-content span[class*="-formFieldLayout__label"] {
+  color: var(--primary-text-color);
+}
+
+html .ui-tabs .ui-tabs-panel {
+  border-color: var(--main-border);
+  background-color: var(--main-content-bg);
+}
+
+html div:has(> [data-testid="desktop-message-action-header"]) {
+  /* Inbox UI */
+  width: auto;
+  height: 96vh !important;
+  padding: 16px;
+  margin: 2vh 2vw;
+  border: 1px solid var(--transparent-glass-border);
+  background-color: var(--transparent-glass-bg);
+  box-shadow: var(--glass-inset-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border-radius: 40px;
+}
+
+html div[data-testid="tool-bar"] {
+  /* Inbox Toolbar */
+  background-color: transparent;
+  border: none;
+}
+
+html div[data-testid="list-items-desktop"]>div {
+  /* Inbox Conversation List  */
+  border: none;
+  border-radius: 24px;
+  margin-right: 16px;
+  height: auto;
+  background-color: var(--sidebar-content-bg);
+  scrollbar-width: none;
+}
+
+html div[data-testid="list-items-desktop"] div[style*="background-color: rgb(229, 242, 248)"] {
+  background-color: var(--main-content-bg) !important;
+  color: var(--primary-text-color);
+}
+
+html [data-testid="conversation"] {
+  /* Inbox Individual Conversations */
+  border: none;
+}
+
+html [data-testid="conversation"] span[class*="-checkboxFacade__facade"] {
+  margin-left: 5px;
+}
+
+html span:has([data-testid="list-items-desktop"])+span {
+  /* Inbox Message */
+  border-radius: 24px;
+  background-color: var(--main-content-bg);
+  padding: 16px;
+}
+
+html #compose-message-modal {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html #compose-message-modal div[data-cid="ModalHeader"] {
+  background-color: var(--main-content-bg);
+}
+
+html #compose-message-modal div[data-cid="ModalFooter"] {
+  background-color: var(--secondary-content-bg);
+}
+
+html #compose-message-modal span[class*="checkboxFacade__label"] {
+  color: var(--primary-text-color);
+}
+
+html select,
+html textarea,
+html input[type="text"],
+html input[type="password"],
+html input[type="datetime"],
+html input[type="datetime-local"],
+html input[type="date"],
+html input[type="month"],
+html input[type="time"],
+html input[type="week"],
+html input[type="number"],
+html input[type="email"],
+html input[type="url"],
+html input[type="search"],
+html input[type="tel"],
+html input[type="color"],
+.uneditable-input {
+  background-color: var(--main-content-bg) !important;
+  color: var(--primary-text-color) !important;
+  border-radius: 12px !important;
+  border-color: var(--main-border) !important;
+}
+
+html .rce-wrapper,
+html .canvas-rce__skins--root {
+  background-color: var(--main-content-bg);
+  padding: 24px 24px 8px 24px;
+  border-radius: 16px;
+}
+
+/* html .tox .tox-menubar {
     background-color: transparent;
-    padding-bottom: 0px;
 }
 
-html .ic-Layout-contentMain,
-html .css-69szee-view--block {
-    /* Main content, Dashboard | announcement UI, discussion UI */
-    height: auto;
-    padding: 36px !important;
-    margin: 10vh 0 2vh 0;
-    border: 1px solid var(--transparent-glass-border);
-    background-color: var(--transparent-glass-bg);
-    backdrop-filter: var(--glass-backdrop-filter);
-    border-radius: 24px;
-    box-shadow: var(--glass-inset-shadow);
-}
-
-html .css-69szee-view--block {
-    /* announcement/discussion UI reduce width */
-    width: 70vw;
-}
-
-html #content:has(#wiki_page_show, #course_syllabus, #grade-summary-content, #assignment_show, #quiz_show, #submit_quiz_form, #assignments-2-student-header) {
-    /*Specific for Home, Text, Grade, Quiz pages */
-    background-color: var(--main-content-bg);
-}
-
-html .css-k1zfx8-view--flex-flex {
-    /* Inbox UI */
-    width: auto;
-    height: 96vh !important;
-    padding: 16px;
-    margin: 2vh 2vw;
-    border: 1px solid var(--transparent-glass-border);
-    background-color: var(--transparent-glass-bg);
-    box-shadow: var(--glass-inset-shadow);
-    backdrop-filter: var(--glass-backdrop-filter);
-    border-radius: 40px;
-}
-
-html .css-8iuz5w-view--inlineBlock {
-    /* Inbox Toolbar */
+html .tox:not(.tox-tinymce-inline) .tox-editor-header {
     background-color: transparent;
-    border: none;
 }
 
-html .css-1fmutmb-view {
-    /* Inbox Conversation List  */
-    border: none;
-    border-radius: 24px;
-    margin-right: 16px;
-    height: auto;
-    background-color: var(--side-content-bg);
-    scrollbar-width: none;
+html .tox .tox-toolbar-overlord {
+    background-color: transparent;
 }
 
-html .css-hzvops-view {
-    /* Inbox Individual Conversations */
-    border: none;
+html .tox .tox-toolbar__primary {
+    background-color: transparent;
 }
 
-html .css-107y6ep-view-flexItem {
-    /* Inbox Message */
-    border-radius: 24px;
-    background-color: var(--main-content-bg);
-    padding: 16px;
+html .tox :not(svg):not(rect) {
+    color: var(--primary-text-color);
 }
 
+html .tox .tox-tbtn svg {
+    fill: var(--primary-text-color);
+}
 
+html .tox .tox-tbtn__select-chevron svg {
+    fill: var(--secondary-content-bg)
+}
 
-html .css-1j6kuei-view,
-html .css-1srbu6u-view > div {
-    /* Discussion instructions, Announcement message, post/threads/replies, Pagination button */
-    background-color: var(--main-content-bg);
-    /* white */
-    border: 1px solid var(--main-border);
-    border-radius: 16px;
-    margin-top: 16px;
-    padding-top: 12px;
+html .tox .tox-split-button .tox-tbtn.tox-split-button__chevron {
+    background-color: var(--secondary-content-bg);
+} */
+
+html div[data-testid="discussion-topic-container"]>span>div
+/* Announcement & Discussion instructions */
+,
+html div[data-testid="discussion-root-entry-container"]>div
+
+/* Individual Posts/Replies */
+  {
+  /* Discussion instructions, Announcement message, post/threads/replies, Pagination button */
+  background-color: var(--main-content-bg);
+  /* white */
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
 }
 
 html .css-1hsfnch-view-flexItem hr {
-    /*removing the line in discussion posts*/
-    /*display: none !important;*/
+  /*removing the line in discussion posts*/
+  /*display: none !important;*/
 }
 
-html .css-tab7xj-view > div > div {
-    /* submission/text box preview for #assignments-2-student-header */
-    border: none !important;
-    /*box-shadow: 1px 1px 6px #9c9c9c;*/
-    border-radius: 16px;
-    padding: 16px;
+html div[data-testid="assignment-2-student-content-tabs"] div[data-testid="attempt-tab"]>div {
+  /* submission/text box preview for #assignments-2-student-header */
+  background-color: var(--secondary-content-bg) !important;
+  border: none !important;
+  /*box-shadow: 1px 1px 6px #9c9c9c;*/
+  border-radius: 16px;
+  padding: 16px;
 }
 
-html .css-k8wj4l-view {
-    /* Discussion Top Toolbar */
-    background-color: transparent;
+html .submission-type-icon-contents span[class*="baseButton__content"],
+html .submission-type-icon-contents [class*="-baseButton"]:hover>span[class*="-baseButton__content"] {
+  background-color: transparent !important;
 }
 
-html .css-1c66oc-drawerLayout__content {
-    /* Discussion scrollbar */
-    scrollbar-width: none;
+html #file-upload-container div[class*="view-flexItem"]>div>span {
+  background-color: var(--secondary-content-bg) !important;
+  padding: 12px 0 !important;
 }
 
+html div[data-testid="assignments-2-student-view"] span[class*="-toggleDetails__summary"] {
+  background-color: transparent;
+  color: var(--primary-text-color);
+}
+
+html div[data-testid="assignments-2-student-view"] div[class*="-toggleDetails__details"] {
+  background-color: transparent;
+  color: var(--primary-text-color);
+}
+
+/* html #wiki_page_show:not(a):not([style]),
+html #course_syllabus *:not(a):not([style]),
+html #grade-summary-content *:not(a):not([style]),
+html #assignment_show *:not(a):not([style]),
+html #quiz_show *:not(a):not([style]),
+html #submit_quiz_form *:not(a):not([style]),
+html div[data-testid="assignments-2-student-view"] *:not(a) {
+  color: var(--primary-text-color);
+  background-color: transparent;
+} */
+
+html #content .page-title {
+  color: var(--primary-text-color);
+}
+
+html span[style*="background-color: #fbeeb8"],
+html span[style*="background-color: #fbeeb8"] * {
+  color: black !important;
+}
+
+html .quiz-submission {
+  background-color: transparent;
+}
+
+html #questions.assessing {
+  background-color: var(--main-content-bg);
+}
+
+html .question .header,
+html #questions.assessment_results .question .header {
+  background-color: var(--secondary-content-bg) !important;
+  color: var(--primary-text-color) !important;
+}
+
+html .question .header .question_points_holder {
+  background-color: var(--secondary-content-bg) !important;
+  color: var(--secondary-text-color) !important;
+}
+
+html .question {
+  background-color: var(--main-content-bg) !important;
+  color: var(--primary-text-color) !important;
+}
+
+html .quiz_comment:before {
+  /* quiz comment arrow border */
+  border-bottom-color: var(--main-border);
+}
+
+html .quiz_comment:after {
+  /* quiz comment arrow fill */
+  border-bottom-color: var(--secondary-content-bg);
+}
+
+html .quiz_comment {
+  background-image: none;
+  background-color: var(--secondary-content-bg) !important;
+  color: var(--primary-text-color) !important;
+  border-color: var(--main-border);
+}
+
+html .quiz_score .score_value {
+  color: var(--secondary-text-color);
+}
+
+html #module_sequence_footer_container>div {
+  /* Discussion Top Toolbar */
+  background-color: transparent;
+}
+
+html #discussion-drawer-layout {
+  /* Discussion scrollbar */
+  scrollbar-width: none;
+}
 
 html .discussion-pagination-section {
-    padding: 0px !important;
-    width: fit-content;
-    margin: auto;
+  padding: 0px !important;
+  width: fit-content;
+  margin: auto;
+}
+
+html span[class*="-view--block"]:has([data-testid="DiscussionEdit-container"]) {
+  background-color: transparent;
+  color: var(--primary-text-color);
 }
 
 html .mce-content-body {
-    /*Text box*/
-    background-image: none;
-    box-shadow: none;
+  /*Text box*/
+  background-image: none;
+  box-shadow: none;
 }
 
 
 
 /* Submission Page */
 html .ic-Layout-contentMain:has(.submission_details) {
-    width: 65vw;
-    /*height: 88vh;
+  width: 65vw;
+  /*height: 88vh;
     margin-top: 2vh;
     margin-bottom: 2vh;*/
 }
 
-html .ic-Layout-contentMain:has(.submission_description/*, .quiz-header*/
+html .ic-Layout-contentMain:has(.submission_description
+
+  /*, .quiz-header*/
 ) {
-    /* discussion post, quiz */
-    background-color: var(--main-content-bg);
-    border: 1px solid var(--main-border);
-    margin-top: 0;
-    margin-bottom: 0;
-    max-width: fit-content;
+  /* discussion post, quiz */
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: fit-content;
 }
 
-html .ic-Layout-contentMain:has(#submission_preview.paper, #submission_preview.plain_text) {
-    /*textbox, paper*/
-    background-color: transparent;
-    backdrop-filter: none;
-    border: none;
-    max-width: fit-content;
-    margin: 0;
-    padding-top: 0 !important;
+html .ic-Layout-contentMain:has(#submission_preview.paper,
+  #submission_preview.plain_text) {
+  /*textbox, paper*/
+  background-color: transparent;
+  backdrop-filter: none;
+  border: none;
+  max-width: fit-content;
+  margin: 0;
+  padding-top: 0 !important;
 }
-
 
 html body.no-headers {
-    /* Submission box */
-    background-image: none;
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    scrollbar-width: none;
+  /* Submission box */
+  background-image: none;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  scrollbar-width: none;
 }
 
-
-html .submission-details-comments > div {
-    /* wrapper box for comments */
-    background-color: transparent !important;
+html .submission-details-comments>div {
+  /* wrapper box for comments */
+  background-color: transparent !important;
 }
 
 html .submission-details-comments .comments {
-    background-color: var(--main-content-bg);
-    border: 1px solid var(--main-border);
-    border-radius: 16px;
-    padding-top: 12px;
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  border-radius: 16px;
+  padding-top: 12px;
 }
-
 
 html .submission-details-container {
-    border: none;
+  border: none;
 }
 
-
-
-
-
 /* Right Side Content: Quiz score, Todo, Submission */
-html #right-side-wrapper:has(#tfc-wall-rose, table, ul, button) {
-    height: fit-content;
-    margin-top: 10vh;
-    margin-left: 16px;
-    border: 1px solid var(--transparent-glass-border);
-    background-color: var(--side-content-bg);
-    backdrop-filter: var(--glass-backdrop-filter);
-    box-shadow: var(--glass-inset-shadow);
-    border-radius: 24px;
+html #right-side-wrapper:has(#tfc-wall-rose, table, ul, button, a) {
+  height: fit-content;
+  margin-top: 10vh;
+  margin-left: 16px;
+  border: 1px solid var(--transparent-glass-border);
+  background-color: var(--sidebar-content-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  box-shadow: var(--glass-inset-shadow);
+  border-radius: 24px;
 }
 
 /*#right-side-wrapper:has(#sidebar_content > *) {
     display: none;  hmmm 
 }*/
+html #right-side .h2 {
+  border-bottom: none;
+}
+
 html .recent_feedback_icon {
-    background-color: white;
-    padding: 8px;
-    margin-top: 4px;
-    border-radius: 8px;
-    border: 2px solid var(--transparent-glass-border);
-    box-shadow: 2px 2px 4px var(--shadow);
+  background-color: var(--main-content-bg);
+  padding: 8px;
+  margin-top: 4px;
+  border-radius: 8px;
+  border: 2px solid var(--main-border);
+  box-shadow: 2px 2px 4px var(--shadow);
 }
 
 html .right-side-list li:last-child .recent_feedback_icon {
-    border: 2px solid var(--transparent-glass-border) !important;
-    box-shadow: 2px 2px 4px var(--shadow) !important;
+  border: 2px solid var(--main-border) !important;
+  box-shadow: 2px 2px 4px var(--shadow) !important;
 }
 
-html [class="sc-dmlrTW jIDpCu"] {
-    /* Todo extension cards */
-    background-color: white;
+html .recent_feedback_icon * {
+  color: var(--primary-text-color);
+}
+
+html .event-details:after {
+  display: none;
+}
+
+html .jIDpCu {
+  /* Todo extension cards */
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html .fFvlhF {
+  color: var(--secondary-text-color);
 }
 
 html [class="App !tw-font-primary"] {
-    /* Canvas Analytics grade UI */
-    background-color: transparent !important;
+  /* Canvas Analytics grade UI */
+  background-color: transparent !important;
 }
-
-
 
 /* Due dates, Points chips */
 html .ig-details__item {
-    background-color: transparent;
-    font-weight: bold;
-    border: 1px solid var(--main-border);
-    border-radius: 12px;
-    margin-left: 4px;
-    margin-top: 2px;
-    padding: 0px 6px;
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid var(--main-border);
+  border-radius: 12px;
+  margin-left: 4px;
+  margin-top: 2px;
+  padding: 0px 6px;
 }
 
 html .ig-details__item::after {
-    display: none;
+  display: none;
 }
 
 html [class="requirement-description ig-details__item"] {
-    display: none;
+  display: none;
 }
 
 html [class="estimated_duration_display ig-details__item"] {
-    display: none;
+  display: none;
 }
-
-
-
 
 /* Button Styling */
-html .css-1ta5ds2-baseButton__content,
 html .btn,
 html .Button,
 html .ui-button {
+  background-color: var(--main-content-bg) !important;
+  color: var(--primary-text-color) !important;
+  border-color: var(--main-border);
+  border-radius: 24px !important;
+  padding: 8px 12px !important;
+  width: fit-content;
+  /* box-shadow: 1px 1px 2px black, -1px -2px 4px #000000ad inset, 1px 1px 3px white inset; */
+}
+
+/*html button[class*="baseButton"] span {
     border-radius: 24px;
     background-color: var(--main-content-bg);
-    color: var(--text-color);
-    padding: 0px 12px;
-}
+    color: var(--primary-text-color);
+}*/
 
-html .btn,
-html .Button,
-html .ui-button {
-    padding: 8px 12px;
-}
-
-html .css-usxqn-view--inlineBlock-baseButton:hover > [class$="-baseButton__content"],
 html .btn:hover,
 html .Button:hover,
 html .ui-button:hover {
-    color: var(--text-color);
-    background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  background-color: var(--main-content-bg);
+  border-color: var(--main-border);
+}
+
+html span[class*="-baseButton__content"] {
+  background-color: var(--main-content-bg) !important;
+  color: var(--secondary-text-color) !important;
+  border-color: var(--main-border);
+  border-radius: 12px;
+}
+
+html [class*="-baseButton"]:hover>span[class*="-baseButton__content"] {
+  background-color: var(--secondary-content-bg) !important;
 }
 
 html .btn-primary,
 html .Button--primary,
 html .btn-primary:hover,
 html .Button--primary:hover {
-    color: white;
-    background-color: #c83640;
-    border-radius: 8px;
+  color: white;
+  background-color: #c83640;
+  border-radius: 8px;
+}
+
+html .ic-Form-control.ic-Form-control--checkbox input[type=checkbox]:checked~.ic-Label:before {
+  background-color: black;
 }
 
 html .ic-DashboardCard__header-button,
 html .ic-DashboardCard__header-button:hover {
-    background-color: transparent;
+  background-color: transparent !important;
+  padding: 0 !important;
 }
 
-html .css-1jpjaee-textInput__facade {
-    /* Search, Selection box */
-    border-radius: 12px;
+html label[data-cid="TextInput"]>span>span {
+  /* Search, Selection box */
+  background-color: var(--main-content-bg);
+  border-color: var(--main-border);
+  border-radius: 12px;
+}
+
+html label[data-cid="TextInput"]>span>span * {
+  color: var(--primary-text-color) !important;
+}
+
+html select {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border-color: var(--main-border);
+  border-radius: 12px;
 }
 
 html #courseMenuToggle {
-    /* Course Nav Bar Toggle*/
-    padding: 0 0 2px 0;
-    width: 41px;
-    height: 41px;
+  /* Course Nav Bar Toggle*/
+  padding: 0 0 2px 0 !important;
+  width: 41px;
+  height: 41px;
 }
-
-
 
 /* Wallpaper */
 /* The default wallpaper. When the user picks their own image, popup.js injects a
@@ -624,13 +1137,14 @@ html #courseMenuToggle {
    it can't come through --canvas-bg-image, because Chrome drops custom property
    values over 2 MiB and a base64 image is routinely bigger than that. */
 html body {
-    background-color: #fff;
-    background-image: var(--canvas-bg-image, url("https://images.unsplash.com/photo-1508108712903-49b7ef9b1df8?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 100% 70%;
-    background-attachment: fixed;
-    /*box-shadow: 0px 0px 24px #000 inset;*/
+  background-color: #fff;
+  background-image: var(--canvas-bg-image,
+      url("https://images.unsplash.com/photo-1508108712903-49b7ef9b1df8?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100% 70%;
+  background-attachment: fixed;
+  /*box-shadow: 0px 0px 24px #000 inset;*/
 }
 
 /*body:has(#authorization_redirect_form) {
@@ -640,61 +1154,89 @@ html body {
 }*/
 /* Misc */
 html .Grouping-styles__items {
-    background-color: var(--main-content-bg);
+  background-color: var(--main-content-bg);
 }
 
 html .ic-app-crumbs {
-    flex: none;
+  flex: none;
 }
 
 html .ic-app-nav-toggle-and-crumbs {
-    border: none;
+  border: none;
+  background-color: transparent;
+  background-image: none;
 }
 
 html #breadcrumbs {
-    background-color: var(--main-content-bg);
-    border: 1px solid var(--main-border);
-    padding: 6px 12px;
-    border-radius: 20px;
+  background-color: var(--main-content-bg);
+  border: 1px solid var(--main-border);
+  padding: 6px 12px;
+  border-radius: 20px;
 }
 
+html .PlannerHeader-styles__root {
+  background: transparent;
+}
 
 /* ---- Course content entrance animation ---- */
+/* @keyframes ccFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate(0, 40px) scale(0.97);
+    filter: blur(24px);
+  }
+  70% {
+    transform: translate(0, -8px) scale(1.01);
+    filter: none;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+} */
+
 @keyframes ccFadeInUp {
-    0% {
-        opacity: 0;
-        transform: translate(0, 200px) scale(0.99) rotateX(-60deg) rotateZ(-2deg);
-    }
-    70% {
-        transform: translate(0, -8px) scale(1.01);
-    }
-    100% {
-        opacity: 1;
-        transform: none;
-    }
+  0% {
+    opacity: 0;
+    transform: translate(0, 200px) scale(0.99) rotateX(-60deg) rotateZ(-2deg);
+  }
+
+  70% {
+    transform: translate(0, -8px) scale(1.01);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-html #content.ic-Layout-contentMain, html .css-k1zfx8-view--flex-flex {
-    animation: ccFadeInUp 550ms ease-in-out;
+html #content.ic-Layout-contentMain,
+html div:has(> [data-testid="desktop-message-action-header"]) {
+  animation: ccFadeInUp 550ms ease-in-out;
 }
 
 /* sidebar follows slightly behind for a subtle stagger */
 html #right-side-wrapper {
-    animation: ccFadeInUp 550ms ease-in-out 200ms;
+  animation: ccFadeInUp 550ms ease-in-out 200ms;
+}
+
+html * {
+  transition:
+    background-color 500ms ease;
 }
 
 /* ---- Accessibility ---- */
 @media (prefers-reduced-motion: reduce) {
-    html #content.ic-Layout-contentMain,
-    html #right-side-wrapper,
-    html #section-tabs li.section a,
-    html #section-tabs li.section a::before {
-        animation: none !important;
-        transition: none !important;
-    }
+
+  html #content.ic-Layout-contentMain,
+  html #right-side-wrapper,
+  html #section-tabs li.section a,
+  html #section-tabs li.section a::before {
+    animation: none !important;
+    transition: none !important;
+  }
 }
-
-
 
 /*
 #module_sequence_footer {
@@ -703,12 +1245,12 @@ html #right-side-wrapper {
 */
 html .module-sequence-footer .module-sequence-footer-content,
 html #assignments-student-footer {
-    height: fit-content;
-    background-color: transparent !important;
-    border: none;
-    justify-content: flex-end;
+  height: fit-content;
+  background-color: transparent !important;
+  border: none;
+  justify-content: flex-end;
 }
 
 html #footer {
-    display: none;
+  display: none;
 }
