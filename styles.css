@@ -1254,3 +1254,11 @@ html #assignments-student-footer {
 html #footer {
   display: none;
 }
+
+/*
+glassy borders
+
+background-color: var(--transparent-glass-bg) !important;
+box-shadow: 1px 1px 0px #ffffff6b inset, -1px -1px 0px #ffffff6b inset;
+border: none;
+*/
