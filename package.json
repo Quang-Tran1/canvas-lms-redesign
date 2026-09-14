@@ -1,0 +1,32 @@
+{
+  "name": "canvas-lms-redesign",
+  "version": "1.1.1",
+  "description": "BetterLMS - Beautiful design for every assignment on Canvas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quang-Tran1/canvas-lms-redesign.git"
+  },
+  "author": "Quang Tran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Quang-Tran1/canvas-lms-redesign/issues"
+  },
+  "homepage": "https://github.com/Quang-Tran1/canvas-lms-redesign#readme",
+  "dependencies": {
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.7.1",
+    "@preact/preset-vite": "^2.10.6",
+    "@types/chrome": "^0.2.9",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  }
+}
