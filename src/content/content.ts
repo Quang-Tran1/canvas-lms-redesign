@@ -17,6 +17,7 @@ import {
     applyTheme,
     readSettings,
 } from "../shared/settings";
+import { mountTodo } from "./todo/mount";
 
 declare global {
     interface Window {
@@ -27,6 +28,7 @@ declare global {
 if (!window.__betterLmsInjected) {
     window.__betterLmsInjected = true;
     initPage();
+    mountTodo();
 }
 
 async function initPage(): Promise<void> {
