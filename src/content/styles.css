@@ -5,8 +5,8 @@
   --accent: var(--ic-brand-primary);
   --accent-fill: color-mix(in srgb, var(--accent) 20%, transparent);
 
-  --glass-specular-highlight: 1px 1px 0px #ffffff6b inset, -1px -1px 0px #ffffff6b inset;
-  --glass-specular-highlight-hover: -1px 1px 0px #ffffff6b inset, 1px -1px 0px #ffffff6b inset;
+  --glass-specular-highlight: 0.75px 0.75px 0px #ffffff6b inset, -0.75px -0.75px 0px #ffffff6b inset;
+  --glass-specular-highlight-hover: -0.75px 0.75px 0px #ffffff6b inset, 0.75px -0.75px 0px #ffffff6b inset;
 }
 
 :root[data-theme="light"] {
@@ -17,6 +17,7 @@
   --secondary-content-bg: #efefef;
   --sidebar-content-bg: #fffc;
   --transparent-glass-bg: #ffffff6e;
+  --transparent-glass-btn-bg: #0000001f;
   --nav-bg: #ffffff6e;
 
   /* Borders */
@@ -56,6 +57,7 @@
   --secondary-content-bg: #efefef;
   --sidebar-content-bg: #fffc;
   --transparent-glass-bg: #0000003b;
+  --transparent-glass-btn-bg: #0000001f;
   --nav-bg: #00000069;
 
   /* Borders */
@@ -101,6 +103,7 @@
   ;
   --sidebar-content-bg: #363636c8;
   --transparent-glass-bg: #0000003b;
+  --transparent-glass-btn-bg: #ffffff1f;
   --nav-bg: #00000069;
 
   /* Borders */
@@ -215,13 +218,19 @@ html .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-ap
 
 html .menu-item a,
 html .ic-app-header__menu-list-item a {
-  transition: transform 200ms ease;
+  transition: transform 200ms ease, filter 200ms ease;
 }
 
 html .menu-item a:hover,
 html .ic-app-header__menu-list-item a:hover {
   transform: scale(1.2);
   background-color: transparent;
+}
+
+html .menu-item a:active,
+html .ic-app-header__menu-list-item a:active {
+  transform: scale(0.9);
+  filter: blur(2px);
 }
 
 html .ic-app-header__logomark-container {
@@ -374,7 +383,9 @@ html .ig-header .name {
 }
 
 html .element_toggler,
-html .accessible-toggler {
+html .accessible-toggler,
+html .accessible-toggler:hover, 
+html .accessible-toggler:focus {
   color: var(--primary-text-color);
 }
 
@@ -1046,6 +1057,7 @@ html .ui-button {
   border-radius: 24px !important;
   padding: 8px 12px !important;
   width: fit-content;
+  transition: transform 200ms ease, filter 200ms ease;
   /* box-shadow: 1px 1px 2px black, -1px -2px 4px #000000ad inset, 1px 1px 3px white inset; */
 }
 
@@ -1063,15 +1075,28 @@ html .ui-button:hover {
   border-color: var(--main-border);
 }
 
+html .btn:active,
+html .Button:active,
+html .ui-button:active {
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
 html span[class*="-baseButton__content"] {
   background-color: var(--main-content-bg) !important;
   color: var(--secondary-text-color) !important;
   border-color: var(--main-border);
   border-radius: 12px;
+  transition: transform 200ms ease, filter 200ms ease;
 }
 
 html [class*="-baseButton"]:hover>span[class*="-baseButton__content"] {
   background-color: var(--secondary-content-bg) !important;
+}
+
+html [class*="-baseButton"]:active>span[class*="-baseButton__content"] {
+  transform: scale(0.8);
+  filter: blur(2px);
 }
 
 html .btn-primary,
