@@ -784,11 +784,6 @@ html div[data-testid="discussion-root-entry-container"]>div
   padding-top: 12px;
 }
 
-html .css-1hsfnch-view-flexItem hr {
-  /*removing the line in discussion posts*/
-  /*display: none !important;*/
-}
-
 html div[data-testid="assignment-2-student-content-tabs"] div[data-testid="attempt-tab"]>div {
   /* submission/text box preview for #assignments-2-student-header */
   background-color: var(--secondary-content-bg) !important;
