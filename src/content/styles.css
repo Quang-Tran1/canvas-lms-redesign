@@ -481,6 +481,19 @@ html #calendar-app .fc-day {
   /* border-radius: 16px; */
 }
 
+html #calendar-app .fc-event {
+  background-color: var(--main-content-bg);
+}
+
+html .calendar .fc-row .fc-content-skeleton td {
+  border: none;
+}
+
+html .event-details {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
 html #minical,
 html .mini_month {
   background-color: var(--main-content-bg);
@@ -710,6 +723,12 @@ html #compose-message-modal div[data-cid="ModalFooter"] {
 
 html #compose-message-modal span[class*="checkboxFacade__label"] {
   color: var(--primary-text-color);
+}
+
+html .ui-widget-overlay,
+html span[class*="-mask"] {
+  background: none;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 html select,
