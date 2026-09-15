@@ -17,7 +17,7 @@
   --secondary-content-bg: #efefef;
   --sidebar-content-bg: #fffc;
   --transparent-glass-bg: #ffffff6e;
-  --transparent-glass-btn-bg: #0000001f;
+  --transparent-glass-btn-bg: #00000012;
   --nav-bg: #ffffff6e;
 
   /* Borders */
@@ -57,7 +57,7 @@
   --secondary-content-bg: #efefef;
   --sidebar-content-bg: #fffc;
   --transparent-glass-bg: #0000003b;
-  --transparent-glass-btn-bg: #0000001f;
+  --transparent-glass-btn-bg: #00000012;
   --nav-bg: #00000069;
 
   /* Borders */
@@ -144,7 +144,9 @@ button[class*="-link"] {
   color: var(--ic-link-color) !important;
 }
 
-html .flash-message-container {
+html .flash-message-container, 
+html .ic-notification,
+html .ic-notification__content {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
 }
@@ -340,7 +342,7 @@ html .ic-Dashboard-header span[class*="view-heading"] {
   color: white;
   text-shadow: 2px 2px 4px #15345e;
   font-size: 48px;
-  font-family: "Baskerville";
+
 }
 
 html .ic-DashboardCard {
@@ -408,6 +410,10 @@ html #calendar-list-holder {
   padding-right: 24px;
   box-shadow: none;
   /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+}
+
+html #calendar-list-holder #calendars-context-list li:hover {
+  background-color: var(--secondary-content-bg);
 }
 
 html .pages.show,
