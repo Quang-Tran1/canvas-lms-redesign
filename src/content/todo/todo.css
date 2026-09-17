@@ -32,14 +32,16 @@ html #blms-todo .blms-scopeselector__option {
 }
 
 html #blms-todo .blms-scopeselector__option:hover {
-  background-color: var(--secondary-content-bg);
+  background-color: var(--transparent-glass-bg);
 }
 
 html #blms-todo .blms-scopeselector__option.option--selected {
-  background-color: var(--main-content-bg);
+  background-color: var(--transparent-glass-bg);
   border: 1px solid var(--main-border);
   box-shadow: 0px 0px 2px var(--shadow);
+  backdrop-filter: blur(1px);
   transform: scale(1.2);
+  transition: transform 300ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
 }
 
 html #blms-todo .blms-datepicker {
