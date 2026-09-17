@@ -1,7 +1,7 @@
 export default function DatePicker() {
   return (
     <div className="blms-datepicker">
-      <button className="blms-datepicker__btn">
+      <button className="blms-datepicker__btn" id="left">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -18,7 +18,7 @@ export default function DatePicker() {
         </svg>
       </button>
       <div className="blms-datepicker__date">Sep 7-14</div>
-      <button className="blms-datepicker__btn">
+      <button className="blms-datepicker__btn" id="right">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

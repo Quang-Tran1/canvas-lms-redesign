@@ -61,8 +61,13 @@ html #blms-todo .blms-datepicker__btn {
   transition: transform 200ms ease, filter 200ms ease;
 }
 
-html #blms-todo .blms-datepicker__btn:active {
-  transform: scale(0.9);
+html #blms-todo .blms-datepicker__btn#left:active {
+  transform: scale(0.9) translateX(-4px);
+  filter: blur(2px);
+}
+
+html #blms-todo .blms-datepicker__btn#right:active {
+  transform: scale(0.9) translateX(4px);
   filter: blur(2px);
 }
 
@@ -185,6 +190,12 @@ html #blms-todo .blms-taskcard-details__btn {
 
 html #blms-todo .blms-taskcard-details__btn:hover {
   background-color: #47ca59;
+  transition: transform 200ms ease, filter 200ms ease;
+}
+
+html #blms-todo .blms-taskcard-details__btn:active {
+  transform: scale(0.9) translateY(-9px);
+  filter: blur(2px);
 }
 
 html #blms-todo .blms-taskcard-details__btn > svg {
