@@ -291,7 +291,7 @@ html #content .ic-Profile-layout {
 }
 
 /* Navigation Container */
-html #nav-tray-portal>span>span {
+html span[data-cid="Tray"] > span[class*="-tray"][class*="-left"] {
   margin-left: 16px;
   padding-top: 12px;
   padding-left: 12px;
@@ -310,10 +310,32 @@ html #nav-tray-portal>span>span {
   /* Let the anchors decide the height */
 }
 
-html #nav-tray-portal>span>span button[data-cid~="CloseButton"] {
+html span[data-cid="Tray"] > span[class*="-tray"][class*="-left"] button[data-cid~="CloseButton"] {
   margin-top: 20px !important;
   margin-right: 20px !important;
-  border-radius: 14px;
+}
+
+html span[data-cid="Tray"] > span[class*="-tray"][class*="-right"] {
+  margin-right: 16px;
+  padding-top: 12px;
+  background-color: var(--sidebar-content-bg);
+  /* white */
+  border: 1px solid var(--main-border);
+  backdrop-filter: var(--glass-backdrop-filter);
+  border-radius: 48px;
+  scrollbar-width: none;
+  overscroll-behavior: none;
+
+  /* Match the header's top and bottom boundaries */
+  top: anchor(--global-nav-bar top);
+  bottom: anchor(--global-nav-bar bottom);
+  height: auto;
+  /* Let the anchors decide the height */
+}
+
+html span[data-cid="Tray"] > span[class*="-tray"][class*="-right"] button[data-cid~="CloseButton"] {
+  margin-top: 12px !important;
+  margin-right: 12px !important;
 }
 
 html #nav-tray-portal li[data-cid="ListItem"] {
