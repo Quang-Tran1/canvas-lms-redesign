@@ -799,13 +799,13 @@ html div[class*="-view-tab"]:hover {
 
 
 /* modal component*/
-html span[class*="-modal"] {
+html [class*="-modal"] {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
 }
 
 html div[data-cid="ModalHeader"] {
-  background-color: var(--main-content-bg);
+  background-color: var(--secondary-content-bg);
   color: var(--primary-text-color);
 }
 
