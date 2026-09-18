@@ -450,7 +450,10 @@ html .ui-widget-header {
 
 html .ui-tabs .ui-tabs-nav li.ui-tabs-active,
 html .ui-tabs .ui-tabs-nav li.ui-tabs-active.ui-state-hover,
-html .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover {
+html .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover,
+html .ui-tabs .ui-tabs-nav li,
+html .ui-tabs .ui-tabs-nav li.ui-state-hover,
+html .ui-tabs .ui-tabs-nav li:hover {
   background-color: var(--main-content-bg) !important;
 }
 
@@ -730,21 +733,96 @@ html span:has([data-testid="list-items-desktop"])+span {
   padding: 16px;
 }
 
-html #compose-message-modal {
+/* menu component*/
+html span[class*="-contextView__arrow"] {
+  border-bottom-color: var(--main-border);
+}
+
+html span[class*="-contextView__arrow"]::after {
+  border-bottom-color: var(--main-content-bg);
+}
+
+html span[class*="-contextView__content"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border-color: var(--main-border);
+}
+
+html div[class*="-menu"][data-cid="Menu"] {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
 }
 
-html #compose-message-modal div[data-cid="ModalHeader"] {
+html span[class*="-menuItemGroup__label"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html [class*="-menuItem"][data-cid="MenuItem"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html [class*="-menuItem"][data-cid="MenuItem"]:hover,
+html [class*="-menuItem"][data-cid="MenuItem"]:active,
+html [class*="-menuItem"][data-cid="MenuItem"]:focus {
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
+}
+
+html [class*="-menuItem__label"],
+html [class*="-menuItem"][data-cid="MenuItem"]:hover span[class*="-menuItem__label"],
+html [class*="-menuItem"][data-cid="MenuItem"]:active span[class*="-menuItem__label"],
+html [class*="-menuItem"][data-cid="MenuItem"]:focus span[class*="-menuItem__label"] {
+  color: var(--primary-text-color);
+}
+
+html [class*="-menuItem__icon"],
+html [class*="-menuItem"][data-cid="MenuItem"]:hover span[class*="-menuItem__icon"],
+html [class*="-menuItem"][data-cid="MenuItem"]:active span[class*="-menuItem__icon"],
+html [class*="-menuItem"][data-cid="MenuItem"]:focus span[class*="-menuItem__icon"] {
+  color: var(--primary-text-color);
+}
+
+/* dashboard color picker */
+html div [class*="-view-panel__content"],
+html .ColorPicker__Container {
   background-color: var(--main-content-bg);
 }
 
-html #compose-message-modal div[data-cid="ModalFooter"] {
+html div[class*="-view-tab"],
+html div[class*="-view-tab"]:hover {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border-bottom: none;
+}
+
+
+/* modal component*/
+html span[class*="-modal"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html div[data-cid="ModalHeader"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html  div[data-cid="ModalFooter"] {
   background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
 }
 
 html #compose-message-modal span[class*="checkboxFacade__label"] {
   color: var(--primary-text-color);
+}
+
+html button[class*="-view-tag"],
+html button[class*="-view-tag"]:hover {
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
+  border-color: var(--main-border);
 }
 
 html .ui-widget-overlay,
@@ -904,12 +982,12 @@ html .question {
   color: var(--primary-text-color) !important;
 }
 
-html .quiz_comment:before {
+html .quiz_comment::before {
   /* quiz comment arrow border */
   border-bottom-color: var(--main-border);
 }
 
-html .quiz_comment:after {
+html .quiz_comment::after {
   /* quiz comment arrow fill */
   border-bottom-color: var(--secondary-content-bg);
 }
@@ -1047,7 +1125,7 @@ html .recent_feedback_icon * {
   color: var(--primary-text-color);
 }
 
-html .event-details:after {
+html .event-details::after {
   display: none;
 }
 
@@ -1130,6 +1208,10 @@ html span[class*="-baseButton__content"] {
   border-color: var(--main-border);
   border-radius: 12px;
   transition: transform 200ms ease, filter 200ms ease;
+}
+
+html span[class*="-baseButton__content"] svg {
+  stroke: var(--primary-text-color);
 }
 
 html [class*="-baseButton"]:hover>span[class*="-baseButton__content"] {
