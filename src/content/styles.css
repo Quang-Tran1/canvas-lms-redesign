@@ -1136,7 +1136,7 @@ html #right-side .right-side-list {
 html .recent_feedback_icon {
   background-color: var(--main-content-bg);
   padding: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   border-radius: 16px;
   border: 1px solid var(--main-border);
   box-shadow: 1px 1px 4px var(--shadow);
