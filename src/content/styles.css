@@ -514,7 +514,7 @@ html .calendar .fc-row .fc-content-skeleton td {
   border: none;
 }
 
-html .event-details {
+html .event-details { /*Expanded view for calendar events*/
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
 }
@@ -795,6 +795,27 @@ html div[class*="-view-tab"]:hover {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
   border-bottom: none;
+}
+
+/* another menu component*/
+html [class*="-view--block"] {
+  background-color: transparent;
+  border-color: var(--main-border)
+}
+
+html span[class*="-options__label"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html li[class*="-optionItem"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+}
+
+html li[class*="-optionItem"]:hover {
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
 }
 
 
@@ -1105,24 +1126,35 @@ html #right-side-wrapper:has(#tfc-wall-rose, table, ul, button, a) {
 }*/
 html #right-side .h2 {
   border-bottom: none;
+  margin-bottom: 8px;
+}
+
+html #right-side .right-side-list {
+  margin: 0;
 }
 
 html .recent_feedback_icon {
   background-color: var(--main-content-bg);
-  padding: 8px;
-  margin-top: 4px;
-  border-radius: 8px;
-  border: 2px solid var(--main-border);
-  box-shadow: 2px 2px 4px var(--shadow);
+  padding: 12px;
+  margin-bottom: 4px;
+  border-radius: 16px;
+  border: 1px solid var(--main-border);
+  box-shadow: 1px 1px 4px var(--shadow);
 }
 
-html .right-side-list li:last-child .recent_feedback_icon {
-  border: 2px solid var(--main-border) !important;
-  box-shadow: 2px 2px 4px var(--shadow) !important;
+html #right-side .right-side-list li:last-child .recent_feedback_icon {
+  border: 1px solid var(--main-border);
+  box-shadow: 1px 1px 4px var(--shadow);
 }
 
-html .recent_feedback_icon * {
+html #right-side .events_list .event-details {
+  background-color: transparent;
   color: var(--primary-text-color);
+  padding-right: 0;
+}
+
+html #right-side .right-side-list li p {
+  color: var(--tertiary-text-color);
 }
 
 html .event-details::after {
