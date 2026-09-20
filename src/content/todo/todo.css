@@ -24,6 +24,13 @@ html #blms-todo .blms-scopeselector {
 }
 
 html #blms-todo .blms-scopeselector__option {
+  /* <button>, so it needs the browser's chrome cleared off first. */
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+
   font-size: 12px;
   font-weight: 700;
   padding: 9px 11px;
@@ -79,6 +86,12 @@ html #blms-todo .blms-datepicker__btn > svg {
 }
 
 html #blms-todo .blms-datepicker__date {
+  /* <button>, so it needs the browser's chrome cleared off first. */
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+
   background: var(--transparent-glass-btn-bg);
   border-radius: 23px;
   box-shadow: var(--glass-specular-highlight);
@@ -108,56 +121,67 @@ html .blms-progressbar {
 html .blms-progressbar__segment {
   height: 24px;
   border-radius: 12px;
+  /* Widths are exact shares of the window's work -- don't let flex rebalance them. */
+  flex-shrink: 0;
+}
+
+/* Every segment but the first tucks under the one before it. ProgressBar adds
+   this 20px back onto each width so the overlaps don't shrink the bar. */
+html .blms-progressbar__segment + .blms-progressbar__segment {
   margin-left: -20px;
 }
 
-html .blms-progressbar__segment.first-segment {
+html .blms-progressbar__segment.segment--completed {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
-  margin-left: 0px;
+  /* Grows into whatever the course segments leave over. */
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  background-color: #47ca59;
   z-index: 99;
 }
 
-html .blms-progressbar__segment#completed {
-  background-color: #47ca59;
-}
-
-html .blms-progressbar__segment#completed > svg {
+html .blms-progressbar__segment.segment--completed > svg {
   width: 16px;
   height: 16px;
-}
-html .blms-progressbar__segment#class1 {
-  width: 25%;
-  background-color: #a87fa8;
-  z-index: 9;
-}
-html .blms-progressbar__segment#class2 {
-  width: 25%;
-  background-color: #cb901d;
-  z-index: 8;
+  flex-shrink: 0;
 }
 
-html .blms-progressbar__segment#class3 {
-  width: 25%;
-  background-color: #7fb0b7;
-  z-index: 7;
+html #blms-todo .blms-todo__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+html #blms-todo .blms-todo__message {
+  color: var(--secondary-text-color);
+  text-align: center;
+  margin: 40px 0;
+}
+
+html #blms-todo .blms-todo__message--error {
+  color: #ff6b74;
 }
 
 html #blms-todo .blms-taskcard {
+  /* The tick button is absolutely positioned against this card. */
+  position: relative;
+  list-style: none;
   display: flex;
   background-color: var(--main-content-bg);
   border: 1px solid var(--main-border);
   border-radius: 24px;
   padding: 4px;
   margin-bottom: 8px;
-} 
+}
 
 html #blms-todo .blms-taskcard__icon {
   width: 40px;
   min-width: 40px;
-  background-color: #7FB0B7;
+  /* Set per card from the user's dashboard color for that course. */
+  background-color: var(--course-color, #7FB0B7);
   border-radius: 20px;
   display: flex;
   -webkit-box-pack: center;
@@ -208,6 +232,7 @@ html #blms-todo .blms-taskcard-details__btn > svg {
 html #blms-todo .blms-taskcard-details__title {
   display: block;
   color: var(--primary-text-color);
+  text-decoration: none;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.4;
@@ -216,8 +241,12 @@ html #blms-todo .blms-taskcard-details__title {
   text-overflow: ellipsis;
 }
 
+html #blms-todo .blms-taskcard-details__title:hover {
+  text-decoration: underline;
+}
+
 html #blms-todo .blms-taskcard-details__context {
-  color: #7FB0B7;
+  color: var(--course-color, #7FB0B7);
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
@@ -242,5 +271,13 @@ html #blms-todo .blms-taskcard-details-chips__chip {
   border-radius: 10px;
   padding: 0 6px 0 6px;
   margin-right: 4px;
+  white-space: nowrap;
+}
+
+/* Missing or late work. */
+html #blms-todo .blms-taskcard-details-chips__chip.chip--alert {
+  border-color: transparent;
+  background-color: #c8364033;
+  color: #ff6b74;
 }
 
