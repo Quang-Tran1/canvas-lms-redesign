@@ -9,8 +9,10 @@ import {
     SCHOOL_ACCENT_KEY,
     THEME_KEY,
     THEMES,
+    TODO_KEY,
     type Theme,
     applyTheme,
+    isEnabled,
     isHexColor,
     isTheme,
     readSettings,
@@ -50,6 +52,7 @@ export function Popup() {
     const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
     const [useSchoolAccent, setUseSchoolAccent] = useState(true);
     const [accent, setAccent] = useState(DEFAULT_ACCENT);
+    const [todoEnabled, setTodoEnabled] = useState(true);
 
     // Fill the controls in from storage and work out which site we're on.
     useEffect(() => {
@@ -57,8 +60,9 @@ export function Popup() {
             const stored = await readSettings();
             setBgPreview(stored[BG_KEY] || null);
             setTheme(isTheme(stored[THEME_KEY]) ? stored[THEME_KEY] : DEFAULT_THEME);
-            setUseSchoolAccent(stored[SCHOOL_ACCENT_KEY] !== false);   // default: on
+            setUseSchoolAccent(isEnabled(stored[SCHOOL_ACCENT_KEY]));  // default: on
             setAccent(isHexColor(stored[ACCENT_KEY]) ? stored[ACCENT_KEY] : DEFAULT_ACCENT);
+            setTodoEnabled(isEnabled(stored[TODO_KEY]));               // default: on
 
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             const url = tab && tab.url ? new URL(tab.url) : null;
@@ -237,6 +241,14 @@ export function Popup() {
         await chrome.storage.local.set({ [ACCENT_KEY]: color });
     }
 
+    /* -------------------------------------------------------- features */
+
+    // Open Canvas tabs mount or unmount the widget from this, no reload.
+    async function onTodoEnabled(checked: boolean) {
+        setTodoEnabled(checked);
+        await chrome.storage.local.set({ [TODO_KEY]: checked });
+    }
+
     /* ---------------------------------------------------------- render */
 
     return (
@@ -311,6 +323,17 @@ export function Popup() {
                 />
                 <output id="accent-value" for="accent-color">{useSchoolAccent ? "school color" : accent}</output>
             </div>
+
+            <label class="checkbox-row" for="enable-todo">
+                <input
+                    id="enable-todo"
+                    type="checkbox"
+                    checked={todoEnabled}
+                    onChange={(e) => onTodoEnabled(e.currentTarget.checked)}
+                />
+                <span>Enable To-Do List</span>
+                <span class="early-feature-tag">BETA</span>
+            </label>
         </>
     );
 }

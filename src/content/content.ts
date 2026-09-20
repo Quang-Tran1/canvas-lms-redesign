@@ -12,12 +12,14 @@ import {
     BG_KEY,
     SCHOOL_ACCENT_KEY,
     THEME_KEY,
+    TODO_KEY,
     applyAccent,
     applyBackground,
     applyTheme,
+    isEnabled,
     readSettings,
 } from "../shared/settings";
-import { mountTodo } from "./todo/mount";
+import { setTodoEnabled } from "./todo/mount";
 
 declare global {
     interface Window {
@@ -28,14 +30,17 @@ declare global {
 if (!window.__betterLmsInjected) {
     window.__betterLmsInjected = true;
     initPage();
-    mountTodo();
 }
 
 async function initPage(): Promise<void> {
     const stored = await readSettings();
     applyBackground(stored[BG_KEY]);
-    applyAccent(stored[SCHOOL_ACCENT_KEY] !== false, stored[ACCENT_KEY]);
+    applyAccent(isEnabled(stored[SCHOOL_ACCENT_KEY]), stored[ACCENT_KEY]);
     applyTheme(stored[THEME_KEY]);
+
+    // Canvas renders its sidebar long after this, so waiting on the storage
+    // read above costs nothing visible.
+    setTodoEnabled(isEnabled(stored[TODO_KEY]));
 
     // Live-update any open Canvas tab when the popup saves a change.
     chrome.storage.onChanged.addListener(async (changes, area) => {
@@ -50,7 +55,11 @@ async function initPage(): Promise<void> {
         if (changes[SCHOOL_ACCENT_KEY] || changes[ACCENT_KEY]) {
             // Re-read both, since only one of the two may have changed.
             const current = await readSettings();
-            applyAccent(current[SCHOOL_ACCENT_KEY] !== false, current[ACCENT_KEY]);
+            applyAccent(isEnabled(current[SCHOOL_ACCENT_KEY]), current[ACCENT_KEY]);
+        }
+        if (changes[TODO_KEY]) {
+            // Mounts or tears the widget down in place, no reload needed.
+            setTodoEnabled(isEnabled(changes[TODO_KEY].newValue));
         }
     });
 }

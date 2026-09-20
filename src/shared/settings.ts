@@ -8,6 +8,7 @@ export const BG_KEY = "backgroundImage";          // string, the user's backgrou
 export const SCHOOL_ACCENT_KEY = "useSchoolAccent"; // boolean, defaults to true
 export const ACCENT_KEY = "accentColor";          // string, "#rrggbb"
 export const THEME_KEY = "colorScheme";           // one of THEMES; light when unset
+export const TODO_KEY = "enableTodo";             // boolean, defaults to true
 
 export const THEMES = ["light", "hybrid", "dark"] as const;
 export type Theme = (typeof THEMES)[number];
@@ -26,10 +27,17 @@ export interface Settings {
     [SCHOOL_ACCENT_KEY]?: boolean;
     [ACCENT_KEY]?: string;
     [THEME_KEY]?: string;
+    [TODO_KEY]?: boolean;
 }
 
 export function readSettings(): Promise<Settings> {
-    return chrome.storage.local.get([BG_KEY, SCHOOL_ACCENT_KEY, ACCENT_KEY, THEME_KEY]) as Promise<Settings>;
+    return chrome.storage.local.get([BG_KEY, SCHOOL_ACCENT_KEY, ACCENT_KEY, THEME_KEY, TODO_KEY]) as Promise<Settings>;
+}
+
+/* Settings that default to on read as enabled unless explicitly stored false,
+   so a user who has never opened the popup still gets them. */
+export function isEnabled(value: unknown): boolean {
+    return value !== false;
 }
 
 export function isTheme(value: unknown): value is Theme {

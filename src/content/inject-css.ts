@@ -17,3 +17,8 @@ export function injectCss(id: string, css: string): void {
     style.textContent = css;
     (document.head || document.documentElement).append(style);
 }
+
+/* Takes a widget's styles back off, for when the user switches it off. */
+export function removeCss(id: string): void {
+    document.getElementById(id)?.remove();
+}
