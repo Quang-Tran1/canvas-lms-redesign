@@ -36,6 +36,7 @@ html #blms-todo .blms-scopeselector__option {
   padding: 9px 11px;
   margin: 0px 1px;
   border-radius: 24px;
+  transition: background-color 400ms ease, transform 300ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
 }
 
 html #blms-todo .blms-scopeselector__option:hover {
@@ -48,7 +49,6 @@ html #blms-todo .blms-scopeselector__option.option--selected {
   box-shadow: 0px 0px 2px var(--shadow);
   backdrop-filter: blur(1px);
   transform: scale(1.2);
-  transition: transform 300ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
 }
 
 html #blms-todo .blms-datepicker {
@@ -211,12 +211,12 @@ html #blms-todo .blms-taskcard-details__btn {
   padding: 5px;
   border-radius: 16px;
   border: none;
-  box-shadow: var(--glass-specular-highlight)
+  box-shadow: var(--glass-specular-highlight);
+  transition: background-color 400ms ease, transform 200ms ease, filter 200ms ease;
 }
 
 html #blms-todo .blms-taskcard-details__btn:hover {
   background-color: #47ca59;
-  transition: transform 200ms ease, filter 200ms ease;
 }
 
 html #blms-todo .blms-taskcard-details__btn:active {
