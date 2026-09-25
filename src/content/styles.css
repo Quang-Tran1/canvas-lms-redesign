@@ -31,7 +31,7 @@
   --text-on-glass-color: #000000;
 
   --ic-brand-font-color-dark: var(--primary-text-color);
-  --ic-link-color: #0000ff;
+  --ic-link-color: var(--accent);
   --ic-link-color-darkened-10: var(--ic-link-color);
   --ic-link-color-lightened-10: #var(--ic-link-color);
 
@@ -71,7 +71,7 @@
   --text-on-glass-color: #fff;
 
   --ic-brand-font-color-dark: var(--primary-text-color);
-  --ic-link-color: #0000ff;
+  --ic-link-color: var(--accent);
   --ic-link-color-darkened-10: var(--ic-link-color);
   --ic-link-color-lightened-10: #var(--ic-link-color);
 
@@ -117,7 +117,7 @@
   --text-on-glass-color: #fff;
 
   --ic-brand-font-color-dark: var(--primary-text-color);
-  --ic-link-color: #6cb4ee;
+  --ic-link-color: var(--accent);
   --ic-link-color-darkened-10: var(--ic-link-color);
   --ic-link-color-lightened-10: #var(--ic-link-color);
 
@@ -135,18 +135,19 @@
   --glass-inset-shadow: 0px 0px 12px #ffffff60 inset;
 }
 
-.lti_tool_icon_large {
+html .lti_tool_icon_large {
   filter: var(--lti-icon-color-filter);
 }
 
-a[class*="-link"],
-button[class*="-link"] {
+html a[class*="-link"],
+html button[class*="-link"] {
   color: var(--ic-link-color) !important;
 }
 
 html .flash-message-container, 
 html .ic-notification,
-html .ic-notification__content {
+html .ic-notification__content,
+html div[class*="-view-alert"] {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
 }
@@ -167,6 +168,18 @@ html body:not(.no-headers):not(.content-only):not(.hide-global-nav).primary-nav-
   max-width: none;
 }
 
+html body:not(.no-headers):not(.content-only):not(.hide-global-nav) .ic-Layout-wrapper {
+  /* aka #wrapper | for mini global nav */
+  margin-left: 70px;
+  margin-right: 16px;
+  max-width: none;
+}
+
+html body:not(.full-width):not(.outcomes):not(.body--login-confirmation):not(.content-only) .ic-Layout-wrapper {
+  max-width: none;
+}
+
+
 html body.course-menu-expanded:not(.ic-no-flex-layout):not(.embedded):not(.is-inside-submission-frame):not(.content-only) .ic-Layout-columns {
   /*aka #main when theres course nav bar*/
   margin-left: calc(192px + 8px);
@@ -185,19 +198,12 @@ html #not_right_side:has(#grades_summary) {
 }
 
 /* Global SDSU Navigation Bar */
-html body.primary-nav-expanded .ic-app-header {
-  /*just expanded*/
-  width: 96px;
-  padding: 24px 4px;
-}
-
 html .ic-app-header {
   /* all including mini*/
   height: fit-content;
   max-height: 82vh;
   margin-left: 16px;
-  padding: 36px 4px;
-  border-radius: 48px;
+  border-radius: 99px;
   border: 1px solid var(--nav-border);
   background-color: var(--nav-bg);
   backdrop-filter: var(--glass-backdrop-filter);
@@ -208,14 +214,37 @@ html .ic-app-header {
   /*vertically centered*/
   transform: translateY(-50%);
   anchor-name: --global-nav-bar;
+  /*transition between expanded & mini*/
+  transition: padding 400ms ease; 
+}
+
+html body.primary-nav-expanded .ic-app-header {
+  /*expanded*/
+  width: 96px;
+  padding: 24px 4px;
+}
+
+html body.primary-nav-transitions .ic-app-header {
+  /*mini*/
+  padding: 16px 4px 36px 4px;
 }
 
 html .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
-  border-radius: 100%;
-  aspect-ratio: 1/1;
+  /*expanded*/
   background-color: var(--accent-fill);
-  /*box-shadow: 0px 0px 8px #fff inset;*/
-  padding-top: 12px;
+  padding: 12px 0;
+  border-radius: 99px;
+  aspect-ratio: 1/1;
+  font-weight: 700;
+}
+
+html body.primary-nav-transitions .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
+  /*mini*/
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: auto;
+  padding: 12px 0 12px 2px;
 }
 
 html .menu-item a,
@@ -392,6 +421,20 @@ html .ic-DashboardCard__header-title {
 
 html .ic-DashboardCard__header_content {
   background-color: transparent;
+}
+
+html .ic-dashboard-app:has(.Day-styles__root) .ic-Dashboard-header {
+  background-color: var(--transparent-glass-bg);
+  padding: 0 24px;
+  margin-top: 8px;
+  border-radius: 99px;
+  transform: translateY(10px);
+  backdrop-filter: blur(96px) var(--glass-backdrop-filter);
+  box-shadow: var(--glass-specular-highlight), 0 0 4px var(--shadow);
+}
+
+html .Day-styles__root {
+  color: var(--primary-text-color);
 }
 
 /* Modules, Assignments, Quizzes, Grades */
@@ -1253,6 +1296,10 @@ html [class*="-baseButton"]:hover>span[class*="-baseButton__content"] {
 html [class*="-baseButton"]:active>span[class*="-baseButton__content"] {
   transform: scale(0.8);
   filter: blur(2px);
+}
+
+html [class*="-baseButton"]:focus {
+  outline-color: var(--accent) !important;
 }
 
 html .btn-primary,
