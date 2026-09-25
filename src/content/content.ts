@@ -19,6 +19,8 @@ import {
     isEnabled,
     readSettings,
 } from "../shared/settings";
+import { startDashboardGrades } from "./grades/mount";
+import { startClassRank } from "./grades/rankMount";
 import { setTodoEnabled } from "./todo/mount";
 
 declare global {
@@ -30,6 +32,8 @@ declare global {
 if (!window.__betterLmsInjected) {
     window.__betterLmsInjected = true;
     initPage();
+    startDashboardGrades();
+    startClassRank();
 }
 
 async function initPage(): Promise<void> {

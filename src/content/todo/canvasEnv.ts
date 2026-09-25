@@ -1,12 +1,10 @@
 /*
- * Course colors and course names, read from the Canvas page.
- *
- * The content script runs in an isolated world, so it cannot see window.ENV
- * even though the page sets it. The ENV object is a plain JSON literal in an
- * inline <script> in <head>, so it is parsed straight out of the page source.
- * Where that fails (a Canvas page that doesn't render ENV, or a shape change),
- * the same data is fetched from the REST API instead.
+ * Course colors and course names, read from the Canvas page's ENV. Where that
+ * fails (a Canvas page that doesn't render ENV, or a shape change), the same
+ * data is fetched from the REST API instead.
  */
+
+import { readPageEnv } from "../pageEnv";
 
 export interface CourseInfo {
     /** "#rrggbb" -- the user's own dashboard color for this course. */
@@ -49,51 +47,6 @@ export function fallbackColor(key: string | undefined): string {
     return FALLBACK_PALETTE[hash % FALLBACK_PALETTE.length];
 }
 
-/* Walks forward from the opening brace to its match, so the scan stops at the
-   end of the ENV object rather than at the first "}" inside a string value.
-   Returns -1 if the braces never balance. */
-function findObjectEnd(text: string, open: number): number {
-    let depth = 0;
-    let inString = false;
-    for (let i = open; i < text.length; i++) {
-        const character = text[i];
-        if (inString) {
-            if (character === "\\") i++;               // skip the escaped character
-            else if (character === '"') inString = false;
-        } else if (character === '"') {
-            inString = true;
-        } else if (character === "{") {
-            depth++;
-        } else if (character === "}") {
-            depth--;
-            if (depth === 0) return i;
-        }
-    }
-    return -1;
-}
-
-export function readPageEnv(): CanvasEnv | null {
-    for (const script of document.scripts) {
-        if (script.src) continue;                     // only inline scripts carry ENV
-        const text = script.textContent;
-        if (!text) continue;
-
-        const match = /\bENV\s*=\s*\{/.exec(text);
-        if (!match) continue;
-
-        const open = match.index + match[0].length - 1;
-        const close = findObjectEnd(text, open);
-        if (close < 0) continue;
-
-        try {
-            return JSON.parse(text.slice(open, close + 1)) as CanvasEnv;
-        } catch {
-            return null;                              // ENV is there but not plain JSON
-        }
-    }
-    return null;
-}
-
 /* Courses don't change while the page is open, so this is fetched once and the
    promise itself is cached -- two widgets mounting at once share one request. */
 let cached: Promise<CourseMap> | null = null;
@@ -105,7 +58,7 @@ export function loadCourses(): Promise<CourseMap> {
 
 async function buildCourseMap(): Promise<CourseMap> {
     const courses: CourseMap = {};
-    const env = readPageEnv();
+    const env = readPageEnv() as CanvasEnv | null;
 
     const setColor = (key: string | undefined, color: unknown) => {
         if (!key || typeof color !== "string") return;

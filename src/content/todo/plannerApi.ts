@@ -1,10 +1,8 @@
 /*
  * The Canvas planner endpoints, and the Task shape the widget renders.
- *
- * Requests go out with the page's own session cookie, so the widget sees
- * exactly what the signed-in user sees. No token handling of our own.
  */
 
+import { api, fetchAllPages } from "../canvasApi";
 import { type CourseMap, fallbackColor, loadCourses } from "./canvasEnv";
 import { type DateRange, dueLabel } from "./dateRange";
 
@@ -83,53 +81,6 @@ export interface Task {
     overrideId?: number;
 }
 
-function csrfToken(): string {
-    const match = document.cookie.match(/(?:^|;\s*)_csrf_token=([^;]+)/);
-    return match ? decodeURIComponent(match[1]) : "";
-}
-
-interface ApiResult<T> {
-    data: T;
-    /** The Link header's rel="next" URL, when the response was paginated. */
-    next: string | null;
-}
-
-async function api<T>(path: string, options: { method?: string; body?: unknown; signal?: AbortSignal } = {}): Promise<ApiResult<T>> {
-    const headers: Record<string, string> = {
-        Accept: "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-    };
-    if (options.body !== undefined) {
-        headers["Content-Type"] = "application/json";
-        headers["X-CSRF-Token"] = csrfToken();
-    }
-
-    const response = await fetch(path, {
-        method: options.method,
-        headers,
-        credentials: "same-origin",
-        signal: options.signal,
-        body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    });
-    if (!response.ok) {
-        throw new Error(`${options.method || "GET"} ${path} responded ${response.status}`);
-    }
-
-    // Session-authenticated Canvas responses are prefixed with "while(1);" to
-    // make them useless as a <script> to another origin.
-    const text = (await response.text()).replace(/^while\(1\);/, "");
-    return { data: JSON.parse(text) as T, next: nextLink(response.headers.get("Link")) };
-}
-
-function nextLink(header: string | null): string | null {
-    if (!header) return null;
-    for (const part of header.split(",")) {
-        const match = part.match(/<([^>]+)>;\s*rel="next"/);
-        if (match) return match[1];
-    }
-    return null;
-}
-
 function contextKey(item: PlannerItem): string | undefined {
     if (item.course_id != null) return `course_${item.course_id}`;
     if (item.group_id != null) return `group_${item.group_id}`;
@@ -185,14 +136,7 @@ export async function fetchTasks(range: DateRange, signal?: AbortSignal): Promis
         per_page: "1000",
     });
 
-    const items: PlannerItem[] = [];
-    let url: string | null = `/api/v1/planner/items?${params}`;
-    // per_page is capped server-side, so follow Link rel="next" regardless.
-    while (url) {
-        const page: ApiResult<PlannerItem[]> = await api<PlannerItem[]>(url, { signal });
-        items.push(...page.data);
-        url = page.next;
-    }
+    const items = await fetchAllPages<PlannerItem>(`/api/v1/planner/items?${params}`, signal);
 
     const courses = await loadCourses();
     return items
