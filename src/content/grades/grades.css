@@ -11,21 +11,7 @@ html .ic-DashboardCard .blms-grade-pill {
 
   white-space: nowrap;
   pointer-events: none;
-  animation: fadeIn 400ms ease;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: scale(1.2);
-    filter: blur(4px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
+  animation: blmsFadeIn 400ms ease;
 }
 
 /* Estimated class rank after the total on a course's Grades page (see rankMount.ts). */
@@ -39,17 +25,19 @@ html .student_assignment.final_grade .blms-class-rank {
   font-size: 14px;
   font-weight: 700;
   white-space: nowrap;
-  animation: slideIn 400ms ease;
+  animation: blmsFadeIn 400ms ease;
 }
 
-@keyframes slideIn {
+@keyframes blmsFadeIn {
   0% {
     opacity: 0;
+    transform: scale(1.2);
     filter: blur(4px);
   }
 
   100% {
     opacity: 1;
+    transform: none;
     filter: none;
   }
 }
