@@ -248,8 +248,8 @@ html .ic-Layout-watermark {
 /* Course Navigation Bar */
 html #sticky-container {
   padding: 0;
+  margin-top: 40vh;
   top: 50%;
-  /*vertically centered*/
   transform: translateY(-50%);
 }
 
