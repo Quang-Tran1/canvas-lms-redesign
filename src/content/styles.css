@@ -393,7 +393,6 @@ html .ic-Dashboard-header span[class*="view-heading"] {
   color: white;
   text-shadow: 2px 2px 4px #15345e;
   font-size: 48px;
-
 }
 
 html .ic-DashboardCard {
@@ -423,6 +422,7 @@ html .ic-DashboardCard__header_content {
   background-color: transparent;
 }
 
+/* Dashboard List View*/
 html .ic-dashboard-app:has(.Day-styles__root) .ic-Dashboard-header {
   background-color: var(--transparent-glass-bg);
   padding: 0 24px;
@@ -434,6 +434,61 @@ html .ic-dashboard-app:has(.Day-styles__root) .ic-Dashboard-header {
 }
 
 html .Day-styles__root {
+  color: var(--primary-text-color);
+}
+
+/* New Dashboard View*/
+html h1[data-testid="dashboard-heading"] {
+  /* Dashboard word */
+  color: white;
+  text-shadow: 2px 2px 4px #15345e;
+  font-size: 48px;
+}
+
+html div[class*="-view"]:has(div[data-testid="dashboard-tabs"]),
+html div[data-testid="dashboard-tabs"] div[class*="-view-tabs"],
+html div[data-testid="dashboard-tabs"] div[class*="-view-panel__content"]  {
+  background-color: transparent;
+}
+
+html div[class*="-view-tab"][role="tab"],
+html div[class*="-view-tab"][role="tab"]:hover  {
+  background-color: transparent;
+  color: var(--primary-text-color);
+  font-weight: 700;
+  border-radius: 8px 8px 0 0;
+}
+
+html div[class*="-view-tab"][role="tab"]::after {
+  background-color: var(--accent);
+  border-radius: 99px;
+}
+
+html div[data-testid="dashboard-tabs"] section[data-testid*="-widget"] {
+  background-color: var(--main-content-bg);
+  color: var(--primary-text-color);
+  border-radius: 24px;
+}
+
+html div[data-testid="dashboard-tabs"] section[data-testid*="-widget"] li[data-cid="ListItem"] {
+  /* Progress Overview Widget*/
+  color: var(--primary-text-color);
+}
+
+html div[data-testid="dashboard-tabs"] section[data-testid*="-widget"] div[data-testid*="statistics-card-"] {
+  /* Course Work Widget*/
+  background-color: var(--secondary-content-bg);
+}
+
+html div[data-testid="dashboard-tabs"] section[data-testid*="-widget"] div[data-testid*="todo-item-"] {
+  /* To Do Widget*/
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
+  border-color: var(--main-border);
+}
+
+html div[data-testid="dashboard-tabs"] div[data-testid="courses-tab-content"] {
+  /* Courses tab*/
   color: var(--primary-text-color);
 }
 
@@ -1414,6 +1469,7 @@ html .PlannerHeader-styles__root {
   0% {
     opacity: 0;
     transform: translate(0, 200px) scale(0.99) rotateX(-60deg) rotateZ(-2deg);
+    max-height: 100vh;
   }
 
   70% {
@@ -1423,17 +1479,36 @@ html .PlannerHeader-styles__root {
   100% {
     opacity: 1;
     transform: none;
+    max-height: 100vh;
+  }
+}
+
+@keyframes ccFadeInBubbly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 200px) scaleX(0.8) scaleY(1.2);
+    max-height: 100vh;
+  }
+
+  70% {
+    transform: translate(0, -8px) scaleX(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    max-height: 100vh;
   }
 }
 
 html #content.ic-Layout-contentMain,
 html div:has(> [data-testid="desktop-message-action-header"]) {
-  animation: ccFadeInUp 550ms ease-in-out;
+  animation: ccFadeInBubbly 500ms ease-in-out;
 }
 
 /* sidebar follows slightly behind for a subtle stagger */
 html #right-side-wrapper {
-  animation: ccFadeInUp 550ms ease-in-out 200ms;
+  animation: ccFadeInBubbly 500ms ease-in-out 200ms;
 }
 
 html * {
