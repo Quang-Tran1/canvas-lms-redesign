@@ -31,7 +31,8 @@
 
 body {
     margin: 0;
-    width: 260px;
+    /* Two columns of the old single-column width, plus the gutter between. */
+    width: 560px;
     padding: 16px;
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 13px;
@@ -50,6 +51,33 @@ h1 {
 
 .logo {
     display: block;
+}
+
+/* Appearance on the left; animation and BETA features on the right. */
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 41px;
+    align-items: start;
+}
+
+/* A hairline centred in the gutter, so both columns keep the same width. */
+.column + .column {
+    position: relative;
+}
+
+.column + .column::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -21px;
+    border-left: 1px solid var(--pop-divider);
+}
+
+/* Each column's first control lines up with the other's. */
+.column > :first-child {
+    margin-top: 0;
 }
 
 button {
@@ -131,6 +159,13 @@ button.secondary {
     padding: 14px 0 0;
     border: 0;
     border-top: 1px solid var(--pop-divider);
+}
+
+/* The same dial row at the top of a column, where no divider is wanted. */
+.theme-row.flush {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
 }
 
 .theme-option {
@@ -226,4 +261,22 @@ input[type="color"]:disabled {
     font-size: 10px;
     padding: 2px 4px;
     border-radius: 10px
+}
+
+/* BETA features: one heading with a divider, then a compact list of toggles. */
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--pop-divider);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.beta .checkbox-row {
+    margin-top: 10px;
+    padding-top: 0;
+    border-top: 0;
 }

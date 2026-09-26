@@ -7,6 +7,10 @@
 
   --glass-specular-highlight: 0.75px 0.75px 0px #ffffff6b inset, -0.75px -0.75px 0px #ffffff6b inset;
   --glass-specular-highlight-hover: -0.75px 0.75px 0px #ffffff6b inset, 0.75px -0.75px 0px #ffffff6b inset;
+
+  --page-load-animation: var(--bubbly-animation);
+  --flip-up-animation: ccFadeInUp 550ms ease-in-out;
+  --bubbly-animation: ccFadeInBubbly 550ms ease-in-out;
 }
 
 :root[data-theme="light"] {
@@ -1503,12 +1507,12 @@ html .PlannerHeader-styles__root {
 
 html #content.ic-Layout-contentMain,
 html div:has(> [data-testid="desktop-message-action-header"]) {
-  animation: ccFadeInBubbly 500ms ease-in-out;
+  animation: var(--page-load-animation);
 }
 
 /* sidebar follows slightly behind for a subtle stagger */
 html #right-side-wrapper {
-  animation: ccFadeInBubbly 500ms ease-in-out 200ms;
+  animation: var(--page-load-animation) 200ms;
 }
 
 html * {

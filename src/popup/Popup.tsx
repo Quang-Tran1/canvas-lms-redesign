@@ -2,16 +2,23 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import iconUrl from "../../icons/icon32.png";
 import {
     ACCENT_KEY,
+    ANIMATIONS,
+    ANIMATION_KEY,
     BG_KEY,
+    CLASS_RANK_KEY,
+    DASHBOARD_GRADES_KEY,
     DEFAULT_ACCENT,
+    DEFAULT_ANIMATION,
     DEFAULT_THEME,
     MAX_IMAGE_BYTES,
     SCHOOL_ACCENT_KEY,
     THEME_KEY,
     THEMES,
     TODO_KEY,
+    type PageAnimation,
     type Theme,
     applyTheme,
+    isAnimation,
     isEnabled,
     isHexColor,
     isTheme,
@@ -38,6 +45,15 @@ interface Status {
     error?: boolean;
 }
 
+/* The BETA checkboxes. Each is an on-by-default setting that the content
+   script mounts or tears down live when it changes. */
+const FEATURES = [
+    { key: TODO_KEY, id: "enable-todo", label: "Enable To-Do List" },
+    { key: DASHBOARD_GRADES_KEY, id: "enable-dashboard-grades", label: "Enable grades on dashboard" },
+    { key: CLASS_RANK_KEY, id: "enable-class-rank", label: "Enable class rank" },
+] as const;
+type FeatureKey = (typeof FEATURES)[number]["key"];
+
 export function Popup() {
     // null until the active tab is known; stays null on non-web pages.
     const [site, setSite] = useState<Site | null>(null);
@@ -52,7 +68,12 @@ export function Popup() {
     const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
     const [useSchoolAccent, setUseSchoolAccent] = useState(true);
     const [accent, setAccent] = useState(DEFAULT_ACCENT);
-    const [todoEnabled, setTodoEnabled] = useState(true);
+    const [animation, setAnimation] = useState<PageAnimation>(DEFAULT_ANIMATION);
+    const [features, setFeatures] = useState<Record<FeatureKey, boolean>>({
+        [TODO_KEY]: true,
+        [DASHBOARD_GRADES_KEY]: true,
+        [CLASS_RANK_KEY]: true,
+    });
 
     // Fill the controls in from storage and work out which site we're on.
     useEffect(() => {
@@ -62,7 +83,12 @@ export function Popup() {
             setTheme(isTheme(stored[THEME_KEY]) ? stored[THEME_KEY] : DEFAULT_THEME);
             setUseSchoolAccent(isEnabled(stored[SCHOOL_ACCENT_KEY]));  // default: on
             setAccent(isHexColor(stored[ACCENT_KEY]) ? stored[ACCENT_KEY] : DEFAULT_ACCENT);
-            setTodoEnabled(isEnabled(stored[TODO_KEY]));               // default: on
+            setAnimation(isAnimation(stored[ANIMATION_KEY]) ? stored[ANIMATION_KEY] : DEFAULT_ANIMATION);
+            setFeatures({                                               // default: all on
+                [TODO_KEY]: isEnabled(stored[TODO_KEY]),
+                [DASHBOARD_GRADES_KEY]: isEnabled(stored[DASHBOARD_GRADES_KEY]),
+                [CLASS_RANK_KEY]: isEnabled(stored[CLASS_RANK_KEY]),
+            });
 
             const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
             const url = tab && tab.url ? new URL(tab.url) : null;
@@ -243,10 +269,16 @@ export function Popup() {
 
     /* -------------------------------------------------------- features */
 
-    // Open Canvas tabs mount or unmount the widget from this, no reload.
-    async function onTodoEnabled(checked: boolean) {
-        setTodoEnabled(checked);
-        await chrome.storage.local.set({ [TODO_KEY]: checked });
+    // Open Canvas tabs replay their load animation with the new choice.
+    async function onAnimation(next: PageAnimation) {
+        setAnimation(next);
+        await chrome.storage.local.set({ [ANIMATION_KEY]: next });
+    }
+
+    // Open Canvas tabs mount or unmount the feature from this, no reload.
+    async function onFeature(key: FeatureKey, checked: boolean) {
+        setFeatures((current) => ({ ...current, [key]: checked }));
+        await chrome.storage.local.set({ [key]: checked });
     }
 
     /* ---------------------------------------------------------- render */
@@ -255,90 +287,120 @@ export function Popup() {
         <>
             <h1><img class="logo" src={iconUrl} alt="" width="20" height="20" />Canvas Redesign</h1>
 
-            <button
-                id="enable-site"
-                type="button"
-                class={enabled && site && !site.builtIn ? "secondary" : ""}
-                disabled={!site || site.builtIn || siteBusy}
-                onClick={onToggleSite}
-            >
-                {siteLabel}
-            </button>
-            <p id="site-status" class={`status${siteStatus?.error ? " error" : ""}`}>{siteText}</p>
+            <div class="columns">
+                <div class="column">
+                    <button
+                        id="enable-site"
+                        type="button"
+                        class={enabled && site && !site.builtIn ? "secondary" : ""}
+                        disabled={!site || site.builtIn || siteBusy}
+                        onClick={onToggleSite}
+                    >
+                        {siteLabel}
+                    </button>
+                    <p id="site-status" class={`status${siteStatus?.error ? " error" : ""}`}>{siteText}</p>
 
-            <label class="field-label" for="bg-file">Background image</label>
-            {/* Deliberately not image/*: that offers HEIC files the browser can't render. */}
-            <input
-                id="bg-file"
-                ref={fileInput}
-                class="visually-hidden"
-                type="file"
-                accept="image/jpeg, image/png, image/webp, image/gif, image/avif"
-                onChange={onPickBackground}
-            />
-            <div class="row">
-                {/* The real file input is visually hidden so the picker can use the
-                    same button styling as everything else in the popup. */}
-                <button type="button" class="secondary" onClick={() => fileInput.current?.click()}>Choose image…</button>
-                <button type="button" class="secondary" onClick={onResetBackground}>Reset</button>
-            </div>
-            {bgPreview && <img id="bg-preview" class="preview" src={bgPreview} alt="Current background" />}
-            <p id="bg-status" class={`status${bgStatus?.error ? " error" : ""}`}>{bgStatus?.text ?? ""}</p>
+                    <label class="field-label" for="bg-file">Background image</label>
+                    {/* Deliberately not image/*: that offers HEIC files the browser can't render. */}
+                    <input
+                        id="bg-file"
+                        ref={fileInput}
+                        class="visually-hidden"
+                        type="file"
+                        accept="image/jpeg, image/png, image/webp, image/gif, image/avif"
+                        onChange={onPickBackground}
+                    />
+                    <div class="row">
+                        {/* The real file input is visually hidden so the picker can use the
+                            same button styling as everything else in the popup. */}
+                        <button type="button" class="secondary" onClick={() => fileInput.current?.click()}>Choose image…</button>
+                        <button type="button" class="secondary" onClick={onResetBackground}>Reset</button>
+                    </div>
+                    {bgPreview && <img id="bg-preview" class="preview" src={bgPreview} alt="Current background" />}
+                    <p id="bg-status" class={`status${bgStatus?.error ? " error" : ""}`}>{bgStatus?.text ?? ""}</p>
 
-            <fieldset class="theme-row">
-                <legend class="visually-hidden">Theme</legend>
-                {THEMES.map((value) => (
-                    <label class="theme-option" key={value}>
-                        <span>{THEME_LABELS[value]}</span>
+                    <fieldset class="theme-row">
+                        <legend class="visually-hidden">Theme</legend>
+                        {THEMES.map((value) => (
+                            <label class="theme-option" key={value}>
+                                <span>{THEME_LABELS[value]}</span>
+                                <input
+                                    type="radio"
+                                    name="theme"
+                                    value={value}
+                                    checked={theme === value}
+                                    onChange={() => onTheme(value)}
+                                />
+                            </label>
+                        ))}
+                    </fieldset>
+
+                    <label class="checkbox-row" for="use-school-accent">
                         <input
-                            type="radio"
-                            name="theme"
-                            value={value}
-                            checked={theme === value}
-                            onChange={() => onTheme(value)}
+                            id="use-school-accent"
+                            type="checkbox"
+                            checked={useSchoolAccent}
+                            onChange={(e) => onSchoolAccent(e.currentTarget.checked)}
                         />
+                        <span>Use school accent colors</span>
                     </label>
-                ))}
-            </fieldset>
 
-            <label class="checkbox-row" for="use-school-accent">
-                <input
-                    id="use-school-accent"
-                    type="checkbox"
-                    checked={useSchoolAccent}
-                    onChange={(e) => onSchoolAccent(e.currentTarget.checked)}
-                />
-                <span>Use school accent colors</span>
-            </label>
+                    <label class="field-label" for="accent-color">Accent color</label>
+                    <div class="row">
+                        {/* The picker is only meaningful when the school's own color isn't in use. */}
+                        <input
+                            id="accent-color"
+                            type="color"
+                            value={accent}
+                            disabled={useSchoolAccent}
+                            onInput={(e) => onAccent(e.currentTarget.value)}
+                        />
+                        <output id="accent-value" for="accent-color">{useSchoolAccent ? "school color" : accent}</output>
+                    </div>
+                </div>
 
-            <label class="field-label" for="accent-color">Accent color</label>
-            <div class="row">
-                {/* The picker is only meaningful when the school's own color isn't in use. */}
-                <input
-                    id="accent-color"
-                    type="color"
-                    value={accent}
-                    disabled={useSchoolAccent}
-                    onInput={(e) => onAccent(e.currentTarget.value)}
-                />
-                <output id="accent-value" for="accent-color">{useSchoolAccent ? "school color" : accent}</output>
+                <div class="column">
+                    <p class="field-label" id="animation-label">Page animation</p>
+                    {/* Real radios, drawn as the same dials as the theme picker. */}
+                    <div class="theme-row flush" role="radiogroup" aria-labelledby="animation-label">
+                        {ANIMATIONS.map((value) => (
+                            <label class="theme-option" key={value}>
+                                <span>{ANIMATION_LABELS[value]}</span>
+                                <input
+                                    type="radio"
+                                    name="animation"
+                                    value={value}
+                                    checked={animation === value}
+                                    onChange={() => onAnimation(value)}
+                                />
+                            </label>
+                        ))}
+                    </div>
+
+                    <section class="beta" aria-labelledby="beta-heading">
+                        <h2 class="section-heading" id="beta-heading">
+                            <span class="early-feature-tag">BETA</span> Features
+                        </h2>
+                        {FEATURES.map((feature) => (
+                            <label class="checkbox-row" for={feature.id} key={feature.key}>
+                                <input
+                                    id={feature.id}
+                                    type="checkbox"
+                                    checked={features[feature.key]}
+                                    onChange={(e) => onFeature(feature.key, e.currentTarget.checked)}
+                                />
+                                <span>{feature.label}</span>
+                            </label>
+                        ))}
+                    </section>
+                </div>
             </div>
-
-            <label class="checkbox-row" for="enable-todo">
-                <input
-                    id="enable-todo"
-                    type="checkbox"
-                    checked={todoEnabled}
-                    onChange={(e) => onTodoEnabled(e.currentTarget.checked)}
-                />
-                <span>Enable To-Do List</span>
-                <span class="early-feature-tag">BETA</span>
-            </label>
         </>
     );
 }
 
 const THEME_LABELS: Record<Theme, string> = { light: "Light", hybrid: "Hybrid", dark: "Dark" };
+const ANIMATION_LABELS: Record<PageAnimation, string> = { "flip-up": "Flip up", bubbly: "Bubbly" };
 
 /* Resolves false if Chrome can't render the image -- the same decode the CSS
    background will attempt, so it can't disagree with what the page does. */

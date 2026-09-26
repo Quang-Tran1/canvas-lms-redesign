@@ -76,34 +76,51 @@ function render(total: Element, rank: RankLabel): void {
     total.append(element);
 }
 
-export function startClassRank(): void {
-    const match = location.pathname.match(GRADES_PATH);
-    if (!match) return;
-    const [, courseId, studentInPath = null] = match;
+/* The computed rank is kept when the feature is switched off, so switching it
+   back on doesn't fetch again. */
+let requested = false;
+let rank: RankLabel | null = null;
 
-    let requested = false;
-    let rank: RankLabel | null = null;
+/* Non-null exactly while the feature is on, so it doubles as the "running"
+   flag and makes both calls below safe to repeat. */
+let observer: MutationObserver | null = null;
 
-    const place = () => {
-        const total = document.querySelector(TOTAL);
-        if (!total) return;
+export function setClassRankEnabled(enabled: boolean): void {
+    if (!GRADES_PATH.test(location.pathname)) return;
 
-        // The sidebar is in the server-rendered page, after the ENV script, so
-        // ENV is readable by the time it exists.
-        if (!requested) {
-            requested = true;
-            injectGradesCss();
-            computeRank(courseId, studentInPath).then((result) => {
-                rank = result;
-                place();
-            });
-            return;
-        }
+    if (enabled) {
+        if (observer) return;
+        // Puts the rank back if Canvas redraws the total.
+        observer = new MutationObserver(place);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        place();
+    } else {
+        if (!observer) return;
+        observer.disconnect();
+        observer = null;
+        for (const element of document.querySelectorAll(`.${RANK_CLASS}`)) element.remove();
+    }
+}
 
-        if (rank && !total.querySelector(`.${RANK_CLASS}`)) render(total, rank);
-    };
+function place(): void {
+    // Also guards the request callback below, which can land after a switch-off.
+    if (!observer) return;
 
-    // Puts the rank back if Canvas redraws the total.
-    new MutationObserver(place).observe(document.documentElement, { childList: true, subtree: true });
-    place();
+    const total = document.querySelector(TOTAL);
+    if (!total) return;
+
+    // The sidebar is in the server-rendered page, after the ENV script, so
+    // ENV is readable by the time it exists.
+    if (!requested) {
+        requested = true;
+        injectGradesCss();
+        const [, courseId, studentInPath = null] = location.pathname.match(GRADES_PATH)!;
+        computeRank(courseId, studentInPath).then((result) => {
+            rank = result;
+            place();
+        });
+        return;
+    }
+
+    if (rank && !total.querySelector(`.${RANK_CLASS}`)) render(total, rank);
 }

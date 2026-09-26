@@ -18,16 +18,33 @@ const CARD_LINK = "a.ic-DashboardCard__link";
 const ANCHOR = ".ic-DashboardCard__header-button-bg";
 const PILL_CLASS = "blms-grade-pill";
 
-/* null until the grades request has finished. */
+/* null until the grades request has finished. Kept when the feature is
+   switched off, so switching it back on doesn't fetch again. */
 let grades: Map<string, CourseGrade> | null = null;
 let requested = false;
 
-export function startDashboardGrades(): void {
-    new MutationObserver(decorate).observe(document.documentElement, { childList: true, subtree: true });
-    decorate();
+/* Non-null exactly while the feature is on, so it doubles as the "running"
+   flag and makes both calls below safe to repeat. */
+let observer: MutationObserver | null = null;
+
+export function setDashboardGradesEnabled(enabled: boolean): void {
+    if (enabled) {
+        if (observer) return;
+        observer = new MutationObserver(decorate);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        decorate();
+    } else {
+        if (!observer) return;
+        observer.disconnect();
+        observer = null;
+        for (const pill of document.querySelectorAll(`.${PILL_CLASS}`)) pill.remove();
+    }
 }
 
 function decorate(): void {
+    // Also guards the request callback below, which can land after a switch-off.
+    if (!observer) return;
+
     const cards = document.querySelectorAll(CARD);
     if (!cards.length) return;
 

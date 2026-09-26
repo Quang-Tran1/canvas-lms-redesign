@@ -9,11 +9,19 @@ export const SCHOOL_ACCENT_KEY = "useSchoolAccent"; // boolean, defaults to true
 export const ACCENT_KEY = "accentColor";          // string, "#rrggbb"
 export const THEME_KEY = "colorScheme";           // one of THEMES; light when unset
 export const TODO_KEY = "enableTodo";             // boolean, defaults to true
+export const DASHBOARD_GRADES_KEY = "enableDashboardGrades"; // boolean, defaults to true
+export const CLASS_RANK_KEY = "enableClassRank";  // boolean, defaults to true
+export const ANIMATION_KEY = "pageAnimation";     // one of ANIMATIONS; bubbly when unset
 
 export const THEMES = ["light", "hybrid", "dark"] as const;
 export type Theme = (typeof THEMES)[number];
 export const DEFAULT_THEME: Theme = "light";
 export const DEFAULT_ACCENT = "#b33d3e";
+
+/* Each names a --<name>-animation variable in styles.css. */
+export const ANIMATIONS = ["flip-up", "bubbly"] as const;
+export type PageAnimation = (typeof ANIMATIONS)[number];
+export const DEFAULT_ANIMATION: PageAnimation = "bubbly";
 
 const BG_STYLE_ID = "canvas-redesign-bg";
 
@@ -28,10 +36,16 @@ export interface Settings {
     [ACCENT_KEY]?: string;
     [THEME_KEY]?: string;
     [TODO_KEY]?: boolean;
+    [DASHBOARD_GRADES_KEY]?: boolean;
+    [CLASS_RANK_KEY]?: boolean;
+    [ANIMATION_KEY]?: string;
 }
 
 export function readSettings(): Promise<Settings> {
-    return chrome.storage.local.get([BG_KEY, SCHOOL_ACCENT_KEY, ACCENT_KEY, THEME_KEY, TODO_KEY]) as Promise<Settings>;
+    return chrome.storage.local.get([
+        BG_KEY, SCHOOL_ACCENT_KEY, ACCENT_KEY, THEME_KEY,
+        TODO_KEY, DASHBOARD_GRADES_KEY, CLASS_RANK_KEY, ANIMATION_KEY,
+    ]) as Promise<Settings>;
 }
 
 /* Settings that default to on read as enabled unless explicitly stored false,
@@ -42,6 +56,10 @@ export function isEnabled(value: unknown): boolean {
 
 export function isTheme(value: unknown): value is Theme {
     return typeof value === "string" && (THEMES as readonly string[]).includes(value);
+}
+
+export function isAnimation(value: unknown): value is PageAnimation {
+    return typeof value === "string" && (ANIMATIONS as readonly string[]).includes(value);
 }
 
 export function isHexColor(value: unknown): value is string {
@@ -104,4 +122,17 @@ export function applyTheme(theme: unknown): void {
     if (!root) return;
 
     root.setAttribute("data-theme", isTheme(theme) ? theme : DEFAULT_THEME);
+}
+
+/* Points styles.css's --page-load-animation at the chosen animation. Set even
+   for the default, so the choice holds if styles.css's own default changes.
+
+   Changing it on an open tab restarts the animation on Canvas's content, which
+   doubles as a live preview of the choice. */
+export function applyAnimation(animation: unknown): void {
+    const root = document.documentElement;
+    if (!root) return;
+
+    const name = isAnimation(animation) ? animation : DEFAULT_ANIMATION;
+    root.style.setProperty("--page-load-animation", `var(--${name}-animation)`);
 }
