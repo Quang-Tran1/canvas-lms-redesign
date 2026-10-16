@@ -143,10 +143,23 @@ html .lti_tool_icon_large {
   filter: var(--lti-icon-color-filter);
 }
 
-html a[class*="-link"],
-html button[class*="-link"] {
+html a[data-cid*="Link"],
+html button[class*="-link"],
+html .user_content a:not(.btn):not(.Button):not(.ui-button):not([role=button]),
+html .mceContentBody a:not(.btn):not(.Button):not(.ui-button):not([role=button])  {
   color: var(--ic-link-color) !important;
+  /* border-radius: 4px;
+  transition: background-color 100ms ease, box-shadow 100ms ease; */
 }
+
+/* highlight link effect */
+/* html button[class*="-link"]:hover,
+html .user_content a:not(.btn):not(.Button):not(.ui-button):not([role=button]):hover,
+html .mceContentBody a:not(.btn):not(.Button):not(.ui-button):not([role=button]):hover {
+  color: var(--ic-link-color) !important;
+  background-color: var(--accent-fill);
+  box-shadow: 0 0 0 4px var(--accent-fill);
+} */ 
 
 html .flash-message-container, 
 html .ic-notification,
@@ -497,10 +510,34 @@ html div[data-testid="dashboard-tabs"] div[data-testid="courses-tab-content"] {
 }
 
 /* Modules, Assignments, Quizzes, Grades */
-html .ig-header {
+html .context_module {
+  margin: 0;
+  padding: 0;
+}
+
+html .item-group-condensed .ig-header {
   background-color: var(--secondary-content-bg) !important;
   border: 1px solid var(--main-border) !important;
-  border-radius: 16px 16px 16px 16px;
+  border-radius: 16px 16px 0 0;
+  transition: transform 300ms ease, margin 300ms ease, padding 300ms ease, border-radius 300ms ease;
+
+}
+
+html .context_module.collapsed_module > .ig-header {
+  border-radius: 16px;
+  box-shadow: 0px -2px 4px var(--shadow);
+  margin-top: -16px;
+  padding-top: 6px;
+  padding-bottom: 18px;
+  transform: scaleX(0.98);
+}
+
+html #context_modules .context_module.collapsed_module:first-child > .ig-header {
+  margin-top: 16px;
+}
+
+html #context_modules .context_module {
+  display: flow-root;
 }
 
 html .ig-header .name {
@@ -517,11 +554,11 @@ html .accessible-toggler:focus {
 
 html .ig-header .pill {
   border-color: var(--main-border);
-  padding: 4px;
+  padding: 2px;
   box-shadow: none;
 }
 
-html [class="ig-list items context_module_items "]:has(*),
+html .ig-list.items.context_module_items:has(*),
 html .assignment-list,
 html #assignment-quizzes,
 html .ic-item-row,
@@ -534,6 +571,29 @@ html #calendar-list-holder {
   padding-right: 24px;
   box-shadow: none;
   /*Consider removing .ic-item-row later, need to target the parent element & padding-right */
+}
+
+html .ig-list.items.context_module_items {
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  animation: card 700ms ease;
+}
+
+@keyframes card {
+  60% {
+    transform: scaleX(0.98);
+    margin-top: 8px;
+    border-radius: 16px;
+
+  }
+
+  100% {
+    transform: none;
+    margin-top: 0;
+    border-radius: 0 0 16px 16px;
+  }
 }
 
 html #calendar-list-holder #calendars-context-list li:hover {
@@ -1446,6 +1506,10 @@ html #breadcrumbs {
   border: 1px solid var(--main-border);
   padding: 6px 12px;
   border-radius: 20px;
+}
+
+html #breadcrumbs ol[class*="-breadcrumb"] li[class*="-breadcrumb__crumb"] {
+  max-width: none !important;
 }
 
 html .PlannerHeader-styles__root {
