@@ -4,12 +4,20 @@ import ProgressBar from "./components/ProgressBar"
 import TaskCard from "./components/TaskCard"
 import { useDateRange } from "./useDateRange"
 import { usePlannerTasks } from "./usePlannerTasks"
+import { useExitList } from "./useExitList"
+import { type Task } from "./plannerApi"
+
+// Shared so the exit list sees the same array every loading render.
+const NO_TASKS: Task[] = []
 
 export function TodoPanel() {
     // The window the list covers.
     const { scope, setScope, range, goPrevious, goNext, goToToday, isCurrent } = useDateRange()
     // Everything due inside it, refetched whenever the window moves.
     const { tasks, open, loading, error, completeTask } = usePlannerTasks(range)
+    // Clearing the list while a new window loads sends the old cards out on
+    // click, not when the response lands. New cards wait for them to finish.
+    const [cards, dropCard, entering] = useExitList(loading ? NO_TASKS : open, (task) => task.key)
 
     return (
         <>
@@ -29,16 +37,21 @@ export function TodoPanel() {
 
             {error ? (
                 <p className="blms-todo__message blms-todo__message--error">{error}</p>
-            ) : loading && tasks.length === 0 ? (
-                <p className="blms-todo__message">Loading…</p>
-            ) : open.length === 0 ? (
+            ) : cards.length === 0 && !entering ? (
                 <p className="blms-todo__message">
-                    {tasks.length === 0 ? "Nothing due. Enjoy the break!" : "Nicely done."}
+                    {loading ? "Loading…" : tasks.length === 0 ? "Nothing due. Enjoy the break!" : "Nicely done."}
                 </p>
             ) : (
                 <ul className="blms-todo__list">
-                    {open.map((task) => (
-                        <TaskCard key={task.key} task={task} onComplete={completeTask} />
+                    {cards.map(({ item, leaving, leaveOrder }) => (
+                        <TaskCard
+                            key={item.key}
+                            task={item}
+                            onComplete={completeTask}
+                            leaving={leaving}
+                            leaveOrder={leaveOrder}
+                            onExited={dropCard}
+                        />
                     ))}
                 </ul>
             )}

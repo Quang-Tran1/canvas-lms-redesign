@@ -49,7 +49,7 @@ export default function ProgressBar({ tasks }: Props) {
 
   return (
     <div>
-      <h3 style="margin-left: 8px; margin-bottom: 2px; font-weight: 700;">{percent}%</h3>
+      <h3 className="blms-percentage">{percent}%</h3>
       <div
         className={"blms-progressbar"}
         style={completed / tasks.length === 1 ? "border-color: #47ca59" : ""}

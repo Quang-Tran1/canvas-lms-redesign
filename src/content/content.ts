@@ -16,6 +16,7 @@ import {
     DASHBOARD_GRADES_KEY,
     CLASS_RANK_KEY,
     ANIMATION_KEY,
+    COURSE_IMAGES_KEY,
     applyAccent,
     applyAnimation,
     applyBackground,
@@ -23,6 +24,7 @@ import {
     isEnabled,
     readSettings,
 } from "../shared/settings";
+import { applyCourseImages, initCourseImages } from "./courseImages/mount";
 import { setDashboardGradesEnabled } from "./grades/mount";
 import { setClassRankEnabled } from "./grades/rankMount";
 import { setTodoEnabled } from "./todo/mount";
@@ -39,6 +41,10 @@ if (!window.__betterLmsInjected) {
 }
 
 async function initPage(): Promise<void> {
+    // Reads its own storage key: the images are large, and the popup, which
+    // shares readSettings, has no use for them.
+    initCourseImages();
+
     const stored = await readSettings();
     applyBackground(stored[BG_KEY]);
     applyAccent(isEnabled(stored[SCHOOL_ACCENT_KEY]), stored[ACCENT_KEY]);
@@ -68,6 +74,9 @@ async function initPage(): Promise<void> {
         }
         if (changes[ANIMATION_KEY]) {
             applyAnimation(changes[ANIMATION_KEY].newValue);
+        }
+        if (changes[COURSE_IMAGES_KEY]) {
+            applyCourseImages(changes[COURSE_IMAGES_KEY].newValue);
         }
         // Each feature mounts or tears itself down in place, no reload needed.
         if (changes[TODO_KEY]) {

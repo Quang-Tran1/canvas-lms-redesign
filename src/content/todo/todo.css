@@ -36,7 +36,9 @@ html #blms-todo .blms-scopeselector__option {
   padding: 9px 11px;
   margin: 0px 1px;
   border-radius: 24px;
-  transition: background-color 400ms ease, transform 300ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
+  transition:
+    background-color 400ms ease,
+    transform 300ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
 }
 
 html #blms-todo .blms-scopeselector__option:hover {
@@ -67,7 +69,9 @@ html #blms-todo .blms-datepicker__btn {
   border-radius: 18px;
   box-shadow: var(--glass-specular-highlight);
   border: none;
-  transition: transform 200ms ease, filter 200ms ease;
+  transition:
+    transform 200ms ease,
+    filter 200ms ease;
 }
 
 html #blms-todo .blms-datepicker__btn#left:active {
@@ -101,12 +105,22 @@ html #blms-todo .blms-datepicker__date {
   padding: 12px;
   margin: 0 8px;
   flex-grow: 1;
-  transition: transform 200ms ease, filter 200ms ease;
+  transition:
+    transform 200ms ease,
+    filter 200ms ease;
 }
 
 html #blms-todo .blms-datepicker__date:active {
   transform: scale(0.9);
   filter: blur(2px);
+}
+
+html .blms-percentage {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  margin-left: 8px;
+  margin-bottom: 2px;
 }
 
 html .blms-progressbar {
@@ -178,11 +192,17 @@ html #blms-todo .blms-taskcard {
   animation: taskAnimIn 600ms cubic-bezier(0.24, 0.38, 0.37, 1.37);
 }
 
+html #blms-todo .blms-taskcard.is-leaving {
+  pointer-events: none;
+  animation: taskAnimOut 600ms cubic-bezier(0.5, -0.35, 0.6, 0.9);
+  animation-delay: var(--leave-delay, 0ms);
+}
+
 html #blms-todo .blms-taskcard__icon {
   width: 40px;
   min-width: 40px;
   /* Set per card from the user's dashboard color for that course. */
-  background-color: var(--course-color, #7FB0B7);
+  background-color: var(--course-color, #7fb0b7);
   border-radius: 20px;
   display: flex;
   -webkit-box-pack: center;
@@ -213,7 +233,10 @@ html #blms-todo .blms-taskcard-details__btn {
   border-radius: 16px;
   border: none;
   box-shadow: var(--glass-specular-highlight);
-  transition: background-color 400ms ease, transform 200ms ease, filter 200ms ease;
+  transition:
+    background-color 400ms ease,
+    transform 200ms ease,
+    filter 200ms ease;
 }
 
 html #blms-todo .blms-taskcard-details__btn:hover {
@@ -247,7 +270,7 @@ html #blms-todo .blms-taskcard-details__title:hover {
 }
 
 html #blms-todo .blms-taskcard-details__context {
-  color: var(--course-color, #7FB0B7);
+  color: var(--course-color, #7fb0b7);
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
@@ -255,7 +278,6 @@ html #blms-todo .blms-taskcard-details__context {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
 }
 
 html #blms-todo .blms-taskcard-details-chips {
@@ -284,17 +306,38 @@ html #blms-todo .blms-taskcard-details-chips__chip.chip--alert {
 
 @keyframes taskAnimIn {
   0% {
+    opacity: 0;
+    transform: scaleX(0.92) scaleY(0.8);
     margin-bottom: -80px;
-    transform: scaleX(0.95) scaleY(1.05);
   }
 
   80% {
+    opacity: 1;
+    transform: scaleX(1.03) scaleY(0.94);
     margin-bottom: 12px;
   }
 
   100% {
-    margin-bottom: 8px;
+    opacity: 1;
     transform: none;
+    margin-bottom: 8px;
   }
 }
 
+@keyframes taskAnimOut {
+  0% {
+    opacity: 1;
+    transform: none;
+    margin-bottom: 6px;
+  }
+  20% {
+    opacity: 1;
+    transform: scaleX(1.03) scaleY(0.94);
+    margin-bottom: 12px;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.92) scaleY(0.8);
+    margin-bottom: calc(var(--h, 80px) * -1);
+  }
+}

@@ -64,7 +64,7 @@ function decorate(): void {
 }
 
 /* The card's own link is the one reliable place its course id appears. */
-function courseIdOf(card: Element): string | null {
+export function courseIdOf(card: Element): string | null {
     const href = card.querySelector(CARD_LINK)?.getAttribute("href");
     return href?.match(/\/courses\/(\d+)/)?.[1] ?? null;
 }

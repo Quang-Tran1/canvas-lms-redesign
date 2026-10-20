@@ -1,15 +1,34 @@
 import { type Task } from "../plannerApi";
 import TypeIcon from "./TypeIcon";
+import { useLayoutEffect, useRef } from "preact/hooks";
 
 interface Props {
   task: Task;
   onComplete: (task: Task) => void;
+  leaving: boolean;
+  leaveOrder: number;
+  onExited: (key: string) => void;
 }
 
-export default function TaskCard({ task, onComplete }: Props) {
+export default function TaskCard({ task, onComplete, leaving, leaveOrder, onExited }: Props) {
+  const cardRef = useRef<HTMLLIElement>(null);
+
+  useLayoutEffect(() => {
+    if (leaving && cardRef.current) {
+      cardRef.current.style.setProperty("--h", `${cardRef.current.offsetHeight}px`);
+    }
+  }, [leaving]);
+
   return (
     // --course-color feeds the icon tile and the course line in todo.css.
-    <li className="blms-taskcard" style={{ "--course-color": task.color }}>
+    <li
+      ref={cardRef}
+      className={leaving ? "blms-taskcard is-leaving" : "blms-taskcard"}
+      style={{ "--course-color": task.color, "--leave-delay": `${leaveOrder * 20}ms` }}
+      onAnimationEnd={(event) => {
+        if (event.animationName === "taskAnimOut") onExited(task.key);
+      }}
+    >
       <span className="blms-taskcard__icon">
         <TypeIcon type={task.plannableType} />
       </span>
