@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img width="440" height="180" alt="Frame 10" src="https://github.com/user-attachments/assets/1e0fc4ed-5044-458e-9771-2f917f0787fb" />
+  <img width="440" height="180" alt="Banner" src="https://github.com/user-attachments/assets/1e0fc4ed-5044-458e-9771-2f917f0787fb" />
 
   # BetterLMS - Redesign for Canvas
 
@@ -10,6 +10,8 @@
 
 > [!IMPORTANT]
 > BetterLMS is an independent project and is not affiliated with or endorsed by Instructure or Canvas LMS.
+
+<img width="1280" height="800" alt="Showcase" src="https://github.com/user-attachments/assets/28fba251-6bb8-4290-a29b-e9dfc6de86ad" />
 
 <h1><a id="features"></a>Features</h1>
 🪟 Full Glassmorphic Redesign — Frosted translucent panels, soft depth, and rounded surfaces across the whole UI <br>
@@ -23,7 +25,7 @@
 
 <h1><a id="download"></a>Download</h1>
 
-[<img width="206" height="58" alt="image" src="https://github.com/user-attachments/assets/dfba6296-cea7-4115-ad22-92b12e51740d" />](https://chromewebstore.google.com/detail/betterlms-redesign-for-ca/jammgllhnmefkmdgjdneeljdjcdokfhh)
+[<img width="206" height="58" alt="Chrome Web Store Download" src="https://github.com/user-attachments/assets/dfba6296-cea7-4115-ad22-92b12e51740d" />](https://chromewebstore.google.com/detail/betterlms-redesign-for-ca/jammgllhnmefkmdgjdneeljdjcdokfhh)
 <br>
 
 <h1><a id="contributing"></a>Contributing</h1>
