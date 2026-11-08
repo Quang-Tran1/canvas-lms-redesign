@@ -7,6 +7,19 @@
  */
 
 import { enabledSites, registerSites } from "../shared/sites";
+import { DEFAULT_PRESET, applyPreset } from "../shared/themePresets";
+
+// A fresh install starts on the default theme. Only on "install": an update
+// must keep whatever the user has set up since.
+chrome.runtime.onInstalled.addListener(async ({ reason }) => {
+    if (reason !== chrome.runtime.OnInstalledReason.INSTALL) return;
+    try {
+        await applyPreset(DEFAULT_PRESET);
+    } catch (cause) {
+        // Canvas just keeps its stock look until the user picks a theme.
+        console.warn("[BetterLMS] could not apply the default theme:", cause);
+    }
+});
 
 // Fires on install and on update, which is exactly when registrations are gone.
 chrome.runtime.onInstalled.addListener(async () => {

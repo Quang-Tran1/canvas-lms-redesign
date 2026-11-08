@@ -3,6 +3,43 @@ html .Sidebar__TodoListContainer {
   display: none !important;
 }
 
+html #blms-todo .blms-streak {
+  display: flex;
+  align-items: center;
+  background-color: var(--transparent-glass-btn-bg);
+  background: linear-gradient(90deg, #b55d279e 0%, #B55D271F 55%, #ffffff1f 100% );
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  border-radius: 99px;
+  box-shadow: var(--glass-specular-highlight);
+}
+
+html #blms-todo .blms-streak__icon,
+html #blms-todo .blms-streak__icon > svg {
+  height: 36px;
+  width: 36px;
+}
+
+html #blms-todo .blms-streak__icon > svg > path {
+  fill: var(--transparent-glass-btn-bg);
+  box-shadow: var(--glass-specular-highlight);
+}
+
+html #blms-todo .blms-streak__number {
+  color: #d9870d;
+  font-size: 32px;
+  font-weight: 800;
+  padding-left: 4px;
+}
+
+html #blms-todo .blms-streak__units {
+  color: var(--secondary-text-color);
+  font-size: 20px;
+  font-weight: 800;
+  padding-top: 12px;
+  padding-left: 4px;
+}
+
 html #blms-todo .blms-todo__title {
   font-size: 16px;
   font-weight: 700;
@@ -340,4 +377,16 @@ html #blms-todo .blms-taskcard-details-chips__chip.chip--alert {
     transform: scaleX(0.92) scaleY(0.8);
     margin-bottom: calc(var(--h, 80px) * -1);
   }
+}
+
+/* Confetti on completing a task (see confetti.ts), laid over the whole
+   sidebar and clipped to its rounded corners. */
+html #right-side-wrapper > .blms-confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
 }

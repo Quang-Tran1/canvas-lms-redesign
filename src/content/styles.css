@@ -172,35 +172,48 @@ html [class*="-text"][color="secondary"] {
 }
 
 /* App Structure*/
-html body:not(.no-headers):not(.content-only):not(.hide-global-nav).primary-nav-expanded .ic-Layout-wrapper {
-  /* aka #wrapper */
-  margin-left: 112px;
-  margin-right: 16px;
-  max-width: none;
+@media (min-width: 768px) {
+  html body:not(.no-headers):not(.content-only):not(.hide-global-nav).primary-nav-expanded .ic-Layout-wrapper {
+    /* aka #wrapper */
+    margin-left: 112px;
+    margin-right: 16px;
+    max-width: none;
+  }
 }
 
-html body:not(.no-headers):not(.content-only):not(.hide-global-nav) .ic-Layout-wrapper {
-  /* aka #wrapper | for mini global nav */
-  margin-left: 70px;
-  margin-right: 16px;
-  max-width: none;
+@media (min-width: 768px) {
+  html body:not(.no-headers):not(.content-only):not(.hide-global-nav) .ic-Layout-wrapper {
+    /* aka #wrapper | for mini global nav */
+    margin-left: 70px;
+    margin-right: 16px;
+    max-width: none;
+  }
 }
 
 html body:not(.full-width):not(.outcomes):not(.body--login-confirmation):not(.content-only) .ic-Layout-wrapper {
   max-width: none;
 }
 
-
-html body.course-menu-expanded:not(.ic-no-flex-layout):not(.embedded):not(.is-inside-submission-frame):not(.content-only) .ic-Layout-columns {
-  /*aka #main when theres course nav bar*/
-  margin-left: calc(192px + 8px);
-  /*8 px margin-left for course nav bar from the global nav bar*/
+@media (min-width: 768px) {
+  html body.course-menu-expanded:not(.ic-no-flex-layout):not(.embedded):not(.is-inside-submission-frame):not(.content-only) .ic-Layout-columns {
+    /*aka #main when theres course nav bar*/
+    margin-left: calc(192px + 8px);
+    /*8 px margin-left for course nav bar from the global nav bar*/
+  }
 }
 
 html #not_right_side {
   /*is right side*/
   margin-left: 16px;
   /*16px margin-left for main content from course/global nav bar*/
+}
+
+@media (max-width: 767px) {
+  html #not_right_side {
+    /*is right side*/
+    margin-right: 16px;
+    /*16px margin-right for main content when in movile layout */
+  }
 }
 
 html #not_right_side:has(#grades_summary) {
@@ -1309,6 +1322,8 @@ html .submission-details-container {
 /* Right Side Content: Quiz score, Todo, Submission */
 html #right-side-wrapper:has(#tfc-wall-rose, table, ul, button, a) {
   height: fit-content;
+  max-width: 300px;
+  padding: 24px;
   margin-top: 10vh;
   margin-left: 16px;
   border: 1px solid var(--transparent-glass-border);
@@ -1399,10 +1414,7 @@ html [class="estimated_duration_display ig-details__item"] {
 /* Button Styling */
 html .btn,
 html .Button,
-html .ui-button,
-html .btn:hover,
-html .Button:hover,
-html .ui-button:hover {
+html .ui-button {
   background-color: var(--main-content-bg);
   color: var(--primary-text-color);
   border-color: var(--main-border);
@@ -1410,26 +1422,58 @@ html .ui-button:hover {
   padding: 8px 16px !important;
   width: fit-content;
   transition:
+    background-color 200ms ease,
     transform 200ms ease,
     filter 200ms ease;
-  /* box-shadow: 1px 1px 2px black, -1px -2px 4px #000000ad inset, 1px 1px 3px white inset; */
+}
+
+html .btn:hover,
+html .Button:hover,
+html .ui-button:hover,
+html .btn:focus,
+html .Button:focus,
+html .ui-button:focus {
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
 }
 
 html .btn:active,
 html .Button:active,
 html .ui-button:active {
+  background-color: var(--secondary-content-bg);
+  color: var(--primary-text-color);
   transform: scale(0.8);
   filter: blur(2px);
 }
 
 html .btn-primary,
-html .Button--primary,
-html .btn-primary:hover,
-html .Button--primary:hover {
-  color: var(--accent);
+html .Button--primary {
   background-color: var(--accent-fill);
+  color: var(--accent);
   border: none;
   border-radius: 8px;
+  transition:
+    background-color 200ms ease,
+    transform 200ms ease,
+    filter 200ms ease;
+}
+
+html .btn-primary:hover,
+html .Button--primary:hover,
+html .btn-primary:focus,
+html .Button--primary:focus {
+  background-color: transparent;
+  color: var(--accent);
+  border: none;
+  transform: scale(1.4);
+}
+
+html .btn-primary:active,
+html .Button--primary:active {
+  background-color: transparent;
+  color: var(--accent);
+  transform: scale(0.8) !important;
+  filter: blur(2px);
 }
 
 html span[class*="-baseButton__content"] {
@@ -1438,16 +1482,9 @@ html span[class*="-baseButton__content"] {
   border-color: var(--main-border);
   border-radius: 12px;
   transition:
+    background-color 200ms ease,
     transform 200ms ease,
     filter 200ms ease;
-}
-
-html button[data-testid="submit-button"] span[class*="-baseButton__content"],
-html button[data-testid="send-button"] span[class*="-baseButton__content"],
-html button[data-testid="new-attempt-button"] span[class*="-baseButton__content"] {
-  background-color: var(--accent-fill);
-  color: var(--accent);
-  border: none;
 }
 
 html span[class*="-baseButton__content"] svg {
@@ -1459,7 +1496,9 @@ html [class*="-baseButton"]:hover > span[class*="-baseButton__content"] {
 }
 
 html [class*="-baseButton"]:active > span[class*="-baseButton__content"] {
-  transform: scale(0.8);
+  background-color: var(--secondary-content-bg);
+  box-shadow: none;
+  transform: scale(0.8) !important;
   filter: blur(2px);
 }
 
@@ -1467,13 +1506,35 @@ html [class*="-baseButton"]:focus {
   outline-color: var(--accent) !important;
 }
 
-html .btn-primary,
-html .Button--primary,
-html .btn-primary:hover,
-html .Button--primary:hover {
-  color: white;
-  background-color: #c83640;
-  border-radius: 8px;
+html button[data-testid="submit-button"] span[class*="-baseButton__content"],
+html button[data-testid="send-button"] span[class*="-baseButton__content"],
+html button[data-testid="new-attempt-button"] span[class*="-baseButton__content"],
+html button[type="submit"] span[class*="-baseButton__content"]  {
+  background-color: var(--accent-fill);
+  color: var(--accent);
+  border: none;
+}
+
+html button[data-testid="submit-button"]:hover span[class*="-baseButton__content"],
+html button[data-testid="send-button"]:hover span[class*="-baseButton__content"],
+html button[data-testid="new-attempt-button"]:hover span[class*="-baseButton__content"],
+html button[type="submit"]:hover span[class*="-baseButton__content"],
+html button[data-testid="submit-button"]:focus span[class*="-baseButton__content"],
+html button[data-testid="send-button"]:focus span[class*="-baseButton__content"],
+html button[data-testid="new-attempt-button"]:focus span[class*="-baseButton__content"],
+html button[type="submit"]:focus span[class*="-baseButton__content"] {
+  background-color: transparent;
+  transform: scale(1.4);
+}
+
+html button[data-testid="submit-button"]:active span[class*="-baseButton__content"],
+html button[data-testid="send-button"]:active span[class*="-baseButton__content"],
+html button[data-testid="new-attempt-button"]:active span[class*="-baseButton__content"],
+html button[type="submit"]:active span[class*="-baseButton__content"] {
+  background-color: transparent;
+  box-shadow: none;
+  transform: scale(0.8) !important;
+  filter: blur(2px);
 }
 
 html .ic-Form-control.ic-Form-control--checkbox input[type=checkbox]:checked~.ic-Label:before {

@@ -280,3 +280,72 @@ input[type="color"]:disabled {
     padding-top: 0;
     border-top: 0;
 }
+
+/* Themes: a grid of wallpaper thumbnails, then Apply. The tiles are labels
+   around visually hidden radios, so the checked one is styled through :has. */
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.preset-tile {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: 6px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    cursor: pointer;
+    transition: outline-color 150ms ease, transform 150ms ease;
+}
+
+.preset-tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
+.preset-tile:hover {
+    transform: scale(1.04);
+}
+
+.preset-tile:has(input:checked) {
+    outline-color: var(--pop-brand);
+}
+
+.preset-tile:has(input:focus-visible) {
+    outline-color: var(--pop-brand);
+    outline-style: dashed;
+}
+
+/* The accent color the theme brings along. */
+.preset-accent {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.preset-current {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.preset-apply {
+    margin-top: 12px;
+}

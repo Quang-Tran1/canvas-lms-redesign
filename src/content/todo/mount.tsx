@@ -11,6 +11,7 @@
 import { render } from "preact";
 import { injectCss, removeCss } from "../inject-css";
 import { TodoPanel } from "./TodoPanel";
+import { removeConfetti } from "./confetti";
 import css from "./todo.css?inline";
 
 const HOST_ID = "blms-todo";
@@ -54,6 +55,7 @@ function stop(): void {
         render(null, host);
         host.remove();
     }
+    removeConfetti();
 
     // Last, so Canvas's list only reappears once ours is gone.
     removeCss(STYLE_ID);

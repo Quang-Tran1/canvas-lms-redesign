@@ -1,3 +1,4 @@
+import { useCallback } from "preact/hooks"
 import ScopeSelector from "./components/ScopeSelector"
 import DatePicker from "./components/DatePicker"
 import ProgressBar from "./components/ProgressBar"
@@ -6,6 +7,7 @@ import { useDateRange } from "./useDateRange"
 import { usePlannerTasks } from "./usePlannerTasks"
 import { useExitList } from "./useExitList"
 import { type Task } from "./plannerApi"
+import { shootConfetti } from "./confetti"
 
 // Shared so the exit list sees the same array every loading render.
 const NO_TASKS: Task[] = []
@@ -18,6 +20,11 @@ export function TodoPanel() {
     // Clearing the list while a new window loads sends the old cards out on
     // click, not when the response lands. New cards wait for them to finish.
     const [cards, dropCard, entering] = useExitList(loading ? NO_TASKS : open, (task) => task.key)
+
+    const onComplete = useCallback((task: Task) => {
+        completeTask(task)
+        shootConfetti()
+    }, [completeTask])
 
     return (
         <>
@@ -47,7 +54,7 @@ export function TodoPanel() {
                         <TaskCard
                             key={item.key}
                             task={item}
-                            onComplete={completeTask}
+                            onComplete={onComplete}
                             leaving={leaving}
                             leaveOrder={leaveOrder}
                             onExited={dropCard}

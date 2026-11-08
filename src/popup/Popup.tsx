@@ -13,6 +13,7 @@ import {
     MAX_IMAGE_BYTES,
     SCHOOL_ACCENT_KEY,
     THEME_KEY,
+    THEME_PRESET_KEY,
     THEMES,
     TODO_KEY,
     type PageAnimation,
@@ -32,6 +33,7 @@ import {
     registeredPatterns,
     saveEnabledSites,
 } from "../shared/sites";
+import { THEME_PRESETS, applyPreset, findPreset } from "../shared/themePresets";
 
 interface Site {
     tabId: number;
@@ -69,6 +71,11 @@ export function Popup() {
     const [useSchoolAccent, setUseSchoolAccent] = useState(true);
     const [accent, setAccent] = useState(DEFAULT_ACCENT);
     const [animation, setAnimation] = useState<PageAnimation>(DEFAULT_ANIMATION);
+    // The preset whose wallpaper is on now, and the one picked in the grid.
+    const [appliedPreset, setAppliedPreset] = useState<string | null>(null);
+    const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+    const [presetBusy, setPresetBusy] = useState(false);
+    const [presetStatus, setPresetStatus] = useState<Status | null>(null);
     const [features, setFeatures] = useState<Record<FeatureKey, boolean>>({
         [TODO_KEY]: true,
         [DASHBOARD_GRADES_KEY]: true,
@@ -84,6 +91,9 @@ export function Popup() {
             setUseSchoolAccent(isEnabled(stored[SCHOOL_ACCENT_KEY]));  // default: on
             setAccent(isHexColor(stored[ACCENT_KEY]) ? stored[ACCENT_KEY] : DEFAULT_ACCENT);
             setAnimation(isAnimation(stored[ANIMATION_KEY]) ? stored[ANIMATION_KEY] : DEFAULT_ANIMATION);
+            const preset = findPreset(stored[THEME_PRESET_KEY])?.id ?? null;
+            setAppliedPreset(preset);
+            setSelectedPreset(preset);
             setFeatures({                                               // default: all on
                 [TODO_KEY]: isEnabled(stored[TODO_KEY]),
                 [DASHBOARD_GRADES_KEY]: isEnabled(stored[DASHBOARD_GRADES_KEY]),
@@ -224,6 +234,7 @@ export function Popup() {
 
         try {
             await chrome.storage.local.set({ [BG_KEY]: dataUrl });
+            await chrome.storage.local.remove(THEME_PRESET_KEY);    // the preset's wallpaper is gone
         } catch {
             // In practice this is always the quota: base64 inflates the file by
             // about a third, so something just under the cap can still overflow.
@@ -233,12 +244,14 @@ export function Popup() {
 
         setBgPreview(dataUrl);
         setBgStatus({ text: `Using ${file.name}.` });
+        setAppliedPreset(null);
         input.value = "";
     }
 
     async function onResetBackground() {
-        await chrome.storage.local.remove(BG_KEY);
+        await chrome.storage.local.remove([BG_KEY, THEME_PRESET_KEY]);
         setBgPreview(null);
+        setAppliedPreset(null);
         if (fileInput.current) fileInput.current.value = "";
         setBgStatus({ text: "Back to the default background." });
     }
@@ -265,6 +278,32 @@ export function Popup() {
     async function onAccent(color: string) {
         setAccent(color);
         await chrome.storage.local.set({ [ACCENT_KEY]: color });
+    }
+
+    /* --------------------------------------------------------- presets */
+
+    // Picking a tile only selects it; nothing changes until Apply.
+    async function onApplyPreset() {
+        const preset = findPreset(selectedPreset);
+        if (!preset) return;
+
+        setPresetBusy(true);
+        setPresetStatus(null);
+        try {
+            const dataUrl = await applyPreset(preset);
+            // Mirror what was saved into the controls on the left.
+            setBgPreview(dataUrl);
+            setBgStatus(null);
+            setTheme(preset.theme);
+            setUseSchoolAccent(false);
+            setAccent(preset.accent);
+            setAppliedPreset(preset.id);
+            setPresetStatus({ text: `Applied ${preset.name}.` });
+        } catch {
+            setPresetStatus({ text: "Couldn't apply that theme.", error: true });
+        } finally {
+            setPresetBusy(false);
+        }
     }
 
     /* -------------------------------------------------------- features */
@@ -392,6 +431,38 @@ export function Popup() {
                                 <span>{feature.label}</span>
                             </label>
                         ))}
+                    </section>
+
+                    <section class="presets" aria-labelledby="presets-heading">
+                        <h2 class="section-heading" id="presets-heading">Themes</h2>
+                        {/* Real radios again, visually hidden behind the thumbnails. */}
+                        <div class="preset-grid" role="radiogroup" aria-labelledby="presets-heading">
+                            {THEME_PRESETS.map((preset) => (
+                                <label class="preset-tile" key={preset.id} title={preset.name}>
+                                    <input
+                                        class="visually-hidden"
+                                        type="radio"
+                                        name="theme-preset"
+                                        value={preset.id}
+                                        aria-label={preset.name}
+                                        checked={selectedPreset === preset.id}
+                                        onChange={() => setSelectedPreset(preset.id)}
+                                    />
+                                    <img src={preset.thumb} alt={preset.name} />
+                                    <span class="preset-accent" style={{ backgroundColor: preset.accent }} aria-hidden="true" />
+                                    {appliedPreset === preset.id && <span class="preset-current">Current</span>}
+                                </label>
+                            ))}
+                        </div>
+                        <button
+                            type="button"
+                            class="preset-apply"
+                            disabled={!selectedPreset || selectedPreset === appliedPreset || presetBusy}
+                            onClick={onApplyPreset}
+                        >
+                            Apply
+                        </button>
+                        <p class={`status${presetStatus?.error ? " error" : ""}`}>{presetStatus?.text ?? ""}</p>
                     </section>
                 </div>
             </div>

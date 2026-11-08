@@ -12,6 +12,7 @@ export const TODO_KEY = "enableTodo";             // boolean, defaults to true
 export const DASHBOARD_GRADES_KEY = "enableDashboardGrades"; // boolean, defaults to true
 export const CLASS_RANK_KEY = "enableClassRank";  // boolean, defaults to true
 export const ANIMATION_KEY = "pageAnimation";     // one of ANIMATIONS; bubbly when unset
+export const THEME_PRESET_KEY = "themePreset";   // id of the applied preset (see themePresets.ts); cleared by a custom background
 export const COURSE_IMAGES_KEY = "courseImages";  // Record<"host/courseId", data: URL>, see content/courseImages
 
 export const THEMES = ["light", "hybrid", "dark"] as const;
@@ -40,12 +41,13 @@ export interface Settings {
     [DASHBOARD_GRADES_KEY]?: boolean;
     [CLASS_RANK_KEY]?: boolean;
     [ANIMATION_KEY]?: string;
+    [THEME_PRESET_KEY]?: string;
 }
 
 export function readSettings(): Promise<Settings> {
     return chrome.storage.local.get([
         BG_KEY, SCHOOL_ACCENT_KEY, ACCENT_KEY, THEME_KEY,
-        TODO_KEY, DASHBOARD_GRADES_KEY, CLASS_RANK_KEY, ANIMATION_KEY,
+        TODO_KEY, DASHBOARD_GRADES_KEY, CLASS_RANK_KEY, ANIMATION_KEY, THEME_PRESET_KEY,
     ]) as Promise<Settings>;
 }
 

@@ -21,11 +21,13 @@
   },
   "homepage": "https://github.com/Quang-Tran1/canvas-lms-redesign#readme",
   "dependencies": {
+    "canvas-confetti": "1.9.4",
     "preact": "^10.29.8"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.7.1",
     "@preact/preset-vite": "^2.10.6",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/chrome": "^0.2.9",
     "typescript": "^7.0.2",
     "vite": "^8.3.0"
