@@ -3,8 +3,9 @@
  */
 
 import { api, fetchAllPages } from "../canvasApi";
-import { type CourseMap, fallbackColor, loadCourses } from "./canvasEnv";
-import { type DateRange, dueLabel } from "./dateRange";
+import { type CourseMap, currentCourseKey, fallbackColor, loadCourses } from "./canvasEnv";
+import { type DateRange, addDays, dueLabel, startOfDay } from "./dateRange";
+import { type StreakItem } from "./streak";
 
 /** Planner item types worth showing. Announcements are news, not work. */
 const SHOWN_TYPES = new Set([
@@ -22,6 +23,8 @@ const SHOWN_TYPES = new Set([
 interface PlannerOverride {
     id?: number;
     marked_complete?: boolean;
+    dismissed?: boolean;
+    created_at?: string;
 }
 
 interface Submissions {
@@ -66,7 +69,7 @@ export interface Task {
     url?: string;
     /** "course_208726" -- groups tasks by course in the progress bar. */
     courseKey: string;
-    /** "COMM103" from the dashboard, else the long course name. */
+    /** "COMM103": the nickname, else the course name (see canvasEnv). */
     courseName: string;
     /** The user's dashboard color for the course. */
     color: string;
@@ -138,11 +141,43 @@ export async function fetchTasks(range: DateRange, signal?: AbortSignal): Promis
 
     const items = await fetchAllPages<PlannerItem>(`/api/v1/planner/items?${params}`, signal);
 
+    // Inside a course, only that course's work -- the list, the percentage and
+    // the progress bar all follow from this.
+    const course = currentCourseKey();
     const courses = await loadCourses();
     return items
         .filter((item) => SHOWN_TYPES.has(item.plannable_type))
+        .filter((item) => !course || contextKey(item) === course)
         .map((item) => normalize(item, courses))
         .sort(byDueDate);
+}
+
+/** Graded or to-do work that a streak can be kept or broken on. */
+const STREAK_TYPES = new Set(["assignment", "quiz", "discussion_topic", "sub_assignment"]);
+
+/** How far back a first load looks. Canvas drops concluded courses from the
+    planner anyway, so this rarely reaches anything. */
+const STREAK_HISTORY_DAYS = 730;
+
+/* Everything due from local midnight `from` (STREAK_HISTORY_DAYS ago, without
+   one) through today, for streak.ts. */
+export async function fetchStreakItems(from?: Date, signal?: AbortSignal): Promise<StreakItem[]> {
+    const tomorrow = addDays(startOfDay(new Date()), 1);
+    const params = new URLSearchParams({
+        start_date: (from ?? addDays(tomorrow, -STREAK_HISTORY_DAYS)).toISOString(),
+        end_date: tomorrow.toISOString(),
+        per_page: "1000",
+    });
+
+    const items = await fetchAllPages<PlannerItem>(`/api/v1/planner/items?${params}`, signal);
+    return items
+        .filter((item) => STREAK_TYPES.has(item.plannable_type))
+        .map((item) => ({
+            // Ungraded discussions only have a to-do date.
+            dueAt: item.plannable?.due_at || item.plannable?.todo_date,
+            submission: item.submissions,
+            override: item.planner_override,
+        }));
 }
 
 /*

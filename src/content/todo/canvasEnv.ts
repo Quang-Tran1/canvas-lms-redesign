@@ -4,12 +4,14 @@
  * data is fetched from the REST API instead.
  */
 
+import { api } from "../canvasApi";
 import { readPageEnv } from "../pageEnv";
 
 export interface CourseInfo {
     /** "#rrggbb" -- the user's own dashboard color for this course. */
     color?: string;
-    /** The short code the dashboard shows, e.g. "COMM103". */
+    /** The user's nickname for the course, else its name: "COMM103", not the
+        course code "COMM103-01-Fall2026". */
     name?: string;
 }
 
@@ -45,6 +47,12 @@ export function fallbackColor(key: string | undefined): string {
         hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
     }
     return FALLBACK_PALETTE[hash % FALLBACK_PALETTE.length];
+}
+
+/* "course_212306" on a course's pages, from the <body> class Canvas sets
+   ("context-course_212306"); null on the dashboard and everywhere else. */
+export function currentCourseKey(): string | null {
+    return document.body?.className.match(/\bcontext-(course_\d+)\b/)?.[1] ?? null;
 }
 
 /* Courses don't change while the page is open, so this is fetched once and the
@@ -88,16 +96,25 @@ async function buildCourseMap(): Promise<CourseMap> {
         }
     }
 
+    // shortName is the nickname, else the course name -- what planner items
+    // carry as context_name, so the dashboard and course pages agree.
     const envCourses = env?.STUDENT_PLANNER_COURSES;
     if (envCourses) {
         for (const course of envCourses) {
             const key = course.assetString || (course.id != null ? `course_${course.id}` : undefined);
-            setName(key, course.courseCode || course.shortName || course.originalName || course.longName);
+            setName(key, course.shortName || course.originalName || course.courseCode || course.longName);
             setColor(key, course.color);
         }
+    } else {
+        // Course pages don't carry the list. context_name covers the names;
+        // only nicknames need fetching.
+        try {
+            const { data } = await api<{ course_id?: number; nickname?: string }[]>("/api/v1/users/self/course_nicknames");
+            for (const entry of data) setName(entry.course_id != null ? `course_${entry.course_id}` : undefined, entry.nickname);
+        } catch {
+            // Courses keep their plain names.
+        }
     }
-    // No REST fallback for names: each planner item carries context_name, which
-    // is the long course name but always present.
 
     return courses;
 }

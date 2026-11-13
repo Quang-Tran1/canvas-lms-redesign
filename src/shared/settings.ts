@@ -14,6 +14,7 @@ export const CLASS_RANK_KEY = "enableClassRank";  // boolean, defaults to true
 export const ANIMATION_KEY = "pageAnimation";     // one of ANIMATIONS; bubbly when unset
 export const THEME_PRESET_KEY = "themePreset";   // id of the applied preset (see themePresets.ts); cleared by a custom background
 export const COURSE_IMAGES_KEY = "courseImages";  // Record<"host/courseId", data: URL>, see content/courseImages
+export const STREAK_KEY = "streakCheckpoint";     // Record<"host/userId", StreakCheckpoint>, see content/todo/streak.ts
 
 export const THEMES = ["light", "hybrid", "dark"] as const;
 export type Theme = (typeof THEMES)[number];

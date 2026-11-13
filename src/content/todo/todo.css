@@ -1,7 +1,4 @@
 :root {
-  --streak-bg:var(--streak-gradient-tier-4-bg);
-  --streak-text: var(--streak-gradient-tier-4-text);
-
   --streak-gradient-tier-1-bg: linear-gradient(90deg, #7272729e 0%, #5555551f 70%, var(--transparent-glass-btn-bg) 100%);
   --streak-gradient-tier-1-text: linear-gradient(180deg, #ffffff5c 0%, #ffffff99 100%);
 
@@ -36,6 +33,7 @@ html #blms-todo .blms-streak {
     filter 200ms ease;
 }
 
+html #blms-todo .blms-streak--loading,
 html #blms-todo .blms-streak:active {
   transform: scale(0.9);
   filter: blur(2px);
