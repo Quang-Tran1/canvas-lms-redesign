@@ -1,4 +1,5 @@
 import { useCallback } from "preact/hooks"
+import Streak from "./components/Streak"
 import ScopeSelector from "./components/ScopeSelector"
 import DatePicker from "./components/DatePicker"
 import ProgressBar from "./components/ProgressBar"
@@ -28,6 +29,8 @@ export function TodoPanel() {
 
     return (
         <>
+            <h2 className="blms-todo__title">Streak</h2>
+            <Streak />
             <h2 className="blms-todo__title">To Do</h2>
             <ScopeSelector scope={scope} onScope={setScope} />
             <DatePicker

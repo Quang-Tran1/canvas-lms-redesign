@@ -1,3 +1,23 @@
+:root {
+  --streak-bg:var(--streak-gradient-tier-4-bg);
+  --streak-text: var(--streak-gradient-tier-4-text);
+
+  --streak-gradient-tier-1-bg: linear-gradient(90deg, #7272729e 0%, #5555551f 70%, var(--transparent-glass-btn-bg) 100%);
+  --streak-gradient-tier-1-text: linear-gradient(180deg, #ffffff5c 0%, #ffffff99 100%);
+
+  --streak-gradient-tier-2-bg: linear-gradient(90deg, #ff84389e 0%, #ff83371f 70%, var(--transparent-glass-btn-bg) 100%);
+  --streak-gradient-tier-2-text: linear-gradient(180deg, #ff6d13, #ffa318);
+
+  --streak-gradient-tier-3-bg: linear-gradient(90deg, #496fd89e 0%, #7995e11f 70%, var(--transparent-glass-btn-bg) 100%);
+  --streak-gradient-tier-3-text: linear-gradient(180deg, #245dfa 0%, #23b9ff 100%);
+
+  --streak-gradient-tier-4-bg: linear-gradient(90deg, #9d42d19e 0%, #b463e21f 70%, var(--transparent-glass-btn-bg) 100%);
+  --streak-gradient-tier-4-text: linear-gradient(180deg, #a72cff 0%, #e923ff 100%);
+
+  --streak-gradient-tier-5-bg: linear-gradient(90deg, #ff28289e 0%, #ffb8b81f 70%, var(--transparent-glass-btn-bg) 100%);
+  --streak-gradient-tier-5-text: linear-gradient(180deg, #D90C0C 0%, #fcbcbc 100%);
+}
+
 /* Canvas's own to-do list: hidden, not removed (see mount.ts). */
 html .Sidebar__TodoListContainer {
   display: none !important;
@@ -6,38 +26,48 @@ html .Sidebar__TodoListContainer {
 html #blms-todo .blms-streak {
   display: flex;
   align-items: center;
-  background-color: var(--transparent-glass-btn-bg);
-  background: linear-gradient(90deg, #b55d279e 0%, #B55D271F 55%, #ffffff1f 100% );
+  background: var(--streak-bg);
   padding: 6px 12px;
   margin-bottom: 8px;
-  border-radius: 99px;
-  box-shadow: var(--glass-specular-highlight);
+  border-radius: 28px;
+  box-shadow: var(--glass-specular-highlight), 0px 0px 4px var(--shadow);
+  transition:
+    transform 200ms ease,
+    filter 200ms ease;
 }
 
-html #blms-todo .blms-streak__icon,
-html #blms-todo .blms-streak__icon > svg {
-  height: 36px;
-  width: 36px;
-}
-
-html #blms-todo .blms-streak__icon > svg > path {
-  fill: var(--transparent-glass-btn-bg);
-  box-shadow: var(--glass-specular-highlight);
+html #blms-todo .blms-streak:active {
+  transform: scale(0.9);
+  filter: blur(2px);
 }
 
 html #blms-todo .blms-streak__number {
-  color: #d9870d;
+  background: var(--streak-text);
+  color: transparent;
   font-size: 32px;
   font-weight: 800;
   padding-left: 4px;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 html #blms-todo .blms-streak__units {
-  color: var(--secondary-text-color);
+  background: var(--streak-text);
+  color: transparent;
   font-size: 20px;
   font-weight: 800;
-  padding-top: 12px;
+  padding-top: 8px;
   padding-left: 4px;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 html #blms-todo .blms-todo__title {
