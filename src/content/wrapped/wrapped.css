@@ -1,0 +1,1443 @@
+/*
+ * Canvas Wrapped. Everything here lives in a shadow root (see mount.tsx), so
+ * none of it leaks onto Canvas and none of Canvas's or styles.css's rules
+ * reach in.
+ *
+ * The slides are laid out on the Figma frame's own grid: a 1280x832 stage
+ * holding a 1184x736 card, in plain px, which WrappedModal scales to fit the
+ * window. Coordinates inside a slide are relative to the card unless a
+ * comment says otherwise, and match the Figma file's numbers.
+ */
+
+:host {
+  all: initial;
+  /* Absolute rather than fixed, so it scrolls with the page instead of
+     covering the cards. mount.tsx anchors it under the Dashboard panel's
+     lower-right corner; this top-left spot, in the strip above Canvas's
+     content, is for a browser without anchor positioning. */
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 101;
+}
+
+/* Canvas's phone layout puts its own header bar here. */
+@media (max-width: 767px) {
+  :host {
+    display: none;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.blms-wrapped {
+  --blms-inter: "BLMS Wrapped Inter", "Inter", system-ui, sans-serif;
+  --blms-rubik: "BLMS Wrapped Rubik", "Rubik", system-ui, sans-serif;
+  --blms-lato: "BLMS Wrapped Lato", "Lato", system-ui, sans-serif;
+  /* Lines settle gently over their whole two seconds rather than snapping
+     in and idling. */
+  --blms-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --blms-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* The glint that sweeps across metal text: a bright core with a shade
+     either side, so it reads even on the near-white middle of the fill. It
+     sits on a layer four times the text's width, clear of the right edge at
+     --blms-sheen 0 and of the left at 1, so at rest the fill is the design's. */
+  --blms-sheen-layer: linear-gradient(100deg,
+    rgba(0, 0, 0, 0) 34%,
+    rgba(0, 0, 0, 0.2) 44%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(0, 0, 0, 0.2) 56%,
+    rgba(0, 0, 0, 0) 66%);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Launcher ---- */
+
+.blms-wrapped__launcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 20px;
+  border: 0;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #000 0%, #000 75%, rgba(0, 0, 0, 0.01) 100%);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    inset 0 0 8px rgba(255, 255, 255, 0.4),
+    inset 0.5px 0.5px 0 rgba(255, 255, 255, 0.25),
+    inset -0.5px -0.5px 0 rgba(255, 255, 255, 0.25);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 200ms ease,
+    filter 200ms ease;
+  animation: 600ms launcherFadeIn 1000ms ease backwards;
+}
+
+.blms-wrapped__launcher:hover {
+  transform: scale(1.05);
+}
+
+.blms-wrapped__launcher:active {
+  transform: scale(0.9);
+  filter: blur(2px);
+}
+
+.blms-wrapped__launcher:focus {
+  outline: none;
+}
+
+.blms-wrapped__launcher:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@keyframes launcherFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+    filter: blur(24px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.blms-wrapped__launcher-label {
+  font-family: var(--blms-inter);
+  font-weight: 900;
+  font-size: 16px;
+  /* Keeps the pill at the design's 64px: 24px padding around a 16px row. */
+  line-height: 16px;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-image:
+    var(--blms-sheen-layer),
+    radial-gradient(182.04px 9.1px at 1.96px 50%, var(--blms-chrome-stops));
+  background-size: 400% 100%, auto;
+  background-position: calc(var(--blms-sheen) * 100%) 0, 0 0;
+  filter: drop-shadow(0 1px 0 rgba(183, 183, 183, 0.4));
+  animation: blms-sheen 7s linear 1.5s infinite;
+}
+
+.blms-wrapped__launcher img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+/* ---- Modal ---- */
+
+.blms-wrapped__dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  outline: none;
+  color-scheme: dark;
+  /* Transparent while the iris shows the page around it. */
+  background: transparent;
+  /* NavCursor stands in for the pointer. */
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.blms-wrapped__dialog::backdrop {
+  background: transparent;
+}
+
+/* Everything the iris reveals. */
+.blms-wrapped__scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.blms-wrapped__wallpaper {
+  position: absolute;
+  inset: 0;
+  /* The wallpaper (set inline, it's a data: URL) is framed as in the design
+     at 1280x832, 1470x980 from (-78, -28), and still covers any other size. */
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: 41.05% 18.92%;
+  background-size: max(calc(1470px * var(--blms-wrapped-scale, 1)), 100vw, 150.04vh) auto;
+  /* Zooms in and out around the launcher, where the iris is. */
+  transform-origin: var(--iris-x, 50%) var(--iris-y, 50%);
+  animation: blms-wallpaper-in 1900ms var(--blms-ease-out) both;
+}
+
+.blms-wrapped__stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1280px;
+  height: 832px;
+  transform: translate(-50%, -50%) scale(var(--blms-wrapped-scale, 1));
+}
+
+.blms-wrapped__card {
+  position: absolute;
+  left: 48px;
+  top: 48px;
+  width: 1184px;
+  height: 736px;
+  overflow: hidden;
+  border-radius: 56px;
+  background: linear-gradient(180deg, #151515 0%, #030303 79.808%, rgba(0, 0, 0, 0.01) 100%);
+  /* transform-origin is set inline, at the launcher. */
+  animation: blms-card-in 1600ms var(--blms-ease-out) 120ms both;
+}
+
+/* Sits over the slide's content, as in the design. */
+.blms-wrapped__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 -8px 24px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.blms-wrapped__card > *,
+.blms-wrapped__slide > *,
+.blms-wrapped__tile > * {
+  position: absolute;
+  margin: 0;
+}
+
+/* One slide. While the next comes in, the last fades up and out over it. */
+.blms-wrapped__slide {
+  inset: 0;
+}
+
+.blms-wrapped__slide--leaving {
+  pointer-events: none;
+  animation: blms-slide-out 350ms cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* ---- Cursor ---- */
+
+/* Placed every frame by NavCursor, with an inline translate3d, which puts it
+   on a layer of its own. Not will-change: transform, which would let Chrome
+   keep rasterizing it at a stale scale and soften its edges. */
+.blms-wrapped__cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  pointer-events: none;
+}
+
+/* The design's glass circle. The bubble animations use transform and the
+   press uses scale, so the two can overlap. Opacity and the press blur stay
+   on this same element: on an ancestor, either would cut the backdrop blur
+   off from the slide. */
+.blms-wrapped__cursor-bubble {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    inset -0.5px -0.5px 0 rgba(255, 255, 255, 0.25),
+    inset 0.5px 0.5px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 16px rgba(255, 255, 255, 0.4);
+  transition:
+    scale 200ms ease,
+    filter 200ms ease;
+}
+
+/* The design's arrow: a 30px shaft and a head 12.5px deep, stroked 4px wide
+   with round ends. This is the shaft, centered in the circle so it can turn
+   about its own middle, and the head's two strokes hang off its right end. */
+.blms-wrapped__cursor-arrow {
+  position: absolute;
+  left: 27px;
+  top: 42px;
+  width: 34px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #fff;
+  transition: rotate 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.blms-wrapped__cursor-arrow::before,
+.blms-wrapped__cursor-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* 12.5px across and 12.5px down, plus the two round ends. */
+  width: calc(12.5px * 1.41421356 + 4px);
+  height: 4px;
+  border-radius: 2px;
+  background-color: #fff;
+  /* Turns about the round end at the tip, which sits on the shaft's. */
+  transform-origin: calc(100% - 2px) 50%;
+}
+
+.blms-wrapped__cursor-arrow::before {
+  rotate: 45deg;
+}
+
+.blms-wrapped__cursor-arrow::after {
+  rotate: -45deg;
+}
+
+.blms-wrapped__cursor-bubble--hidden {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.blms-wrapped__cursor-bubble--in {
+  animation: blms-bubble-in 620ms ease-out both;
+}
+
+/* Arrives with the iris, a beat after the click. */
+.blms-wrapped__dialog--opening .blms-wrapped__cursor-bubble--in {
+  animation-delay: 220ms;
+}
+
+.blms-wrapped__cursor-bubble--out {
+  animation: blms-bubble-out 340ms ease-in both;
+}
+
+.blms-wrapped__cursor-bubble--pressed {
+  scale: 0.9;
+  filter: blur(2px);
+}
+
+.blms-wrapped__cursor--back .blms-wrapped__cursor-arrow {
+  rotate: 180deg;
+}
+
+/* ---- Progress ---- */
+
+.blms-wrapped__progress {
+  left: 56px;
+  top: 28px;
+  display: flex;
+  gap: 16px;
+  animation: blms-bar-in 700ms var(--blms-ease) both;
+}
+
+.blms-wrapped__segment {
+  position: relative;
+  width: 167px;
+  height: 22px;
+  border-radius: 99px;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* The design's lit segment, revealed left to right. Clipping rather than
+   scaling keeps the rounded ends round and the gradient where it is. */
+.blms-wrapped__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(270deg, #fff 0%, #b1b1b1 100%);
+  box-shadow:
+    inset 0 -4px 4px rgba(0, 0, 0, 0.25),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.25);
+  /* Full, as the slides before the current one are. Stated rather than left
+     at none so the animations below have an inset to run to. */
+  clip-path: inset(0 0 0 0 round 99px);
+}
+
+/* The duration is set inline, from the slide's. */
+.blms-wrapped__fill--timed {
+  animation: blms-fill linear both;
+}
+
+/* Clicked past before it filled: runs on from where it was (--empty, set
+   inline) to full. */
+.blms-wrapped__fill--finish {
+  animation: blms-fill-finish 450ms var(--blms-ease-out) both;
+}
+
+@keyframes blms-fill-finish {
+  from {
+    clip-path: inset(0 var(--empty, 0%) 0 0 round 99px);
+  }
+}
+
+/* ---- Type ---- */
+
+.blms-wrapped {
+  /* Figma's two radial "metal" fills. Each use places the ellipse with
+     --rx/--ry (radii) and --cx/--cy (center), copied from the design. */
+  --blms-chrome-stops: #bbb 0%, #ddd 25.481%, #fff 50.962%, #c3c3c3 75.481%, #a4a4a4 87.74%, #868686 100%;
+  --blms-silver-stops: #dcdcdc 0%, #fff 50.962%, #d0d0d0 75.481%, #a1a1a1 100%;
+}
+
+.blms-wrapped__metal {
+  --stops: var(--blms-silver-stops);
+  /* Figma's text drop shadow. A text-shadow would paint over the clipped
+     gradient instead of under it. Named so the entrance can blur on top. */
+  --own-filter: drop-shadow(0 var(--lift, 8px) 0 rgba(183, 183, 183, 0.4));
+  font-family: var(--blms-inter);
+  font-weight: 900;
+  line-height: normal;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-image:
+    var(--blms-sheen-layer),
+    radial-gradient(var(--rx) var(--ry) at var(--cx) var(--cy, 50%), var(--stops));
+  background-size: 400% 100%, auto;
+  background-position: calc(var(--blms-sheen) * 100%) 0, 0 0;
+  filter: var(--own-filter);
+  /* Starts once the text is about in, then sweeps every few seconds. */
+  animation: blms-sheen 7s linear calc(var(--at) + var(--blms-line) * 0.6) infinite;
+}
+
+.blms-wrapped__metal--chrome {
+  --stops: var(--blms-chrome-stops);
+}
+
+/* Its pieces paint the gradient instead. */
+.blms-wrapped__metal--split {
+  background-image: none;
+}
+
+/* A digit or line of split metal text: the host's gradient and sheen,
+   shifted back by where the piece sits in the host (set by alignPieces), so
+   together they paint exactly what the host would. The host's drop shadow
+   still falls under all of them. */
+.blms-wrapped__piece {
+  --own-filter: initial;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-repeat: no-repeat;
+  background-image:
+    var(--blms-sheen-layer),
+    radial-gradient(var(--rx) var(--ry) at calc(var(--cx) - var(--dx, 0px)) calc(var(--hcy) - var(--dy, 0px)), var(--stops));
+  background-size: calc(var(--hw) * 4) var(--hh), auto;
+  background-position: calc(var(--blms-sheen) * var(--hw) * -3 - var(--dx, 0px)) calc(0px - var(--dy, 0px)), 0 0;
+}
+
+.blms-wrapped__muted {
+  font-family: var(--blms-inter);
+  font-weight: 500;
+  color: #b0b0b0;
+  white-space: nowrap;
+}
+
+.blms-wrapped__lead {
+  left: 71px;
+  top: 154px;
+  font-size: 48px;
+  line-height: 1.347;
+}
+
+.blms-wrapped__label {
+  font-size: 16px;
+  line-height: 1.347;
+  /* Figma rounds this size's half-leading the other way and sets the
+     text 1px lower than Chrome does. */
+  margin-top: 1px;
+}
+
+.blms-wrapped__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A line of a paragraph, set apart so it can come in on its own. */
+.blms-wrapped__line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Anchors an element by its vertical center, like Figma's centered text boxes. */
+.blms-wrapped__mid-y {
+  transform: translateY(-50%);
+}
+
+.blms-wrapped__mid {
+  transform: translate(-50%, -50%);
+}
+
+.blms-wrapped__byline {
+  font-family: var(--blms-lato);
+  font-weight: 900;
+  line-height: normal;
+  color: #9b9b9b;
+}
+
+.blms-wrapped__brand {
+  font-family: var(--blms-rubik);
+  font-weight: 600;
+  line-height: normal;
+  color: #fff;
+}
+
+/* ---- Slide: intro ---- */
+
+.blms-wrapped__intro-title {
+  left: 56px;
+  top: 56px;
+  width: 802px;
+  font-size: 148px;
+  white-space: normal;
+  --rx: 691.45px;
+  --ry: 289.71px;
+  --cx: 8.54px;
+  --cy: 261.5px;
+}
+
+.blms-wrapped__intro-by {
+  left: 56px;
+  top: 639px;
+  font-size: 32px;
+}
+
+.blms-wrapped__intro-brand {
+  left: 107px;
+  top: 657.5px;
+  font-size: 48px;
+}
+
+/* ---- Slide: stats ---- */
+
+.blms-wrapped__stats-hero {
+  left: 56px;
+  top: 304px;
+  font-size: 176px;
+  --rx: 455.79px;
+  --ry: 111.83px;
+  --cx: 6.71px;
+}
+
+.blms-wrapped__stats-caption {
+  left: 56px;
+  top: 400px;
+  width: 478px;
+  font-size: 32px;
+  line-height: normal;
+  white-space: normal;
+}
+
+.blms-wrapped__stats-caption b {
+  font-weight: 900;
+}
+
+.blms-wrapped__stats-item {
+  left: 716px;
+  --rx: 307.01px;
+  --ry: 112.45px;
+  --cx: 4.5px;
+}
+
+.blms-wrapped__stats-item--points {
+  top: 166px;
+}
+
+.blms-wrapped__stats-item--discussions {
+  top: 361px;
+  /* This one's box is wider in the design, which stretches its fill. */
+  --rx: 333.2px;
+  --cx: 4.88px;
+}
+
+.blms-wrapped__stats-item--quizzes {
+  top: 569px;
+}
+
+.blms-wrapped__stats-item > span {
+  display: block;
+}
+
+/* Figma sets these two lines 8px closer than line-height: normal would,
+   measured against its render. */
+.blms-wrapped__stats-number {
+  font-size: 80px;
+  line-height: 88.875px;
+}
+
+.blms-wrapped__stats-unit {
+  font-size: 48px;
+  line-height: 50.125px;
+}
+
+/* ---- Slide: people ---- */
+
+.blms-wrapped__people-text {
+  left: 195px;
+  top: 324px;
+  font-size: 48px;
+  line-height: 1.347;
+}
+
+/* Sits in the sentence's first line without making it taller, dropped to
+   where the design has its baseline. */
+.blms-wrapped__people-number {
+  position: relative;
+  top: 2px;
+  margin: 0 16px 0 20px;
+  font-size: 124px;
+  line-height: 0;
+  --rx: 306.7px;
+  --ry: 152.93px;
+  --cx: 3.3px;
+}
+
+/* Its digits rise on their own, so each needs a box as tall as the glyphs,
+   which the zero line height would flatten. The negative margins keep those
+   boxes from making the sentence's line any taller. */
+.blms-wrapped__people-number .blms-wrapped__digit {
+  line-height: normal;
+  margin-block: -0.75em -0.25em;
+}
+
+/* ---- Slide: procrastination ---- */
+
+.blms-wrapped__score-title {
+  left: 579px;
+  top: 183px;
+  font-size: 48px;
+  line-height: normal;
+  color: #525252;
+}
+
+.blms-wrapped__score {
+  left: 591.5px;
+  top: 358px;
+  font-size: 148px;
+  --rx: 444.22px;
+  --ry: 152.93px;
+  --cx: 4.78px;
+}
+
+.blms-wrapped__score-hint {
+  left: 489px;
+  top: 455px;
+  font-size: 24px;
+  line-height: 1.347;
+}
+
+/* Centered where the design's line is, so a shorter or longer one sits the same. */
+.blms-wrapped__score-quip {
+  left: 588.40625px;
+  top: 524px;
+  transform: translateX(-50%);
+  font-size: 40px;
+  line-height: 1.347;
+}
+
+/* ---- Slides: busiest day and course ---- */
+
+.blms-wrapped__headline {
+  top: 368px;
+  font-size: 124px;
+  --ry: 152.93px;
+}
+
+/* Centered on where the design's text sits, not on its text box. */
+.blms-wrapped__headline--day {
+  left: 584.5px;
+  --rx: 540.18px;
+  --cx: 5.82px;
+}
+
+.blms-wrapped__headline--course {
+  left: 600.5px;
+  --rx: 645.06px;
+  --cx: 6.94px;
+}
+
+/* Centered on the design's text box, so any total and either plural sits
+   where the design's line does. */
+.blms-wrapped__day-total {
+  left: 604.5px;
+  top: 462px;
+  transform: translateX(-50%);
+  font-size: 40px;
+  line-height: 1.347;
+}
+
+/* The busiest course's color glowing up from the bottom-right corner, where
+   the design's purple glow is on the summary's tile; here it fills the
+   card's corner the same way. The geometry is the tile's (a 258.8 x 202.1
+   ellipse centered at 366.48, 287 on its 363 x 287) in proportions, and
+   --course-glow, from slides.tsx, is the color stops. */
+.blms-wrapped__tile--course,
+.blms-wrapped__course-glow {
+  background-image: radial-gradient(71.295% 70.418% at 100.959% 100%, var(--course-glow));
+}
+
+.blms-wrapped__course-glow {
+  inset: 0;
+  /* Swells into place rather than rising like a line. */
+  --in-y: 0px;
+  --in-scale: 1.15;
+  --in-blur: 40px;
+  transform-origin: 100% 100%;
+}
+
+.blms-wrapped__course-photo {
+  left: 988.41px;
+  top: 619.71px;
+  width: 422.09px;
+  height: 235.21px;
+  border-radius: 16px;
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(6.95deg);
+}
+
+/* ---- Slide: summary ---- */
+
+.blms-wrapped__tile {
+  border-radius: 24px;
+  background-color: rgba(255, 251, 251, 0.12);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    inset 0.5px 0.5px 0 rgba(255, 255, 255, 0.25),
+    inset -0.5px -0.5px 0 rgba(255, 255, 255, 0.25);
+}
+
+.blms-wrapped__tile .blms-wrapped__metal {
+  font-size: 48px;
+  --lift: 4px;
+}
+
+.blms-wrapped__tile--submissions {
+  left: 56px;
+  top: 82px;
+  width: 357px;
+  height: 147px;
+}
+
+.blms-wrapped__tile--people {
+  left: 437px;
+  top: 82px;
+  width: 304px;
+  height: 147px;
+}
+
+.blms-wrapped__tile--numbers {
+  left: 56px;
+  top: 253px;
+  width: 357px;
+  height: 427px;
+}
+
+.blms-wrapped__tile--score {
+  left: 437px;
+  top: 513px;
+  width: 304px;
+  height: 167px;
+}
+
+.blms-wrapped__tile--day,
+.blms-wrapped__tile--course {
+  left: 765px;
+  width: 363px;
+  height: 287px;
+}
+
+.blms-wrapped__tile--day {
+  top: 82px;
+  background-image: radial-gradient(258.8px 202.1px at 366.48px 287px,
+    #fff 0%,
+    rgba(191, 223, 255, 0.84375) 8.6538%,
+    rgba(128, 191, 255, 0.6875) 17.308%,
+    rgba(64, 159, 255, 0.53125) 25.962%,
+    rgba(32, 143, 255, 0.45313) 30.288%,
+    rgba(0, 128, 255, 0.375) 34.615%,
+    rgba(0, 128, 255, 0) 100%);
+}
+
+.blms-wrapped__tile--course {
+  top: 393px;
+  overflow: hidden;
+}
+
+/* Inside the tiles, coordinates are relative to the tile. */
+
+.blms-wrapped__tile-center {
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* The design left-aligns these two numbers in boxes centered on their
+   labels; centering the text itself, a little left of the label, keeps
+   them where the design has them at any length. */
+.blms-wrapped__summary-submissions {
+  left: 101px;
+  top: 55.5px;
+  transform: translate(-50%, -50%);
+  --rx: 73.79px;
+  --ry: 42.81px;
+  --cx: 1.09px;
+}
+
+.blms-wrapped__summary-submissions-label {
+  left: 104px;
+  top: 93px;
+}
+
+/* styles.css's .btn-primary, which can't reach into the shadow root, in the
+   page's own accent color. Custom properties are inherited across the shadow
+   boundary, so --accent is the one the rest of the page uses. */
+.btn-primary {
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent-fill, color-mix(in srgb, var(--ic-brand-primary, #0374b5) 20%, transparent));
+  color: var(--accent, var(--ic-brand-primary, #0374b5));
+  font-weight: bold;
+  cursor: none;
+  transition:
+    background-color 200ms ease,
+    transform 200ms ease,
+    filter 200ms ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background-color: transparent;
+  transform: scale(1.4);
+}
+
+.btn-primary:active {
+  background-color: transparent;
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
+/* Canvas's .btn.btn-primary as the design draws it: a pill, scaled up from
+   Canvas's 39px to the design's 53px. */
+.blms-wrapped__submit {
+  left: 212px;
+  top: 50px;
+  width: 113px;
+  height: 53px;
+  padding: 0;
+  border-radius: 99px;
+  font-family: var(--blms-lato);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.blms-wrapped__summary-people {
+  left: 24px;
+  top: 59.91px;
+  --rx: 103.31px;
+  --ry: 36.27px;
+  --cx: 1.51px;
+}
+
+.blms-wrapped__summary-people-label {
+  left: 24px;
+  top: 93.64px;
+}
+
+.blms-wrapped__person {
+  left: 194px;
+  top: 30.21px;
+  width: 86px;
+  height: 86.589px;
+}
+
+.blms-wrapped__tile--numbers .blms-wrapped__metal {
+  font-size: 72px;
+}
+
+.blms-wrapped__summary-points {
+  left: 33px;
+  top: 83px;
+  --rx: 180.42px;
+  --ry: 29.87px;
+  --cx: 2.64px;
+}
+
+.blms-wrapped__summary-points-label {
+  left: 33px;
+  top: 123px;
+}
+
+.blms-wrapped__summary-discussions {
+  right: 49px;
+  top: 207.5px;
+  --rx: 98.94px;
+  --ry: 36.02px;
+  --cx: 1.45px;
+}
+
+.blms-wrapped__summary-discussions-label {
+  right: 49px;
+  top: 239px;
+  text-align: right;
+}
+
+.blms-wrapped__summary-quizzes {
+  left: 45px;
+  top: 283.5px;
+  --rx: 75.66px;
+  --ry: 36.02px;
+  --cx: 1.11px;
+}
+
+.blms-wrapped__summary-quizzes-label {
+  left: 45px;
+  top: 313px;
+}
+
+.blms-wrapped__summary-numbers-label {
+  left: 179px;
+  top: 382px;
+}
+
+.blms-wrapped__summary-score {
+  left: 149.5px;
+  top: 62.5px;
+  transform: translate(-50%, -50%);
+  --rx: 109.13px;
+  --ry: 36.02px;
+  --cx: 1.6px;
+}
+
+.blms-wrapped__summary-score-label {
+  left: 152.5px;
+  top: 103px;
+}
+
+.blms-wrapped__summary-day-label {
+  left: 18px;
+  top: 19px;
+}
+
+.blms-wrapped__clock {
+  left: 105px;
+  top: 66px;
+  width: 153px;
+  height: 153px;
+}
+
+.blms-wrapped__summary-day {
+  right: 40px;
+  top: 226.5px;
+  --rx: 224.81px;
+  --ry: 49.14px;
+  --cx: 2.19px;
+}
+
+.blms-wrapped__summary-course-photo {
+  left: 268.38px;
+  top: 237.9px;
+  width: 195px;
+  height: 109px;
+  border-radius: 16px;
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(6.95deg);
+}
+
+.blms-wrapped__summary-course {
+  left: 178px;
+  top: 136.5px;
+  transform: translate(-50%, -50%);
+  --rx: 247.42px;
+  --ry: 50.62px;
+  --cx: 2.58px;
+}
+
+.blms-wrapped__summary-course-label {
+  left: 14px;
+  top: 12px;
+}
+
+/* Card coordinates again. */
+
+.blms-wrapped__summary-title {
+  left: 462px;
+  top: 257px;
+  width: 260px;
+  font-size: 52px;
+  text-align: center;
+  white-space: normal;
+  --lift: 4px;
+  --rx: 224.16px;
+  --ry: 90.29px;
+  --cx: 2.77px;
+  --cy: 81.5px;
+}
+
+.blms-wrapped__summary-by {
+  left: 516px;
+  top: 470px;
+  font-size: 16px;
+}
+
+.blms-wrapped__summary-brand {
+  left: 539px;
+  top: 469.5px;
+  font-size: 24px;
+}
+
+/* ---- Slide: outro ---- */
+
+.blms-wrapped__outro-title {
+  left: 292px;
+  top: 368px;
+  font-size: 124px;
+  --rx: 592.62px;
+  --ry: 152.93px;
+  --cx: 6.38px;
+}
+
+.blms-wrapped__outro-text {
+  left: 368px;
+  top: 443px;
+  font-size: 48px;
+  line-height: 1.347;
+}
+
+/* ---- While the numbers load ---- */
+
+/* In the intro's lower right, level with "by BetterLMS". */
+.blms-wrapped__status {
+  right: 56px;
+  top: 657.5px;
+  font-size: 24px;
+  line-height: 1.347;
+}
+
+.blms-wrapped__status--loading,
+.blms-wrapped__status--ready {
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-image: linear-gradient(100deg,
+    #6e6e6e 0%, #6e6e6e 38%, #f5f5f5 50%, #6e6e6e 62%, #6e6e6e 100%);
+  background-size: 250% 100%;
+}
+
+/* Doubled up to outrank .blms-wrapped__in below. */
+.blms-wrapped__status.blms-wrapped__status--loading {
+  animation:
+    blms-in var(--blms-line) var(--blms-ease) var(--at) both,
+    blms-shimmer 2.4s linear infinite;
+}
+
+/* Keeps the entrance's own frame and fades from there, so a status that is
+   no sooner in than done never flashes. */
+.blms-wrapped__status.blms-wrapped__status--ready {
+  animation:
+    blms-in var(--blms-line) var(--blms-ease) var(--at) both,
+    blms-shimmer 2.4s linear infinite,
+    blms-out 600ms ease forwards;
+}
+
+/* Text that takes the loading line's place (the year couldn't load, or has
+   too little in it) comes in on its own. Backwards rather than both, so once
+   in it holds no animation that would keep it on a layer of its own. */
+.blms-wrapped__status-text--changed {
+  display: inline-block;
+  animation: blms-status-swap 700ms var(--blms-ease) backwards;
+}
+
+@keyframes blms-status-swap {
+  from {
+    opacity: 0;
+    translate: 0 0.3em;
+    filter: blur(8px);
+  }
+}
+
+/* ---- Motion ----
+ *
+ * Timing comes from WrappedModal as custom properties: --blms-line (how long
+ * a line takes), --blms-stagger (between lines), and --blms-digit and
+ * --blms-digit-stagger for numbers. A slide frame sets --start, and each
+ * element its line, --i. Everything inside a tile waits a beat for the tile.
+ */
+
+.blms-wrapped__in,
+.blms-wrapped__metal,
+.blms-wrapped__digit,
+.blms-wrapped__pop,
+.blms-wrapped__status {
+  --at: calc(var(--start, 0ms) + var(--i, 0) * var(--blms-stagger, 0ms) + var(--lag, 0ms));
+}
+
+.blms-wrapped__tile > * {
+  --lag: 250ms;
+}
+
+.blms-wrapped__in {
+  animation: blms-in var(--blms-line) var(--blms-ease) var(--at) both;
+}
+
+.blms-wrapped__metal.blms-wrapped__in {
+  animation:
+    blms-in var(--blms-line) var(--blms-ease) var(--at) both,
+    blms-sheen 7s linear calc(var(--at) + var(--blms-line) * 0.6) infinite;
+}
+
+/* Rises a little, from an em-relative distance so big type travels further. */
+@keyframes blms-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--in-y, min(0.35em, 40px));
+    scale: var(--in-scale, 1);
+    rotate: var(--in-rotate, 0deg);
+    filter: var(--own-filter,) blur(var(--in-blur, 12px));
+  }
+}
+
+.blms-wrapped__tile {
+  --in-y: 28px;
+  --in-scale: 0.94;
+  --in-blur: 16px;
+}
+
+/* Tossed onto the card, settling at the design's tilt. */
+.blms-wrapped__in--photo {
+  --in-y: 72px;
+  --in-scale: 0.82;
+  --in-rotate: -12deg;
+  --in-blur: 18px;
+}
+
+.blms-wrapped__digit {
+  display: inline-block;
+  animation: blms-digit var(--blms-digit) var(--blms-ease-out)
+    calc(var(--at) + var(--d, 0) * var(--blms-digit-stagger, 0ms)) both;
+}
+
+@keyframes blms-digit {
+  from {
+    opacity: 0;
+    translate: 0 0.45em;
+    filter: blur(8px);
+  }
+}
+
+/* The summary's icons. */
+.blms-wrapped__pop {
+  animation: blms-pop 900ms ease-out calc(var(--at) + 150ms) both;
+}
+
+@keyframes blms-pop {
+  0% {
+    opacity: 0;
+    scale: 0.4;
+    filter: blur(8px);
+  }
+  55% {
+    opacity: 1;
+    scale: 1.08;
+    filter: blur(0);
+  }
+  80% {
+    scale: 0.98;
+  }
+}
+
+/* One pass of light across the text, then a rest. */
+@keyframes blms-sheen {
+  0% {
+    --blms-sheen: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  50%,
+  100% {
+    --blms-sheen: 0;
+  }
+}
+
+@keyframes blms-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+@keyframes blms-out {
+  to {
+    opacity: 0;
+    translate: 0 -8px;
+    filter: blur(8px);
+  }
+}
+
+@keyframes blms-slide-out {
+  to {
+    opacity: 0;
+    translate: 0 -16px;
+    filter: blur(12px);
+  }
+}
+
+@keyframes blms-bar-in {
+  from {
+    opacity: 0;
+    translate: 0 -12px;
+    filter: blur(6px);
+  }
+}
+
+@keyframes blms-fill {
+  from {
+    clip-path: inset(0 100% 0 0 round 99px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 99px);
+  }
+}
+
+/* ---- Opening and closing ----
+ *
+ * The iris is a soft-edged radial mask on the scene, its radius
+ * (--blms-iris, registered in mount.tsx) animated on the dialog so the scene
+ * and the ring of light share it. WrappedModal sets the center at the
+ * launcher (--iris-x, --iris-y) and the radius that clears the screen
+ * (--iris-max), and drops the mask once the iris is open.
+ */
+
+.blms-wrapped__dialog--opening {
+  animation: blms-iris-open var(--iris-open) cubic-bezier(0.7, 0, 0.25, 1) both;
+}
+
+.blms-wrapped__dialog--closing {
+  animation: blms-iris-close var(--iris-close) cubic-bezier(0.6, 0, 0.3, 1) both;
+}
+
+.blms-wrapped__dialog--opening .blms-wrapped__scene,
+.blms-wrapped__dialog--closing .blms-wrapped__scene {
+  -webkit-mask-image: radial-gradient(circle at var(--iris-x) var(--iris-y),
+    #000 calc(var(--blms-iris) - var(--iris-feather)), transparent var(--blms-iris));
+  mask-image: radial-gradient(circle at var(--iris-x) var(--iris-y),
+    #000 calc(var(--blms-iris) - var(--iris-feather)), transparent var(--blms-iris));
+}
+
+@keyframes blms-iris-open {
+  from {
+    --blms-iris: 0px;
+  }
+  to {
+    --blms-iris: var(--iris-max);
+  }
+}
+
+@keyframes blms-iris-close {
+  from {
+    --blms-iris: var(--iris-max);
+  }
+  to {
+    --blms-iris: 0px;
+  }
+}
+
+/* Light caught on the rim of the iris, glowing out over the page. At radius
+   zero it's a spark on the launcher. */
+.blms-wrapped__iris-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--iris-x) var(--iris-y),
+    rgba(255, 255, 255, 0) calc(var(--blms-iris) - 56px),
+    rgba(255, 255, 255, 0.14) calc(var(--blms-iris) - 18px),
+    rgba(255, 255, 255, 0.6) calc(var(--blms-iris) - 2px),
+    rgba(255, 255, 255, 0.16) calc(var(--blms-iris) + 12px),
+    rgba(255, 255, 255, 0) calc(var(--blms-iris) + 72px));
+}
+
+.blms-wrapped__dialog--opening .blms-wrapped__iris-ring {
+  animation: blms-ring var(--iris-open) linear both;
+}
+
+.blms-wrapped__dialog--closing .blms-wrapped__iris-ring {
+  animation: blms-ring var(--iris-close) linear reverse both;
+}
+
+@keyframes blms-ring {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The page dims as the iris opens over it. */
+.blms-wrapped__dialog--opening::backdrop {
+  animation: blms-dim 900ms ease both;
+}
+
+.blms-wrapped__dialog--closing::backdrop {
+  animation: blms-dim var(--iris-close, 800ms) ease reverse both;
+}
+
+@keyframes blms-dim {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* Through the aperture, the scene comes into focus. */
+@keyframes blms-wallpaper-in {
+  from {
+    scale: 1.3;
+    rotate: -3deg;
+    filter: brightness(1.5) blur(8px);
+  }
+}
+
+@keyframes blms-card-in {
+  from {
+    opacity: 0;
+    scale: 0.84;
+    filter: blur(24px);
+  }
+}
+
+.blms-wrapped__dialog--closing .blms-wrapped__wallpaper {
+  animation: blms-wallpaper-out var(--iris-close) cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+
+.blms-wrapped__dialog--closing .blms-wrapped__card {
+  animation: blms-card-out 650ms cubic-bezier(0.5, 0, 0.75, 0) both;
+}
+
+@keyframes blms-wallpaper-out {
+  to {
+    scale: 1.15;
+    filter: brightness(1.3) blur(6px);
+  }
+}
+
+@keyframes blms-card-out {
+  to {
+    opacity: 0;
+    scale: 0.88;
+    filter: blur(16px);
+  }
+}
+
+@keyframes blms-bubble-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.12, 0.9);
+  }
+  62% {
+    transform: scale(0.94, 1.06);
+  }
+  82% {
+    transform: scale(1.02, 0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blms-bubble-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  35% {
+    transform: scale(1.1, 0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+
+/* ---- Reduced motion ----
+ *
+ * WrappedModal skips the iris and the cursor's trailing and shortens the line
+ * timing; this leaves plain fades for the rest.
+ */
+
+.blms-wrapped__dialog--reduced .blms-wrapped__in,
+.blms-wrapped__dialog--reduced .blms-wrapped__digit,
+.blms-wrapped__dialog--reduced .blms-wrapped__pop,
+.blms-wrapped__dialog--reduced .blms-wrapped__status--loading {
+  animation: blms-fade 400ms ease var(--at) both;
+}
+
+.blms-wrapped__dialog--reduced .blms-wrapped__metal,
+.blms-wrapped__dialog--reduced .blms-wrapped__wallpaper,
+.blms-wrapped__dialog--reduced .blms-wrapped__card,
+.blms-wrapped__dialog--reduced .blms-wrapped__cursor-bubble {
+  animation: none;
+}
+
+.blms-wrapped__dialog--reduced .blms-wrapped__metal.blms-wrapped__in {
+  animation: blms-fade 400ms ease var(--at) both;
+}
+
+.blms-wrapped__dialog--reduced .blms-wrapped__cursor-bubble--out {
+  opacity: 0;
+}
+
+.blms-wrapped__dialog--reduced .blms-wrapped__status-text--changed {
+  animation: blms-fade 400ms ease backwards;
+}
+
+@keyframes blms-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blms-wrapped__launcher-label {
+    animation: none;
+  }
+}

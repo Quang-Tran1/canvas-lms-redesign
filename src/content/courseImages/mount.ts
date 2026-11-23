@@ -120,6 +120,11 @@ function courseRule(id: string, url: string): string {
 }`;
 }
 
+/** The image the user picked for a course on this Canvas, if they did. */
+export function customCourseImage(courseId: string): string | undefined {
+    return images[storageKey(courseId)];
+}
+
 function isCourseImages(value: unknown): value is CourseImages {
     return typeof value === "object" && value !== null && !Array.isArray(value);
 }

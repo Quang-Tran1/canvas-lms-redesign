@@ -28,6 +28,7 @@ import { applyCourseImages, initCourseImages } from "./courseImages/mount";
 import { setDashboardGradesEnabled } from "./grades/mount";
 import { setClassRankEnabled } from "./grades/rankMount";
 import { setTodoEnabled } from "./todo/mount";
+import { initWrapped } from "./wrapped/mount";
 
 declare global {
     interface Window {
@@ -44,6 +45,8 @@ async function initPage(): Promise<void> {
     // Reads its own storage key: the images are large, and the popup, which
     // shares readSettings, has no use for them.
     initCourseImages();
+    // No setting of its own: it waits for the page itself, not for storage.
+    initWrapped();
 
     const stored = await readSettings();
     applyBackground(stored[BG_KEY]);
